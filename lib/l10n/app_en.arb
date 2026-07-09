@@ -1,0 +1,10 @@
+{
+  "@@locale": "en",
+  "appName": "FlowPay",
+  "dashboardTitle": "Dashboard",
+  "availableBalance": "Available balance",
+  "todaySales": "Today's sales",
+  "transactions": "Transactions",
+  "charges": "Charges",
+  "profile": "Profile"
+}

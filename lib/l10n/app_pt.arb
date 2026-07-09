@@ -1,0 +1,13 @@
+{
+  "@@locale": "pt",
+  "appName": "FlowPay",
+  "@appName": {
+    "description": "Nome do aplicativo"
+  },
+  "dashboardTitle": "Painel de Vendas",
+  "availableBalance": "Saldo disponível",
+  "todaySales": "Vendas de hoje",
+  "transactions": "Transações",
+  "charges": "Cobranças",
+  "profile": "Perfil"
+}

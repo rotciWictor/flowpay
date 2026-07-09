@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # Backend
   supabase_flutter: ^2.10.0
@@ -62,3 +64,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
