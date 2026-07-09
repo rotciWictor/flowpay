@@ -4,6 +4,14 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 
 ---
 
+## [0.1.1] - Autenticação: Camada de Domínio (SOLID)
+
+### `44dd236` - Auth Domain: Entity, Repository e UseCases
+- **Entidade Limpa (`Merchant`)**: Modelagem do usuário lojista como objeto puro de negócio usando `Equatable`. Seguindo as regras do negócio, os campos foram marcados como `final` e o segmento da loja foi fortemente tipado usando um Enum (`MerchantSegment`), garantindo que o sistema só aceite categorias pré-aprovadas (Alimentação, Varejo, Serviços, etc).
+- **Inversão de Dependência (`AuthRepository`)**: Criação da interface/contrato de autenticação. A interface foi desenhada visando o futuro, abstraindo métodos para Login Clássico (`loginWithEmail`), Recuperação Silenciosa de Sessão (`checkAuthSession`) e Suporte a Login Social (`loginWithGoogle`).
+- **Responsabilidade Única (`UseCases`)**: Isolamento total de cada ação (Login Email, Login Google, CheckAuth, Logout) em suas próprias classes independentes. O caso de uso de login clássico implementa validações síncronas de regras de negócio (como bloquear e-mails inválidos) retornando `InvalidInputFailure`, evitando idas desnecessárias à camada de rede.
+
+
 ## [0.1.0] - Fundação, Arquitetura e Navegação
 
 ### `7f52bea` - GoRouter Setup & Glassmorphism Bottom Navigation
