@@ -10,8 +10,8 @@ import 'package:flowpay/core/error/failures.dart';
 /// Returns [Either<Failure, Type>]:
 /// - Left(Failure) on error
 /// - Right(Type) on success
-abstract class UseCase<Type, Params> {
-  Future<Either<Failure, Type>> call(Params params);
+abstract class UseCase<T, Params> {
+  Future<Either<Failure, T>> call(Params params);
 }
 
 /// Use this when a use case doesn't need any parameters.

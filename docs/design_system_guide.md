@@ -6,17 +6,17 @@ O FlowPay será um app escuro, elegante e focado em legibilidade financeira, uti
 ## 🎨 2. Paleta de Cores & Efeitos (Tokens)
 Tabela de aplicação das cores originais adaptadas para o efeito Glass:
 
-| Elemento | Token Original | Aplicação no Glassmorphism |
-| :--- | :--- | :--- |
-| **Fundo (Scaffold)** | `#0F1117` (Background) | Sólido, mas com "orbs" (círculos esfumaçados) em `#6C5CE7` a 15% de opacidade nos cantos. |
-| **Superfície de Vidro** | `#1A1D27` (Surface) | Fundo a 60% de opacidade + BackdropFilter (Blur 10px) + Borda Branca a 10%. |
-| **Superfície Sólida** | `#242836` (SurfaceVariant) | Usado para cards de listas infinitas (sem blur) e inputs de texto. |
-| **Ação Principal** | `#6C5CE7` (Primary) | Botões preenchidos, botões flutuantes (FAB) e indicadores de abas ativas. |
-| **Ação Secundária** | `#A29BFE` (PrimaryLight) | Textos de destaque, links clicáveis ou detalhes em gráficos. |
-| **Status Positivo** | `#00B894` (Success) | Badges de status "Aprovado" e valores de entrada (+). |
-| **Status Negativo** | `#FF6B6B` (Error) | Badges de "Recusado/Chargeback" e valores de saída (-). |
-| **Texto Primário** | `#F5F6FA` (TextPrimary) | Títulos, valores monetários ($) e labels de alto contraste. |
-| **Texto Secundário** | `#8B8FA3` (TextSecondary) | Subtítulos, datas, NSU, horários e textos de apoio. |
+| Elemento                | Token Original             | Aplicação no Glassmorphism                                                                |
+| :------------------------| :---------------------------| :------------------------------------------------------------------------------------------|
+| **Fundo (Scaffold)**    | `#0F1117` (Background)     | Sólido, mas com "orbs" (círculos esfumaçados) em `#6C5CE7` a 15% de opacidade nos cantos. |
+| **Superfície de Vidro** | `#1A1D27` (Surface)        | Fundo a 60% de opacidade + BackdropFilter (Blur 10px) + Borda Branca a 10%.               |
+| **Superfície Sólida**   | `#242836` (SurfaceVariant) | Usado para cards de listas infinitas (sem blur) e inputs de texto.                        |
+| **Ação Principal**      | `#6C5CE7` (Primary)        | Botões preenchidos, botões flutuantes (FAB) e indicadores de abas ativas.                 |
+| **Ação Secundária**     | `#A29BFE` (PrimaryLight)   | Textos de destaque, links clicáveis ou detalhes em gráficos.                              |
+| **Status Positivo**     | `#00B894` (Success)        | Badges de status "Aprovado" e valores de entrada (+).                                     |
+| **Status Negativo**     | `#FF6B6B` (Error)          | Badges de "Recusado/Chargeback" e valores de saída (-).                                   |
+| **Texto Primário**      | `#F5F6FA` (TextPrimary)    | Títulos, valores monetários ($) e labels de alto contraste.                               |
+| **Texto Secundário**    | `#8B8FA3` (TextSecondary)  | Subtítulos, datas, NSU, horários e textos de apoio.                                       |
 
 ## 🔤 3. Tipografia (Inter)
 A fonte Inter (via google_fonts) será a espinha dorsal da legibilidade:
