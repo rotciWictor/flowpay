@@ -1,3 +1,3 @@
-# fintech_app
+# FlowPay
 
-A production-grade fintech portfolio app demonstrating Clean Architecture, BLoC pattern, and SOLID principles
+A production-grade merchant payment portfolio app demonstrating Clean Architecture, BLoC pattern, and SOLID principles.
