@@ -36,3 +36,8 @@ class NetworkFailure extends Failure {
 class UnexpectedFailure extends Failure {
   const UnexpectedFailure({super.message = 'Ocorreu um erro inesperado'});
 }
+
+/// Failure for invalid user inputs (e.g. empty fields)
+class InvalidInputFailure extends Failure {
+  const InvalidInputFailure(String message) : super(message: message);
+}
