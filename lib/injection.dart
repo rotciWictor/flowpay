@@ -8,6 +8,7 @@ import 'features/auth/domain/usecases/check_auth.dart';
 import 'features/auth/domain/usecases/login_with_email.dart';
 import 'features/auth/domain/usecases/login_with_google.dart';
 import 'features/auth/domain/usecases/logout.dart';
+import 'features/auth/presentation/cubit/auth_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -30,4 +31,14 @@ void setupDependencies() {
   sl.registerLazySingleton(() => LoginWithGoogle(sl()));
   sl.registerLazySingleton(() => CheckAuth(sl()));
   sl.registerLazySingleton(() => Logout(sl()));
+
+  // Auth Feature - Cubit
+  sl.registerFactory(
+    () => AuthCubit(
+      checkAuth: sl(),
+      loginWithEmail: sl(),
+      loginWithGoogle: sl(),
+      logout: sl(),
+    ),
+  );
 }
