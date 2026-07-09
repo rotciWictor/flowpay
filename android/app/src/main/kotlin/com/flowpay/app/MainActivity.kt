@@ -1,4 +1,4 @@
-package com.lucasdev.fintech_app
+package com.flowpay.app
 
 import io.flutter.embedding.android.FlutterActivity
 

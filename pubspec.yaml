@@ -1,4 +1,4 @@
-name: fintech_app
+name: flowpay
 description: "FlowPay — A production-grade merchant payment app demonstrating Clean Architecture, BLoC pattern, and SOLID principles"
 publish_to: 'none'
 version: 0.1.0+1

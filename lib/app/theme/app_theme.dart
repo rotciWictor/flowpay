@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:fintech_app/app/theme/app_colors.dart';
+import 'package:flowpay/app/theme/app_colors.dart';
 
 /// Complete ThemeData for the FlowPay app.
 ///

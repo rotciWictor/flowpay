@@ -16,7 +16,6 @@ O objetivo deste projeto é simular o painel (dashboard) de um lojista/merchant,
 - **Flutter & Dart** (Versões mais recentes)
 - **Supabase** (Auth & Database)
 - **get_it** (Injeção de dependências)
-- **dio** (Cliente HTTP)
 - **freezed & json_serializable** (Code generation e imutabilidade)
 - **go_router** (Navegação declarativa)
 - **fl_chart** (Gráficos de vendas)

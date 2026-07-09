@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:fintech_app/core/error/failures.dart';
+import 'package:flowpay/core/error/failures.dart';
 
 /// Abstract contract for all use cases in the app.
 ///
