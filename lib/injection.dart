@@ -68,7 +68,6 @@ void setupDependencies() {
   sl.registerFactory(
     () => DashboardCubit(
       getDashboardData: sl(),
-      supabaseClient: sl(),
     ),
   );
 }

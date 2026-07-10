@@ -15,12 +15,10 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
 
   @override
   Future<Either<Failure, List<TransactionEntity>>> getTransactions({
-    required String merchantId,
     int? limit,
   }) async {
     try {
       final transactions = await remoteDatasource.getTransactions(
-        merchantId: merchantId,
         limit: limit,
       );
       return Right(transactions);
@@ -30,9 +28,9 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
   }
 
   @override
-  Future<Either<Failure, Money>> getAvailableBalance({required String merchantId}) async {
+  Future<Either<Failure, Money>> getAvailableBalance() async {
     try {
-      final transactions = await remoteDatasource.getTransactions(merchantId: merchantId);
+      final transactions = await remoteDatasource.getTransactions();
       
       var total = Money.fromIntWithCurrency(0, brlCurrency);
       for (var t in transactions) {
@@ -47,9 +45,9 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
   }
 
   @override
-  Future<Either<Failure, DashboardDataEntity>> getDashboardData({required String merchantId}) async {
+  Future<Either<Failure, DashboardDataEntity>> getDashboardData() async {
     try {
-      final transactions = await remoteDatasource.getDashboardTransactions(merchantId: merchantId);
+      final transactions = await remoteDatasource.getDashboardTransactions();
       
       var availableBalance = Money.fromIntWithCurrency(0, brlCurrency);
       var nextSettlementAmount = Money.fromIntWithCurrency(0, brlCurrency);

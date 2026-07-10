@@ -113,16 +113,37 @@ class _HomePageViewState extends State<_HomePageView> {
 
   Widget _buildErrorState(BuildContext context, String message) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(message, style: const TextStyle(color: AppColors.error)),
-          const SizedBox(height: AppSpacing.md),
-          ElevatedButton(
-            onPressed: () => context.read<DashboardCubit>().fetchDashboard(),
-            child: const Text('Tentar Novamente'),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.wifi_off_rounded, size: 64, color: AppColors.error),
+            const SizedBox(height: AppSpacing.lg),
+            Text(
+              'Ops, algo deu errado',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              message, 
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            ElevatedButton.icon(
+              onPressed: () => context.read<DashboardCubit>().fetchDashboard(),
+              icon: const Icon(Icons.refresh, color: Colors.white),
+              label: const Text('Tentar Novamente'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

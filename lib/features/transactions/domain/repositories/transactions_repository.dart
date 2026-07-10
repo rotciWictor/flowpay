@@ -8,18 +8,13 @@ abstract class TransactionsRepository {
   /// Fetches the recent transactions for a given merchant.
   /// If [limit] is provided, it limits the number of transactions returned.
   Future<Either<Failure, List<TransactionEntity>>> getTransactions({
-    required String merchantId,
     int? limit,
   });
 
   /// Calculates the total available balance for a given merchant.
   /// Typically sums up the `netAmount` of `approved` transactions.
-  Future<Either<Failure, Money>> getAvailableBalance({
-    required String merchantId,
-  });
+  Future<Either<Failure, Money>> getAvailableBalance();
 
   /// Fetches all data necessary for the dashboard in a single call.
-  Future<Either<Failure, DashboardDataEntity>> getDashboardData({
-    required String merchantId,
-  });
+  Future<Either<Failure, DashboardDataEntity>> getDashboardData();
 }
