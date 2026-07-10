@@ -33,7 +33,7 @@ class WeeklySalesChart extends StatelessWidget {
 
     return Container(
       height: 200,
-      padding: const EdgeInsets.only(top: 24, bottom: 8, left: 16, right: 16),
+      padding: const EdgeInsets.only(top: 24, bottom: 8, left: 0, right: 0),
       decoration: BoxDecoration(
         color: AppColors.surfaceVariant,
         borderRadius: BorderRadius.circular(16),
@@ -41,12 +41,14 @@ class WeeklySalesChart extends StatelessWidget {
       ),
       child: LineChart(
         LineChartData(
-          minX: 0,
-          maxX: (weeklySales.length - 1).toDouble(),
+          clipData: const FlClipData.all(),
+          minX: 1,
+          maxX: (weeklySales.length - 2).toDouble(),
           minY: 0,
           maxY: maxY,
           lineTouchData: LineTouchData(
             enabled: true,
+            touchSpotThreshold: 30, // Aumenta a área de toque invisível
             touchTooltipData: LineTouchTooltipData(
               fitInsideHorizontally: true,
               fitInsideVertically: true,
@@ -76,8 +78,14 @@ class WeeklySalesChart extends StatelessWidget {
                   if (index >= 0 && index < weeklySales.length) {
                     final date = weeklySales[index].date;
                     final text = '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}';
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
+                    
+                    return SideTitleWidget(
+                      meta: meta,
+                      space: 8,
+                      fitInside: SideTitleFitInsideData.fromTitleMeta(
+                        meta,
+                        distanceFromEdge: 0,
+                      ),
                       child: Text(text, style: GoogleFonts.outfit(color: Colors.grey, fontSize: 10)),
                     );
                   }
