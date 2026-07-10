@@ -4,6 +4,22 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 
 ---
 
+## [0.4.0] - Fundação do Design System e Refatoração UI
+
+### `(tbd)` - Tokens, Behavior e Componentes (Arquitetura)
+- **Extração de Tokens**: Foi abolido o antigo sistema de temas soltos (`AppColors`, `AppSpacing`). O ecossistema agora reside em `lib/shared/design_system/tokens/`. As cores foram estritamente divididas entre **Primitives** (intocáveis, ex: `_green500`) e **Semantics** (aplicáveis, ex: `FlowColors.primary`), eliminando qualquer brecha para "UI Drift".
+- **Haptic Feedback Nativo**: Criado o `flow_haptics.dart` na camada de Behavior. Interações com botões agora disparam gatilhos táteis automáticos (`lightImpact`, `mediumImpact`), provendo uma resposta física Premium ao toque do usuário.
+- **Componentização Avançada**: O design abstrato e denso construído inicialmente no Dashboard foi componentizado e salvo no catálogo global de `components/`:
+  - `FlowCard`: Card padrão com Liquid Glass e gradiente.
+  - `FlowIconButton`: Botão Neon/Metálico com sombra bicolor.
+  - `FlowListTile`: Item de lista financeiro com suporte a avatar e `Tabular Figures` para os números.
+
+### `(tbd)` - Refatoração Global e Correções
+- **Migração Sistêmica**: Um script autônomo em Python escaneou e reescreveu mais de 30 arquivos da codebase, alterando importações e instâncias de `AppColors` para `FlowColors`, consolidando a nova fundação sem quebrar a lógica de presentation.
+- **Refatoração do Dashboard**: Os widgets `next_settlement_card.dart`, `quick_actions_row.dart` e `latest_transactions_list.dart` sofreram uma limpeza drástica de UI Code (mais de 100 linhas removidas), passando a delegar a responsabilidade estética inteiramente para os componentes da biblioteca `Flow`.
+- **Tradução (Bugfix)**: Corrigida a string `dashboardNextSettlement` de "A receber amanhã" para "A receber próx. dia útil" (`app_pt.arb`), mantendo a precisão das regras de negócio de D+1 (onde D+1 numa sexta não é sábado).
+
+
 ## [0.3.0] - Dashboard Financeiro Premium & UX Overhaul
 
 ### `(tbd)` - Diário de Design (O Processo e Iterações)
