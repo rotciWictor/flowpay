@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flowpay/app/theme/app_colors.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
 
 class QuickActionsRow extends StatelessWidget {
   const QuickActionsRow({super.key});
@@ -12,28 +13,28 @@ class QuickActionsRow extends StatelessWidget {
       children: [
         _ActionIcon(
           icon: Icons.qr_code,
-          label: 'Cobrar',
+          label: AppLocalizations.of(context)!.dashboardQuickActionPix,
           onTap: () {
             // TODO: Navigate to charges
           },
         ),
         _ActionIcon(
           icon: Icons.pix,
-          label: 'Pix',
+          label: 'Pix', // Usually brand names are not translated
           onTap: () {
             // TODO: Open Pix menu
           },
         ),
         _ActionIcon(
           icon: Icons.receipt_long,
-          label: 'Extrato',
+          label: AppLocalizations.of(context)!.bottomNavTransactions, // Using same string "Extrato/Transactions"
           onTap: () {
             // TODO: Navigate to transactions
           },
         ),
         _ActionIcon(
           icon: Icons.fast_forward,
-          label: 'Antecipar',
+          label: AppLocalizations.of(context)!.dashboardQuickActionTransfer, // Anticipate/Transfer
           onTap: () {
             // TODO: Open anticipation simulator
           },

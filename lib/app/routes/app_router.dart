@@ -5,7 +5,7 @@ import 'package:flowpay/shared/widgets/app_bottom_nav.dart';
 import 'package:flowpay/features/auth/presentation/pages/splash_page.dart';
 import 'package:flowpay/features/auth/presentation/pages/login_page.dart';
 import 'package:flowpay/features/auth/presentation/pages/register_page.dart';
-import 'package:flowpay/features/home/presentation/pages/home_page.dart';
+import 'package:flowpay/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:flowpay/features/transactions/presentation/pages/transactions_page.dart';
 import 'package:flowpay/features/charges/presentation/pages/charges_page.dart';
 import 'package:flowpay/features/profile/presentation/pages/profile_page.dart';
@@ -53,13 +53,13 @@ final appRouter = GoRouter(
         return AppBottomNav(navigationShell: navigationShell);
       },
       branches: [
-        // Branch 0 - Home
+        // Branch 0 - Dashboard
         StatefulShellBranch(
           navigatorKey: _shellNavigatorHomeKey,
           routes: [
             GoRoute(
               path: '/',
-              builder: (context, state) => const HomePage(),
+              builder: (context, state) => const DashboardPage(),
             ),
           ],
         ),

@@ -9,32 +9,33 @@ import 'package:flowpay/app/theme/app_colors.dart';
 import 'package:flowpay/app/theme/app_spacing.dart';
 
 // Components
-import 'package:flowpay/features/home/presentation/widgets/dashboard_header.dart';
-import 'package:flowpay/features/home/presentation/widgets/next_settlement_card.dart';
-import 'package:flowpay/features/home/presentation/widgets/quick_actions_row.dart';
-import 'package:flowpay/features/home/presentation/widgets/weekly_sales_chart.dart';
-import 'package:flowpay/features/home/presentation/widgets/latest_transactions_list.dart';
+import 'package:flowpay/features/dashboard/presentation/widgets/dashboard_header.dart';
+import 'package:flowpay/features/dashboard/presentation/widgets/next_settlement_card.dart';
+import 'package:flowpay/features/dashboard/presentation/widgets/quick_actions_row.dart';
+import 'package:flowpay/features/dashboard/presentation/widgets/weekly_sales_chart.dart';
+import 'package:flowpay/features/dashboard/presentation/widgets/latest_transactions_list.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class DashboardPage extends StatelessWidget {
+  const DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => sl<DashboardCubit>()..fetchDashboard(),
-      child: const _HomePageView(),
+      child: const _DashboardPageView(),
     );
   }
 }
 
-class _HomePageView extends StatefulWidget {
-  const _HomePageView();
+class _DashboardPageView extends StatefulWidget {
+  const _DashboardPageView();
 
   @override
-  State<_HomePageView> createState() => _HomePageViewState();
+  State<_DashboardPageView> createState() => _DashboardPageViewState();
 }
 
-class _HomePageViewState extends State<_HomePageView> {
+class _DashboardPageViewState extends State<_DashboardPageView> {
   bool _obscureBalance = false;
 
   @override
@@ -79,9 +80,9 @@ class _HomePageViewState extends State<_HomePageView> {
                           const SizedBox(height: AppSpacing.lg),
                           const QuickActionsRow(),
                           const SizedBox(height: AppSpacing.lg),
-                          const Text(
-                            'Vendas da Semana',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          Text(
+                            AppLocalizations.of(context)!.dashboardWeeklySales,
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: AppSpacing.md),
                           WeeklySalesChart(weeklySales: data.weeklySales),
@@ -121,7 +122,7 @@ class _HomePageViewState extends State<_HomePageView> {
             const Icon(Icons.wifi_off_rounded, size: 64, color: AppColors.error),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              'Ops, algo deu errado',
+              AppLocalizations.of(context)!.dashboardErrorTitle,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             const SizedBox(height: AppSpacing.sm),
@@ -134,7 +135,7 @@ class _HomePageViewState extends State<_HomePageView> {
             ElevatedButton.icon(
               onPressed: () => context.read<DashboardCubit>().fetchDashboard(),
               icon: const Icon(Icons.refresh, color: Colors.white),
-              label: const Text('Tentar Novamente'),
+              label: Text(AppLocalizations.of(context)!.dashboardTryAgain),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,

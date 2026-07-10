@@ -60,8 +60,8 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
         }
       }
 
-      DateTime _getNextBusinessDay() {
-        var nextDay = DateTime.now().add(const Duration(days: 1));
+      DateTime getNextBusinessDay(DateTime date) {
+        DateTime nextDay = date.add(const Duration(days: 1));
         while (nextDay.weekday == DateTime.saturday || nextDay.weekday == DateTime.sunday) {
           nextDay = nextDay.add(const Duration(days: 1));
         }
@@ -76,7 +76,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
       }
       
       // O recebimento sempre cai no próximo dia útil
-      nextSettlementDate = _getNextBusinessDay();
+      nextSettlementDate = getNextBusinessDay(DateTime.now());
 
       // Calculate weekly sales (9 days to allow chart bleed: 8 days ago to tomorrow)
       final now = DateTime.now();

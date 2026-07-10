@@ -77,4 +77,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bottomNavProfile => 'Profile';
+
+  @override
+  String get dashboardErrorTitle => 'Oops, something went wrong';
+
+  @override
+  String get dashboardTryAgain => 'Try Again';
+
+  @override
+  String get dashboardWeeklySales => 'Weekly Sales';
+
+  @override
+  String get dashboardNextSettlement => 'Next Settlement';
+
+  @override
+  String get dashboardQuickActionPix => 'Receive via Pix';
+
+  @override
+  String get dashboardQuickActionLink => 'Pay. Link';
+
+  @override
+  String get dashboardQuickActionTransfer => 'Transfer';
+
+  @override
+  String get dashboardQuickActionMore => 'More';
+
+  @override
+  String get dashboardLatestTransactions => 'Latest Transactions';
+
+  @override
+  String get dashboardSeeAll => 'See all';
 }

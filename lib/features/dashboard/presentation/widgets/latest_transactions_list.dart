@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flowpay/app/theme/app_colors.dart';
 import 'package:flowpay/app/theme/app_spacing.dart';
 import 'package:flowpay/features/transactions/domain/entities/transaction.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
 
 class LatestTransactionsList extends StatelessWidget {
   final List<TransactionEntity> transactions;
@@ -46,15 +47,15 @@ class LatestTransactionsList extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Últimas Transações',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Text(
+                  AppLocalizations.of(context)!.dashboardLatestTransactions,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 TextButton(
                   onPressed: onSeeAll,
                   child: Row(
                     children: [
-                      Text('Ver tudo', style: GoogleFonts.outfit(fontSize: 14)),
+                      Text(AppLocalizations.of(context)!.dashboardSeeAll, style: GoogleFonts.outfit(fontSize: 14)),
                       const SizedBox(width: 4),
                       const Icon(Icons.arrow_forward, size: 14),
                     ],

@@ -22,5 +22,15 @@
   "bottomNavHome": "Home",
   "bottomNavTransactions": "Transactions",
   "bottomNavCharges": "Charge",
-  "bottomNavProfile": "Profile"
+  "bottomNavProfile": "Profile",
+  "dashboardErrorTitle": "Oops, something went wrong",
+  "dashboardTryAgain": "Try Again",
+  "dashboardWeeklySales": "Weekly Sales",
+  "dashboardNextSettlement": "Next Settlement",
+  "dashboardQuickActionPix": "Receive via Pix",
+  "dashboardQuickActionLink": "Pay. Link",
+  "dashboardQuickActionTransfer": "Transfer",
+  "dashboardQuickActionMore": "More",
+  "dashboardLatestTransactions": "Latest Transactions",
+  "dashboardSeeAll": "See all"
 }

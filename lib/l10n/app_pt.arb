@@ -25,5 +25,15 @@
   "bottomNavHome": "Início",
   "bottomNavTransactions": "Transações",
   "bottomNavCharges": "Cobrar",
-  "bottomNavProfile": "Perfil"
+  "bottomNavProfile": "Perfil",
+  "dashboardErrorTitle": "Ops, algo deu errado",
+  "dashboardTryAgain": "Tentar Novamente",
+  "dashboardWeeklySales": "Vendas da Semana",
+  "dashboardNextSettlement": "A receber amanhã",
+  "dashboardQuickActionPix": "Cobrar via Pix",
+  "dashboardQuickActionLink": "Link de Pag.",
+  "dashboardQuickActionTransfer": "Transferir",
+  "dashboardQuickActionMore": "Mais",
+  "dashboardLatestTransactions": "Últimas Transações",
+  "dashboardSeeAll": "Ver todas"
 }

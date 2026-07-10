@@ -8,7 +8,6 @@ import 'package:flowpay/core/utils/currency_format.dart';
 import 'package:flowpay/features/transactions/data/datasources/transactions_remote_datasource.dart';
 import 'package:flowpay/features/transactions/data/models/transaction_model.dart';
 import 'package:flowpay/features/transactions/data/repositories/transactions_repository_impl.dart';
-import 'package:flowpay/features/transactions/domain/entities/dashboard_data.dart';
 import 'package:flowpay/features/transactions/domain/entities/transaction.dart';
 import 'package:flowpay/features/transactions/domain/usecases/get_dashboard_data.dart';
 import 'package:flowpay/features/transactions/presentation/cubit/dashboard_cubit.dart';

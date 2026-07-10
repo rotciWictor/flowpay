@@ -235,6 +235,66 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Perfil'**
   String get bottomNavProfile;
+
+  /// No description provided for @dashboardErrorTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ops, algo deu errado'**
+  String get dashboardErrorTitle;
+
+  /// No description provided for @dashboardTryAgain.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tentar Novamente'**
+  String get dashboardTryAgain;
+
+  /// No description provided for @dashboardWeeklySales.
+  ///
+  /// In pt, this message translates to:
+  /// **'Vendas da Semana'**
+  String get dashboardWeeklySales;
+
+  /// No description provided for @dashboardNextSettlement.
+  ///
+  /// In pt, this message translates to:
+  /// **'A receber amanhã'**
+  String get dashboardNextSettlement;
+
+  /// No description provided for @dashboardQuickActionPix.
+  ///
+  /// In pt, this message translates to:
+  /// **'Cobrar via Pix'**
+  String get dashboardQuickActionPix;
+
+  /// No description provided for @dashboardQuickActionLink.
+  ///
+  /// In pt, this message translates to:
+  /// **'Link de Pag.'**
+  String get dashboardQuickActionLink;
+
+  /// No description provided for @dashboardQuickActionTransfer.
+  ///
+  /// In pt, this message translates to:
+  /// **'Transferir'**
+  String get dashboardQuickActionTransfer;
+
+  /// No description provided for @dashboardQuickActionMore.
+  ///
+  /// In pt, this message translates to:
+  /// **'Mais'**
+  String get dashboardQuickActionMore;
+
+  /// No description provided for @dashboardLatestTransactions.
+  ///
+  /// In pt, this message translates to:
+  /// **'Últimas Transações'**
+  String get dashboardLatestTransactions;
+
+  /// No description provided for @dashboardSeeAll.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ver todas'**
+  String get dashboardSeeAll;
 }
 
 class _AppLocalizationsDelegate

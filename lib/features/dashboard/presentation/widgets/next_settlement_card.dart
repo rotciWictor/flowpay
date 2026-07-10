@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flowpay/app/theme/app_colors.dart';
 import 'package:flowpay/app/theme/app_spacing.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
 
 class NextSettlementCard extends StatelessWidget {
   final String amountStr;
@@ -71,7 +72,7 @@ class NextSettlementCard extends StatelessWidget {
                           const Icon(Icons.flash_on, color: AppColors.primary, size: 16),
                           const SizedBox(width: 4),
                           Text(
-                            'A receber no próx. dia útil',
+                            AppLocalizations.of(context)!.dashboardNextSettlement,
                             style: GoogleFonts.outfit(color: Colors.grey.shade500, fontSize: 12),
                           ),
                         ],
