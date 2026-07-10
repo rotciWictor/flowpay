@@ -36,9 +36,7 @@ jobs:
         run: flutter analyze
 
       - name: Run Tests
-        # Commented out temporarily until tests are actually implemented
-        # run: flutter test
-        run: echo "Tests bypassed for now"
+        run: flutter test
 
       - name: Build APK
         run: flutter build apk --release
