@@ -25,7 +25,10 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
 
   @override
   Future<MerchantModel> loginWithGoogle() async {
-    final success = await client.auth.signInWithOAuth(OAuthProvider.google);
+    final success = await client.auth.signInWithOAuth(
+      OAuthProvider.google,
+      redirectTo: 'io.supabase.flowpay://login-callback/',
+    );
     if (!success) {
       throw const AuthException('Falha ao autenticar com o Google.');
     }

@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flowpay/shared/widgets/app_bottom_nav.dart';
 import 'package:flowpay/features/auth/presentation/pages/splash_page.dart';
 import 'package:flowpay/features/auth/presentation/pages/login_page.dart';
+import 'package:flowpay/features/auth/presentation/pages/register_page.dart';
 import 'package:flowpay/features/home/presentation/pages/home_page.dart';
 import 'package:flowpay/features/transactions/presentation/pages/transactions_page.dart';
 import 'package:flowpay/features/charges/presentation/pages/charges_page.dart';
@@ -23,11 +24,12 @@ final appRouter = GoRouter(
     // Auth Guard
     final isGoingToSplash = state.matchedLocation == '/splash';
     final isGoingToLogin = state.matchedLocation == '/login';
+    final isGoingToRegister = state.matchedLocation == '/register';
     
     // Check if user has an active Supabase session
     final hasSession = Supabase.instance.client.auth.currentSession != null;
 
-    if (!hasSession && !isGoingToSplash && !isGoingToLogin) {
+    if (!hasSession && !isGoingToSplash && !isGoingToLogin && !isGoingToRegister) {
       return '/login';
     }
     
@@ -41,6 +43,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/login',
       builder: (context, state) => const LoginPage(),
+    ),
+    GoRoute(
+      path: '/register',
+      builder: (context, state) => const RegisterPage(),
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {

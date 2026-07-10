@@ -18,11 +18,31 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  int _tapCount = 0;
+  DateTime? _lastTap;
+
   void _login() {
     context.read<AuthCubit>().login(
       _emailController.text,
       _passwordController.text,
     );
+  }
+
+  void _handleLogoTap() {
+    final now = DateTime.now();
+    if (_lastTap == null || now.difference(_lastTap!) > const Duration(seconds: 1)) {
+      _tapCount = 1;
+    } else {
+      _tapCount++;
+    }
+    _lastTap = now;
+
+    if (_tapCount >= 3) {
+      _tapCount = 0;
+      _emailController.text = 'demo@flowpay.com';
+      _passwordController.text = 'FlowPayDemo2026!';
+      _login();
+    }
   }
 
   void _loginGoogle() {
@@ -34,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          context.go('/home');
+          context.go('/');
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -65,9 +85,12 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Image.asset(
-                      'assets/images/logo.png',
-                      height: 80,
+                    GestureDetector(
+                      onTap: _handleLogoTap,
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        height: 80,
+                      ),
                     ),
                     const SizedBox(height: AppSpacing.xxl),
                     
@@ -138,6 +161,17 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: _loginGoogle,
                                 icon: const Icon(Icons.login),
                                 label: const Text('Entrar com Google'),
+                              ),
+                              const SizedBox(height: AppSpacing.md),
+                              TextButton(
+                                onPressed: () => context.push('/register'),
+                                child: const Text(
+                                  'Não tem uma conta? Cadastre-se',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                               ),
                             ],
                           ),

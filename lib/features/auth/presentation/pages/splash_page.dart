@@ -30,7 +30,7 @@ class _SplashPageState extends State<SplashPage> {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          context.go('/home');
+          context.go('/');
         } else if (state is AuthUnauthenticated || state is AuthError) {
           context.go('/login');
         }

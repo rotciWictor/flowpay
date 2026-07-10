@@ -4,6 +4,15 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 
 ---
 
+## [0.2.1] - Auth: Melhorias UX, Google Sign-in e Modo Demo
+
+### `(tbd)` - Easter Egg, Roteamento e Setup Google Auth
+- **Modo Demo (Easter Egg)**: Implementação de um atalho escondido na `LoginPage`. Ao tocar 3 vezes rápidas na logo do FlowPay, o formulário é preenchido automaticamente com `demo@flowpay.com` e o login é disparado. Isso permite que recrutadores e avaliadores testem a aplicação (Frictionless Demo) sem precisarem realizar um cadastro, acessando os dados fictícios criados.
+- **Database Seeding (`seed_demo.sql`)**: Criação de um script SQL avançado para popular a base de dados de demonstração. O script gera a conta do usuário Demo e insere 100 transações financeiras orgânicas e randômicas (com variações de método de pagamento, status de aprovação, taxa de plataforma de 5% sobre o valor líquido e datas nos últimos 30 dias).
+- **Google Auth e Deep Linking**: Finalização da integração com o Google OAuth. O `AndroidManifest.xml` foi atualizado para escutar o esquema de deep link `io.supabase.flowpay://login-callback`. A chamada do `Supabase` agora envia a flag de `redirectTo`, permitindo que o navegador nativo devolva o token OAuth para a engine do Flutter fechar o ciclo de login perfeitamente.
+- **Correções de Roteamento (GoRouter)**: Ajustado o mapeamento da rota principal no redirecionamento do BLoC. As páginas de Login e Splash tentavam rotear para `/home`, porém a árvore de rotas estrutural (Shell Route) estava na raiz `/`. O bug da "Página não encontrada" foi resolvido.
+- **Placeholder de Cadastro e Logout**: Adicionado um botão "Cadastre-se" na tela de Login roteando para um *stub* (`RegisterPage`) que será construído futuramente com um Stepper. Também adicionado um esboço na `ProfilePage` com um botão funcional de Sair (Logout) no topo, destruindo a sessão do Cubit e voltando para a tela de Login.
+
 ## [0.2.0] - Autenticação: Camada de Apresentação (UI e BLoC)
 
 ### `(tbd)` - Splash, Login Premium e Auth Guard
