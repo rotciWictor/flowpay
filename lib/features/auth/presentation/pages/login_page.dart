@@ -8,6 +8,7 @@ import 'package:flowpay/app/theme/app_colors.dart';
 import 'package:flowpay/app/theme/app_spacing.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 import 'package:flowpay/core/bloc/locale_cubit.dart';
+import 'package:country_flags/country_flags.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -190,7 +191,18 @@ class _LoginPageState extends State<LoginPage> {
               top: AppSpacing.md,
               right: AppSpacing.md,
               child: IconButton(
-                icon: const Icon(Icons.language),
+                icon: BlocBuilder<LocaleCubit, Locale>(
+                  builder: (context, locale) {
+                    return CountryFlag.fromCountryCode(
+                      locale.languageCode == 'pt' ? 'US' : 'BR',
+                      theme: const ImageTheme(
+                        shape: Circle(),
+                        width: 24,
+                        height: 24,
+                      ),
+                    );
+                  },
+                ),
                 onPressed: () {
                   context.read<LocaleCubit>().toggleLocale();
                 },
