@@ -9,6 +9,7 @@ import 'features/auth/domain/usecases/login_with_email.dart';
 import 'features/auth/domain/usecases/login_with_google.dart';
 import 'features/auth/domain/usecases/logout.dart';
 import 'features/auth/presentation/cubit/auth_cubit.dart';
+import 'core/bloc/locale_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -41,4 +42,7 @@ void setupDependencies() {
       logout: sl(),
     ),
   );
+
+  // Core - Locale Cubit
+  sl.registerFactory(() => LocaleCubit());
 }

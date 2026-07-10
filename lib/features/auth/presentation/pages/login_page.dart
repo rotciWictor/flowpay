@@ -6,6 +6,8 @@ import 'package:flowpay/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:flowpay/features/auth/presentation/cubit/auth_state.dart';
 import 'package:flowpay/app/theme/app_colors.dart';
 import 'package:flowpay/app/theme/app_spacing.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
+import 'package:flowpay/core/bloc/locale_cubit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -78,10 +80,12 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           child: SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(AppSpacing.xl),
-                child: Column(
+            child: Stack(
+              children: [
+                Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(AppSpacing.xl),
+                    child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -112,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Text(
-                                'Acessar Conta',
+                                AppLocalizations.of(context)!.loginTitle,
                                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -123,18 +127,18 @@ class _LoginPageState extends State<LoginPage> {
                               TextFormField(
                                 controller: _emailController,
                                 keyboardType: TextInputType.emailAddress,
-                                decoration: const InputDecoration(
-                                  labelText: 'E-mail',
-                                  prefixIcon: Icon(Icons.email_outlined),
+                                decoration: InputDecoration(
+                                  labelText: AppLocalizations.of(context)!.loginEmailLabel,
+                                  prefixIcon: const Icon(Icons.email_outlined),
                                 ),
                               ),
                               const SizedBox(height: AppSpacing.md),
                               TextFormField(
                                 controller: _passwordController,
                                 obscureText: true,
-                                decoration: const InputDecoration(
-                                  labelText: 'Senha',
-                                  prefixIcon: Icon(Icons.lock_outline),
+                                decoration: InputDecoration(
+                                  labelText: AppLocalizations.of(context)!.loginPasswordLabel,
+                                  prefixIcon: const Icon(Icons.lock_outline),
                                 ),
                               ),
                               const SizedBox(height: AppSpacing.xl),
@@ -150,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                                             width: 20,
                                             child: CircularProgressIndicator(strokeWidth: 2),
                                           )
-                                        : const Text('Entrar'),
+                                        : Text(AppLocalizations.of(context)!.loginButton),
                                   );
                                 },
                               ),
@@ -160,14 +164,14 @@ class _LoginPageState extends State<LoginPage> {
                               OutlinedButton.icon(
                                 onPressed: _loginGoogle,
                                 icon: const Icon(Icons.login),
-                                label: const Text('Entrar com Google'),
+                                label: Text(AppLocalizations.of(context)!.loginGoogleButton),
                               ),
                               const SizedBox(height: AppSpacing.md),
                               TextButton(
                                 onPressed: () => context.push('/register'),
-                                child: const Text(
-                                  'Não tem uma conta? Cadastre-se',
-                                  style: TextStyle(
+                                child: Text(
+                                  AppLocalizations.of(context)!.loginRegisterPrompt,
+                                  style: const TextStyle(
                                     color: Colors.white70,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -182,9 +186,23 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-          ),
+            Positioned(
+              top: AppSpacing.md,
+              right: AppSpacing.md,
+              child: IconButton(
+                icon: const Icon(Icons.language),
+                onPressed: () {
+                  context.read<LocaleCubit>().toggleLocale();
+                },
+                tooltip: 'Change Language / Mudar Idioma',
+              ),
+            ),
+          ],
         ),
       ),
+    ),
+    ),
     );
   }
 }
+
