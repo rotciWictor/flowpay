@@ -147,15 +147,54 @@ class _LoginPageState extends State<LoginPage> {
                               BlocBuilder<AuthCubit, AuthState>(
                                 builder: (context, state) {
                                   final isLoading = state is AuthLoading;
-                                  return ElevatedButton(
-                                    onPressed: isLoading ? null : _login,
-                                    child: isLoading
-                                        ? const SizedBox(
-                                            height: 20,
-                                            width: 20,
-                                            child: CircularProgressIndicator(strokeWidth: 2),
-                                          )
-                                        : Text(AppLocalizations.of(context)!.loginButton),
+                                  return Container(
+                                    // Outer Container acts as the Gradient Border
+                                    padding: const EdgeInsets.all(1.5),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14),
+                                      gradient: const LinearGradient(
+                                        colors: [AppColors.primary, AppColors.primaryGradientEnd],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: AppColors.primary.withValues(alpha: 0.2),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Container(
+                                      // Inner Container is the dark body of the Ghost Button
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12.5),
+                                        color: const Color(0xFF1A1D27).withValues(alpha: 0.95),
+                                      ),
+                                      child: ElevatedButton(
+                                        onPressed: isLoading ? null : _login,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.transparent,
+                                          shadowColor: Colors.transparent,
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(vertical: 16),
+                                        ),
+                                        child: isLoading
+                                            ? const SizedBox(
+                                                height: 20,
+                                                width: 20,
+                                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                              )
+                                            : Text(
+                                                AppLocalizations.of(context)!.loginButton,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold, 
+                                                  fontSize: 16,
+                                                  letterSpacing: 1.0,
+                                                ),
+                                              ),
+                                      ),
+                                    ),
                                   );
                                 },
                               ),
