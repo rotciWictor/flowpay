@@ -12,7 +12,7 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 ### `(tbd)` - Seletor de Idiomas Dinâmico (LocaleCubit)
 - **Gerenciador de Estado de Localidade (`LocaleCubit`)**: Implementação de um Cubit dedicado à retenção do estado de idioma ativo.
 - **Árvore de Widget Reativa**: O `MaterialApp` base no `main.dart` foi envelopado dentro de um `BlocBuilder<LocaleCubit, Locale>`. Isso converte o aplicativo inteiro em uma árvore reativa onde qualquer alteração de idioma propaga a renderização de strings de maneira global, síncrona e "em tempo real".
-- **UX**: Adição de uma "Bandeirinha" discreta (`IconButton` com ícone de linguagem) no canto superior direito do Auth Flow para demonstrações visuais do poder do framework de trocar de idioma sem necessidade de *hot reload*.
+- **UX (Flags)**: Integração do pacote `country_flags` substituindo ícones genéricos por bandeiras SVG circulares autênticas (BR e US) no botão flutuante superior. Implementada lógica UI intuitiva: a bandeira exibida reflete sempre o *idioma alvo* da troca (ex: exibindo a bandeira US quando a interface está em português) para deixar a ação previsível ao usuário.
 
 ---
 
