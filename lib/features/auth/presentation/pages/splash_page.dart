@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flowpay/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:flowpay/features/auth/presentation/cubit/auth_state.dart';
 import 'package:flowpay/app/theme/app_colors.dart';
+import 'package:flowpay/features/auth/presentation/widgets/gradient_circular_progress_indicator.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -46,22 +47,14 @@ class _SplashPageState extends State<SplashPage> {
                 width: 150,
               ),
               const SizedBox(height: 24),
-              SizedBox(
-                width: 40,
-                height: 40,
-                child: ShaderMask(
-                  blendMode: BlendMode.srcIn,
-                  shaderCallback: (bounds) {
-                    return const SweepGradient(
-                      colors: [AppColors.primary, AppColors.primaryGradientEnd, AppColors.primary],
-                    ).createShader(bounds);
-                  },
-                  child: const CircularProgressIndicator(
-                    strokeWidth: 4,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    backgroundColor: Colors.transparent,
-                  ),
-                ),
+              const GradientCircularProgressIndicator(
+                radius: 20,
+                strokeWidth: 4,
+                gradientColors: [
+                  AppColors.primary,
+                  AppColors.primaryGradientEnd,
+                  AppColors.primary,
+                ],
               ),
             ],
           ),
