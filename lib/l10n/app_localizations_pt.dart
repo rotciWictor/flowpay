@@ -88,7 +88,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dashboardWeeklySales => 'Vendas da Semana';
 
   @override
-  String get dashboardNextSettlement => 'A receber amanhã';
+  String get dashboardNextSettlement => 'A receber próx. dia útil';
 
   @override
   String get dashboardQuickActionPix => 'Cobrar via Pix';

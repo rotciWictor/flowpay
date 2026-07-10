@@ -257,7 +257,7 @@ abstract class AppLocalizations {
   /// No description provided for @dashboardNextSettlement.
   ///
   /// In pt, this message translates to:
-  /// **'A receber amanhã'**
+  /// **'A receber próx. dia útil'**
   String get dashboardNextSettlement;
 
   /// No description provided for @dashboardQuickActionPix.
