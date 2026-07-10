@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flowpay/features/transactions/domain/entities/dashboard_data.dart';
-import 'package:flowpay/app/theme/app_colors.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class WeeklySalesChart extends StatelessWidget {
@@ -15,7 +15,7 @@ class WeeklySalesChart extends StatelessWidget {
       return Container(
         height: 200,
         decoration: BoxDecoration(
-          color: AppColors.surfaceVariant,
+          color: FlowColors.surfaceVariant,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1),
         ),
@@ -27,15 +27,15 @@ class WeeklySalesChart extends StatelessWidget {
     final maxY = maxSale == 0 ? 100.0 : maxSale * 1.2;
 
     final gradientColors = [
-      AppColors.primary,
-      AppColors.primaryGradientEnd,
+      FlowColors.primary,
+      FlowColors.primaryGradientEnd,
     ];
 
     return Container(
       height: 200,
       padding: const EdgeInsets.only(top: 24, bottom: 8, left: 0, right: 0),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariant,
+        color: FlowColors.surfaceVariant,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1),
       ),

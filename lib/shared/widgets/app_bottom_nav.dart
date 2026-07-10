@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flowpay/app/theme/app_colors.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 
 class AppBottomNav extends StatelessWidget {
@@ -32,7 +32,7 @@ class AppBottomNav extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.surface.withValues(alpha: 0.6), // 60% opacity surface
+              color: FlowColors.surface.withValues(alpha: 0.6), // 60% opacity surface
               border: Border(
                 top: BorderSide(
                   color: Colors.white.withValues(alpha: 0.1), // 10% white border
@@ -46,8 +46,8 @@ class AppBottomNav extends StatelessWidget {
               backgroundColor: Colors.transparent, // Let the glass container show through
               elevation: 0,
               type: BottomNavigationBarType.fixed,
-              selectedItemColor: AppColors.primary,
-              unselectedItemColor: AppColors.textSecondary,
+              selectedItemColor: FlowColors.primary,
+              unselectedItemColor: FlowColors.textSecondary,
               items: [
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.home_outlined),

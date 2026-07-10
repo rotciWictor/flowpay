@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flowpay/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:flowpay/features/auth/presentation/cubit/auth_state.dart';
-import 'package:flowpay/app/theme/app_colors.dart';
-import 'package:flowpay/app/theme/app_spacing.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 import 'package:flowpay/core/bloc/locale_cubit.dart';
 import 'package:country_flags/country_flags.dart';
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),
-              backgroundColor: AppColors.error,
+              backgroundColor: FlowColors.error,
             ),
           );
         }
@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
               radius: 1.5,
               colors: [
                 Color(0xFF1E2433), // Slightly lighter at top left
-                AppColors.background,
+                FlowColors.background,
               ],
             ),
           ),
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Center(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(AppSpacing.xl),
+                    padding: const EdgeInsets.all(FlowSpacing.xl),
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 80,
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.xxl),
+                    const SizedBox(height: FlowSpacing.xxl),
                     
                     // Glassmorphism Card
                     ClipRRect(
@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                         child: Container(
-                          padding: const EdgeInsets.all(AppSpacing.xl),
+                          padding: const EdgeInsets.all(FlowSpacing.xl),
                           decoration: BoxDecoration(
                             color: const Color(0xFF1A1D27).withValues(alpha: 0.6),
                             borderRadius: BorderRadius.circular(24),
@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 textAlign: TextAlign.center,
                               ),
-                              const SizedBox(height: AppSpacing.xl),
+                              const SizedBox(height: FlowSpacing.xl),
                               
                               TextFormField(
                                 controller: _emailController,
@@ -133,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                                   prefixIcon: const Icon(Icons.email_outlined),
                                 ),
                               ),
-                              const SizedBox(height: AppSpacing.md),
+                              const SizedBox(height: FlowSpacing.md),
                               TextFormField(
                                 controller: _passwordController,
                                 obscureText: true,
@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                                   prefixIcon: const Icon(Icons.lock_outline),
                                 ),
                               ),
-                              const SizedBox(height: AppSpacing.xl),
+                              const SizedBox(height: FlowSpacing.xl),
                               
                               BlocBuilder<AuthCubit, AuthState>(
                                 builder: (context, state) {
@@ -153,13 +153,13 @@ class _LoginPageState extends State<LoginPage> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(14),
                                       gradient: const LinearGradient(
-                                        colors: [AppColors.primary, AppColors.primaryGradientEnd],
+                                        colors: [FlowColors.primary, FlowColors.primaryGradientEnd],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight,
                                       ),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: AppColors.primary.withValues(alpha: 0.2),
+                                          color: FlowColors.primary.withValues(alpha: 0.2),
                                           blurRadius: 8,
                                           offset: const Offset(0, 2),
                                         ),
@@ -198,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                                   );
                                 },
                               ),
-                              const SizedBox(height: AppSpacing.md),
+                              const SizedBox(height: FlowSpacing.md),
                               
                               // Google Login Button
                               OutlinedButton.icon(
@@ -206,7 +206,7 @@ class _LoginPageState extends State<LoginPage> {
                                 icon: const Icon(Icons.login),
                                 label: Text(AppLocalizations.of(context)!.loginGoogleButton),
                               ),
-                              const SizedBox(height: AppSpacing.md),
+                              const SizedBox(height: FlowSpacing.md),
                               TextButton(
                                 onPressed: () => context.push('/register'),
                                 child: Text(
@@ -227,8 +227,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             Positioned(
-              top: AppSpacing.md,
-              right: AppSpacing.md,
+              top: FlowSpacing.md,
+              right: FlowSpacing.md,
               child: IconButton(
                 icon: BlocBuilder<LocaleCubit, Locale>(
                   builder: (context, locale) {

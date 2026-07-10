@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flowpay/app/theme/app_colors.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 
 /// Complete ThemeData for the FlowPay app.
 ///
@@ -12,23 +12,23 @@ abstract class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: AppColors.background,
+      scaffoldBackgroundColor: FlowColors.background,
       fontFamily: GoogleFonts.outfit().fontFamily,
 
       // ── Color Scheme ──
       colorScheme: const ColorScheme.dark(
-        primary: AppColors.primary,
+        primary: FlowColors.primary,
         onPrimary: Colors.white,
-        secondary: AppColors.primaryGradientEnd,
-        surface: AppColors.surface,
-        onSurface: AppColors.textPrimary,
-        error: AppColors.error,
+        secondary: FlowColors.primaryGradientEnd,
+        surface: FlowColors.surface,
+        onSurface: FlowColors.textPrimary,
+        error: FlowColors.error,
         onError: Colors.white,
       ),
 
       // ── App Bar ──
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.background,
+        backgroundColor: FlowColors.background,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
@@ -36,16 +36,16 @@ abstract class AppTheme {
         titleTextStyle: GoogleFonts.outfit(
           fontSize: 20,
           fontWeight: FontWeight.w600,
-          color: AppColors.textPrimary,
+          color: FlowColors.textPrimary,
         ),
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
+        iconTheme: const IconThemeData(color: FlowColors.textPrimary),
       ),
 
       // ── Bottom Navigation ──
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.surface,
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textTertiary,
+        backgroundColor: FlowColors.surface,
+        selectedItemColor: FlowColors.primary,
+        unselectedItemColor: FlowColors.textTertiary,
         type: BottomNavigationBarType.fixed,
         elevation: 0,
         showUnselectedLabels: true,
@@ -53,7 +53,7 @@ abstract class AppTheme {
 
       // ── Cards ──
       cardTheme: CardThemeData(
-        color: AppColors.surface,
+        color: FlowColors.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -64,7 +64,7 @@ abstract class AppTheme {
       // ── Input Fields ──
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surfaceVariant,
+        fillColor: FlowColors.surfaceVariant,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -76,18 +76,18 @@ abstract class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide: const BorderSide(color: FlowColors.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.error, width: 1),
+          borderSide: const BorderSide(color: FlowColors.error, width: 1),
         ),
         hintStyle: GoogleFonts.outfit(
-          color: AppColors.textTertiary,
+          color: FlowColors.textTertiary,
           fontSize: 14,
         ),
         labelStyle: GoogleFonts.outfit(
-          color: AppColors.textSecondary,
+          color: FlowColors.textSecondary,
           fontSize: 14,
         ),
       ),
@@ -95,7 +95,7 @@ abstract class AppTheme {
       // ── Elevated Buttons ──
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: FlowColors.primary,
           foregroundColor: Colors.white,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
@@ -112,7 +112,7 @@ abstract class AppTheme {
       // ── Text Buttons ──
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.primary,
+          foregroundColor: FlowColors.primary,
           textStyle: GoogleFonts.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -123,8 +123,8 @@ abstract class AppTheme {
       // ── Outlined Buttons ──
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          side: const BorderSide(color: AppColors.border),
+          foregroundColor: FlowColors.primary,
+          side: const BorderSide(color: FlowColors.border),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -138,14 +138,14 @@ abstract class AppTheme {
 
       // ── Divider ──
       dividerTheme: const DividerThemeData(
-        color: AppColors.divider,
+        color: FlowColors.divider,
         thickness: 1,
         space: 1,
       ),
 
       // ── Bottom Sheet ──
       bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: AppColors.surface,
+        backgroundColor: FlowColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
@@ -153,9 +153,9 @@ abstract class AppTheme {
 
       // ── Snackbar ──
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: AppColors.surfaceVariant,
+        backgroundColor: FlowColors.surfaceVariant,
         contentTextStyle: GoogleFonts.outfit(
-          color: AppColors.textPrimary,
+          color: FlowColors.textPrimary,
           fontSize: 14,
         ),
         shape: RoundedRectangleBorder(

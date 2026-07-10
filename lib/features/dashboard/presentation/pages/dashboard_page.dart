@@ -5,8 +5,8 @@ import 'package:flowpay/injection.dart';
 import 'package:flowpay/features/transactions/presentation/cubit/dashboard_cubit.dart';
 import 'package:flowpay/features/transactions/presentation/cubit/dashboard_state.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:flowpay/app/theme/app_colors.dart';
-import 'package:flowpay/app/theme/app_spacing.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 
 // Components
 import 'package:flowpay/features/dashboard/presentation/widgets/dashboard_header.dart';
@@ -56,7 +56,7 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
                 slivers: [
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.all(AppSpacing.md),
+                      padding: const EdgeInsets.all(FlowSpacing.md),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -69,7 +69,7 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
                               });
                             },
                           ),
-                          const SizedBox(height: AppSpacing.lg),
+                          const SizedBox(height: FlowSpacing.lg),
                           NextSettlementCard(
                             amountStr: data.nextSettlementAmount.toString(),
                             date: data.nextSettlementDate,
@@ -77,16 +77,16 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
                               // TODO: Navigate to Receivables or Anticipation Simulator
                             },
                           ),
-                          const SizedBox(height: AppSpacing.lg),
+                          const SizedBox(height: FlowSpacing.lg),
                           const QuickActionsRow(),
-                          const SizedBox(height: AppSpacing.lg),
+                          const SizedBox(height: FlowSpacing.lg),
                           Text(
                             AppLocalizations.of(context)!.dashboardWeeklySales,
                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          const SizedBox(height: AppSpacing.md),
+                          const SizedBox(height: FlowSpacing.md),
                           WeeklySalesChart(weeklySales: data.weeklySales),
-                          const SizedBox(height: AppSpacing.lg),
+                          const SizedBox(height: FlowSpacing.lg),
                         ],
                       ),
                     ),
@@ -115,29 +115,29 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
   Widget _buildErrorState(BuildContext context, String message) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
+        padding: const EdgeInsets.all(FlowSpacing.xl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.wifi_off_rounded, size: 64, color: AppColors.error),
-            const SizedBox(height: AppSpacing.lg),
+            const Icon(Icons.wifi_off_rounded, size: 64, color: FlowColors.error),
+            const SizedBox(height: FlowSpacing.lg),
             Text(
               AppLocalizations.of(context)!.dashboardErrorTitle,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
             ),
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: FlowSpacing.sm),
             Text(
               message, 
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+              style: const TextStyle(color: FlowColors.textSecondary, fontSize: 14),
             ),
-            const SizedBox(height: AppSpacing.xl),
+            const SizedBox(height: FlowSpacing.xl),
             ElevatedButton.icon(
               onPressed: () => context.read<DashboardCubit>().fetchDashboard(),
               icon: const Icon(Icons.refresh, color: Colors.white),
               label: Text(AppLocalizations.of(context)!.dashboardTryAgain),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
+                backgroundColor: FlowColors.primary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -151,13 +151,13 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
 
   Widget _buildShimmerLoading() {
     return Shimmer.fromColors(
-      baseColor: AppColors.surfaceVariant,
-      highlightColor: AppColors.surfaceHighlight,
+      baseColor: FlowColors.surfaceVariant,
+      highlightColor: FlowColors.surfaceHighlight,
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.md),
+              padding: const EdgeInsets.all(FlowSpacing.md),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -165,7 +165,7 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
                   Container(width: 120, height: 14, color: Colors.white),
                   const SizedBox(height: 8),
                   Container(width: 200, height: 40, color: Colors.white),
-                  const SizedBox(height: AppSpacing.lg),
+                  const SizedBox(height: FlowSpacing.lg),
                   
                   // NextSettlementCard
                   Container(
@@ -173,7 +173,7 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
                     height: 80,
                     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
                   ),
-                  const SizedBox(height: AppSpacing.lg),
+                  const SizedBox(height: FlowSpacing.lg),
                   
                   // Quick Actions
                   Row(
@@ -186,11 +186,11 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
                       ],
                     )),
                   ),
-                  const SizedBox(height: AppSpacing.lg),
+                  const SizedBox(height: FlowSpacing.lg),
                   
                   // Chart Title
                   Container(width: 150, height: 20, color: Colors.white),
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: FlowSpacing.md),
                   
                   // Chart
                   Container(
@@ -198,11 +198,11 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
                     height: 200,
                     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
                   ),
-                  const SizedBox(height: AppSpacing.lg),
+                  const SizedBox(height: FlowSpacing.lg),
                   
                   // Transactions Title
                   Container(width: 160, height: 20, color: Colors.white),
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: FlowSpacing.md),
                 ],
               ),
             ),

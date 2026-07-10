@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flowpay/app/theme/app_colors.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'dart:math' as math;
 
 class DashboardHeader extends StatelessWidget {
@@ -92,12 +92,12 @@ class _NeonBorderTextState extends State<_NeonBorderText> with SingleTickerProvi
                 color: Colors.transparent, // Corpo transparente, desenha apenas a sombra
                 shadows: [
                   Shadow(
-                    color: AppColors.primary.withValues(alpha: 0.15),
+                    color: FlowColors.primary.withValues(alpha: 0.15),
                     blurRadius: 16,
                     offset: const Offset(-2, -2),
                   ),
                   Shadow(
-                    color: AppColors.primaryGradientEnd.withValues(alpha: 0.15),
+                    color: FlowColors.primaryGradientEnd.withValues(alpha: 0.15),
                     blurRadius: 16,
                     offset: const Offset(2, 2),
                   ),
@@ -117,11 +117,11 @@ class _NeonBorderTextState extends State<_NeonBorderText> with SingleTickerProvi
                   center: Alignment.center,
                   transform: GradientRotation(_controller.value * 2 * math.pi), // Gira o neon ao redor do texto
                   colors: [
-                    AppColors.primary.withValues(alpha: 0.8), // Verde vivo
+                    FlowColors.primary.withValues(alpha: 0.8), // Verde vivo
                     Colors.transparent,
-                    AppColors.primaryGradientEnd.withValues(alpha: 0.8), // Azul vivo
+                    FlowColors.primaryGradientEnd.withValues(alpha: 0.8), // Azul vivo
                     Colors.transparent,
-                    AppColors.primary.withValues(alpha: 0.8), // Verde para fechar o ciclo
+                    FlowColors.primary.withValues(alpha: 0.8), // Verde para fechar o ciclo
                   ],
                   stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
                 ).createShader(bounds);

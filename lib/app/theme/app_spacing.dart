@@ -2,7 +2,7 @@
 ///
 /// Using consistent spacing prevents "magic numbers" scattered in widgets
 /// and makes the UI feel intentionally designed.
-abstract class AppSpacing {
+abstract class FlowSpacing {
   static const double xxs = 2.0;
   static const double xs = 4.0;
   static const double sm = 8.0;

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flowpay/app/theme/app_colors.dart';
-import 'package:flowpay/app/theme/app_spacing.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
+import 'package:flowpay/shared/design_system/components/lists/flow_list_tile.dart';
 import 'package:flowpay/features/transactions/domain/entities/transaction.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 
@@ -22,15 +23,15 @@ class LatestTransactionsList extends StatelessWidget {
     if (transactions.isEmpty) {
       return SliverToBoxAdapter(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxl),
+          padding: const EdgeInsets.symmetric(vertical: FlowSpacing.xxl),
           child: Center(
             child: Column(
               children: [
                 Icon(Icons.receipt_long, size: 48, color: Colors.grey.shade800),
-                const SizedBox(height: AppSpacing.md),
+                const SizedBox(height: FlowSpacing.md),
                 Text(
                   'Nenhuma transação recente',
-                  style: GoogleFonts.outfit(color: Colors.grey.shade500),
+                  style: FlowTypography.bodyMedium.copyWith(color: Colors.grey.shade500),
                 ),
               ],
             ),
@@ -43,19 +44,19 @@ class LatestTransactionsList extends StatelessWidget {
       slivers: [
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.md),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   AppLocalizations.of(context)!.dashboardLatestTransactions,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: FlowTypography.titleLarge,
                 ),
                 TextButton(
                   onPressed: onSeeAll,
                   child: Row(
                     children: [
-                      Text(AppLocalizations.of(context)!.dashboardSeeAll, style: GoogleFonts.outfit(fontSize: 14)),
+                      Text(AppLocalizations.of(context)!.dashboardSeeAll, style: FlowTypography.bodyMedium),
                       const SizedBox(width: 4),
                       const Icon(Icons.arrow_forward, size: 14),
                     ],
@@ -70,42 +71,17 @@ class LatestTransactionsList extends StatelessWidget {
             (context, index) {
               final tx = transactions[index];
               final isIncome = tx.amount.minorUnits.toInt() > 0 && tx.status == TransactionStatus.approved;
-              final amountColor = isIncome ? AppColors.successMint : Colors.white;
+              final amountColor = isIncome ? FlowColors.successLight : Colors.white;
 
-              return ListTile(
+              return FlowListTile(
+                title: tx.amount.toString(),
+                subtitle: tx.status.displayName,
+                icon: isIncome ? Icons.arrow_downward : Icons.credit_card,
+                iconColor: isIncome ? FlowColors.primary : Colors.grey,
+                iconBackgroundColor: isIncome ? FlowColors.primary.withValues(alpha: 0.1) : FlowColors.surfaceVariant,
+                valueColor: amountColor,
+                trailingText: '${tx.createdAt.day.toString().padLeft(2, '0')}/${tx.createdAt.month.toString().padLeft(2, '0')}',
                 onTap: () => onTransactionTap(tx),
-                contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 4),
-                leading: CircleAvatar(
-                  backgroundColor: isIncome ? AppColors.primary.withValues(alpha: 0.1) : AppColors.surfaceVariant,
-                  child: Icon(
-                    isIncome ? Icons.arrow_downward : Icons.credit_card,
-                    color: isIncome ? AppColors.primary : Colors.grey,
-                  ),
-                ),
-                title: Text(
-                  tx.amount.toString(),
-                  style: GoogleFonts.outfit(
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.5,
-                    color: amountColor,
-                    fontSize: 16,
-                  ),
-                ),
-                subtitle: Text(
-                  tx.status.displayName,
-                  style: GoogleFonts.outfit(color: Colors.grey.shade500, fontSize: 12),
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '${tx.createdAt.day.toString().padLeft(2, '0')}/${tx.createdAt.month.toString().padLeft(2, '0')}',
-                      style: GoogleFonts.outfit(color: Colors.grey.shade500, fontSize: 12),
-                    ),
-                    const SizedBox(width: 8),
-                    Icon(Icons.chevron_right, color: Colors.grey.shade700, size: 20),
-                  ],
-                ),
               );
             },
             childCount: transactions.length,

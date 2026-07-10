@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 ///
 /// Dark fintech palette designed to convey trust and professionalism.
 /// All colors are defined here — widgets never use hardcoded hex values.
-abstract class AppColors {
+abstract class FlowColors {
   // ── Backgrounds ──
   static const background = Color(0xFF0D0D0D); // Charcoal/Dark lead
   static const surface = Color(0xFF1A1A1A); // Slightly lighter for cards
