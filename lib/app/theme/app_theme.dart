@@ -13,13 +13,13 @@ abstract class AppTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppColors.background,
-      fontFamily: GoogleFonts.inter().fontFamily,
+      fontFamily: GoogleFonts.outfit().fontFamily,
 
       // ── Color Scheme ──
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
         onPrimary: Colors.white,
-        secondary: AppColors.primaryLight,
+        secondary: AppColors.primaryGradientEnd,
         surface: AppColors.surface,
         onSurface: AppColors.textPrimary,
         error: AppColors.error,
@@ -33,7 +33,7 @@ abstract class AppTheme {
         scrolledUnderElevation: 0,
         centerTitle: false,
         systemOverlayStyle: SystemUiOverlayStyle.light,
-        titleTextStyle: GoogleFonts.inter(
+        titleTextStyle: GoogleFonts.outfit(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: AppColors.textPrimary,
@@ -82,11 +82,11 @@ abstract class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.error, width: 1),
         ),
-        hintStyle: GoogleFonts.inter(
+        hintStyle: GoogleFonts.outfit(
           color: AppColors.textTertiary,
           fontSize: 14,
         ),
-        labelStyle: GoogleFonts.inter(
+        labelStyle: GoogleFonts.outfit(
           color: AppColors.textSecondary,
           fontSize: 14,
         ),
@@ -102,7 +102,7 @@ abstract class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: GoogleFonts.inter(
+          textStyle: GoogleFonts.outfit(
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
@@ -112,8 +112,8 @@ abstract class AppTheme {
       // ── Text Buttons ──
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.primaryLight,
-          textStyle: GoogleFonts.inter(
+          foregroundColor: AppColors.primary,
+          textStyle: GoogleFonts.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
@@ -123,13 +123,13 @@ abstract class AppTheme {
       // ── Outlined Buttons ──
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primaryLight,
+          foregroundColor: AppColors.primary,
           side: const BorderSide(color: AppColors.border),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: GoogleFonts.inter(
+          textStyle: GoogleFonts.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
@@ -154,7 +154,7 @@ abstract class AppTheme {
       // ── Snackbar ──
       snackBarTheme: SnackBarThemeData(
         backgroundColor: AppColors.surfaceVariant,
-        contentTextStyle: GoogleFonts.inter(
+        contentTextStyle: GoogleFonts.outfit(
           color: AppColors.textPrimary,
           fontSize: 14,
         ),

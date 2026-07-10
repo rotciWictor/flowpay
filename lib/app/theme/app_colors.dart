@@ -6,17 +6,18 @@ import 'package:flutter/material.dart';
 /// All colors are defined here — widgets never use hardcoded hex values.
 abstract class AppColors {
   // ── Backgrounds ──
-  static const background = Color(0xFF0F1117);
-  static const surface = Color(0xFF1A1D27);
-  static const surfaceVariant = Color(0xFF242836);
-  static const surfaceHighlight = Color(0xFF2D3142);
+  static const background = Color(0xFF0D0D0D); // Charcoal/Dark lead
+  static const surface = Color(0xFF1A1A1A); // Slightly lighter for cards
+  static const surfaceVariant = Color(0xFF242424);
+  static const surfaceHighlight = Color(0xFF2D2D2D);
 
   // ── Brand ──
-  static const primary = Color(0xFF6C5CE7);
-  static const primaryLight = Color(0xFFA29BFE);
-  static const primaryDark = Color(0xFF5A4BD1);
+  static const primary = Color(0xFF00E676); // Neon Green
+  static const primaryGradientEnd = Color(0xFF00E5FF); // Cyan Blue
+  static const primaryDark = Color(0xFF00B248);
 
   // ── Semantic ──
+  static const successMint = Color(0xFF4ADE80); // Mint Green for text/lists
   static const success = Color(0xFF00B894);
   static const successLight = Color(0xFF00B894);
   static const error = Color(0xFFFF6B6B);
