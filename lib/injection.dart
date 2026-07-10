@@ -10,6 +10,11 @@ import 'features/auth/domain/usecases/login_with_google.dart';
 import 'features/auth/domain/usecases/logout.dart';
 import 'features/auth/presentation/cubit/auth_cubit.dart';
 import 'core/bloc/locale_cubit.dart';
+import 'features/transactions/data/datasources/transactions_remote_datasource.dart';
+import 'features/transactions/data/repositories/transactions_repository_impl.dart';
+import 'features/transactions/domain/repositories/transactions_repository.dart';
+import 'features/transactions/domain/usecases/get_dashboard_data.dart';
+import 'features/transactions/presentation/cubit/dashboard_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -45,4 +50,25 @@ void setupDependencies() {
 
   // Core - Locale Cubit
   sl.registerFactory(() => LocaleCubit());
+
+  // Transactions Feature - Datasources
+  sl.registerLazySingleton<TransactionsRemoteDatasource>(
+    () => TransactionsRemoteDatasourceImpl(supabaseClient: sl()),
+  );
+
+  // Transactions Feature - Repositories
+  sl.registerLazySingleton<TransactionsRepository>(
+    () => TransactionsRepositoryImpl(remoteDatasource: sl()),
+  );
+
+  // Transactions Feature - UseCases
+  sl.registerLazySingleton(() => GetDashboardData(sl()));
+
+  // Transactions Feature - Cubit
+  sl.registerFactory(
+    () => DashboardCubit(
+      getDashboardData: sl(),
+      supabaseClient: sl(),
+    ),
+  );
 }
