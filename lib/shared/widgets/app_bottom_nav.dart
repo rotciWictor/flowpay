@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flowpay/app/theme/app_colors.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
 
 class AppBottomNav extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -47,26 +48,26 @@ class AppBottomNav extends StatelessWidget {
               type: BottomNavigationBarType.fixed,
               selectedItemColor: AppColors.primary,
               unselectedItemColor: AppColors.textSecondary,
-              items: const [
+              items: [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined),
-                  activeIcon: Icon(Icons.home_rounded),
-                  label: 'Início',
+                  icon: const Icon(Icons.home_outlined),
+                  activeIcon: const Icon(Icons.home_rounded),
+                  label: AppLocalizations.of(context)!.bottomNavHome,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.receipt_long_outlined),
-                  activeIcon: Icon(Icons.receipt_long_rounded),
-                  label: 'Transações',
+                  icon: const Icon(Icons.receipt_long_outlined),
+                  activeIcon: const Icon(Icons.receipt_long_rounded),
+                  label: AppLocalizations.of(context)!.bottomNavTransactions,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.qr_code_2_outlined),
-                  activeIcon: Icon(Icons.qr_code_2_rounded),
-                  label: 'Cobrar',
+                  icon: const Icon(Icons.qr_code_2_outlined),
+                  activeIcon: const Icon(Icons.qr_code_2_rounded),
+                  label: AppLocalizations.of(context)!.bottomNavCharges,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outline),
-                  activeIcon: Icon(Icons.person_rounded),
-                  label: 'Perfil',
+                  icon: const Icon(Icons.person_outline),
+                  activeIcon: const Icon(Icons.person_rounded),
+                  label: AppLocalizations.of(context)!.bottomNavProfile,
                 ),
               ],
             ),

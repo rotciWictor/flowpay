@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flowpay/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -10,7 +11,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meu Perfil'),
+        title: Text(AppLocalizations.of(context)!.profileTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -21,8 +22,8 @@ class ProfilePage extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: Text('Em breve: Configurações do Lojista'),
+      body: Center(
+        child: Text(AppLocalizations.of(context)!.profileComingSoon),
       ),
     );
   }

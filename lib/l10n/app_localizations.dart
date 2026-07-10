@@ -139,6 +139,102 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Perfil'**
   String get profile;
+
+  /// No description provided for @loginTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Acessar Conta'**
+  String get loginTitle;
+
+  /// No description provided for @loginEmailLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'E-mail'**
+  String get loginEmailLabel;
+
+  /// No description provided for @loginPasswordLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Senha'**
+  String get loginPasswordLabel;
+
+  /// No description provided for @loginButton.
+  ///
+  /// In pt, this message translates to:
+  /// **'Entrar'**
+  String get loginButton;
+
+  /// No description provided for @loginGoogleButton.
+  ///
+  /// In pt, this message translates to:
+  /// **'Entrar com Google'**
+  String get loginGoogleButton;
+
+  /// No description provided for @loginRegisterPrompt.
+  ///
+  /// In pt, this message translates to:
+  /// **'Não tem uma conta? Cadastre-se'**
+  String get loginRegisterPrompt;
+
+  /// No description provided for @registerTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Criar Conta'**
+  String get registerTitle;
+
+  /// No description provided for @registerComingSoonTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Fluxo de Cadastro em Construção'**
+  String get registerComingSoonTitle;
+
+  /// No description provided for @registerComingSoonDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Aqui teremos um formulário passo-a-passo (Stepper) para coletar os dados do lojista (CNPJ, Razão Social, etc).'**
+  String get registerComingSoonDesc;
+
+  /// No description provided for @profileLogout.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sair'**
+  String get profileLogout;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Meu Perfil'**
+  String get profileTitle;
+
+  /// No description provided for @profileComingSoon.
+  ///
+  /// In pt, this message translates to:
+  /// **'Em breve: Configurações do Lojista'**
+  String get profileComingSoon;
+
+  /// No description provided for @bottomNavHome.
+  ///
+  /// In pt, this message translates to:
+  /// **'Início'**
+  String get bottomNavHome;
+
+  /// No description provided for @bottomNavTransactions.
+  ///
+  /// In pt, this message translates to:
+  /// **'Transações'**
+  String get bottomNavTransactions;
+
+  /// No description provided for @bottomNavCharges.
+  ///
+  /// In pt, this message translates to:
+  /// **'Cobrar'**
+  String get bottomNavCharges;
+
+  /// No description provided for @bottomNavProfile.
+  ///
+  /// In pt, this message translates to:
+  /// **'Perfil'**
+  String get bottomNavProfile;
 }
 
 class _AppLocalizationsDelegate

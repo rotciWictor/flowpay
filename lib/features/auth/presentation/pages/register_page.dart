@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flowpay/app/theme/app_colors.dart';
 import 'package:flowpay/app/theme/app_spacing.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -10,7 +11,7 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Criar Conta'),
+        title: Text(AppLocalizations.of(context)!.registerTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -25,15 +26,15 @@ class RegisterPage extends StatelessWidget {
               Icon(Icons.construction, size: 64, color: AppColors.primary),
               SizedBox(height: AppSpacing.md),
               Text(
-                'Fluxo de Cadastro em Construção',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                AppLocalizations.of(context)!.registerComingSoonTitle,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: AppSpacing.sm),
+              const SizedBox(height: AppSpacing.sm),
               Text(
-                'Aqui teremos um formulário passo-a-passo (Stepper) para coletar os dados do lojista (CNPJ, Razão Social, etc).',
+                AppLocalizations.of(context)!.registerComingSoonDesc,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
+                style: const TextStyle(color: Colors.grey),
               ),
             ],
           ),

@@ -9,5 +9,21 @@
   "todaySales": "Vendas de hoje",
   "transactions": "Transações",
   "charges": "Cobranças",
-  "profile": "Perfil"
+  "profile": "Perfil",
+  "loginTitle": "Acessar Conta",
+  "loginEmailLabel": "E-mail",
+  "loginPasswordLabel": "Senha",
+  "loginButton": "Entrar",
+  "loginGoogleButton": "Entrar com Google",
+  "loginRegisterPrompt": "Não tem uma conta? Cadastre-se",
+  "registerTitle": "Criar Conta",
+  "registerComingSoonTitle": "Fluxo de Cadastro em Construção",
+  "registerComingSoonDesc": "Aqui teremos um formulário passo-a-passo (Stepper) para coletar os dados do lojista (CNPJ, Razão Social, etc).",
+  "profileLogout": "Sair",
+  "profileTitle": "Meu Perfil",
+  "profileComingSoon": "Em breve: Configurações do Lojista",
+  "bottomNavHome": "Início",
+  "bottomNavTransactions": "Transações",
+  "bottomNavCharges": "Cobrar",
+  "bottomNavProfile": "Perfil"
 }

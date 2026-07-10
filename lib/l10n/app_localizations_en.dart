@@ -28,4 +28,53 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profile => 'Profile';
+
+  @override
+  String get loginTitle => 'Sign In';
+
+  @override
+  String get loginEmailLabel => 'Email';
+
+  @override
+  String get loginPasswordLabel => 'Password';
+
+  @override
+  String get loginButton => 'Login';
+
+  @override
+  String get loginGoogleButton => 'Sign in with Google';
+
+  @override
+  String get loginRegisterPrompt => 'Don\'t have an account? Sign up';
+
+  @override
+  String get registerTitle => 'Create Account';
+
+  @override
+  String get registerComingSoonTitle => 'Registration Flow under construction';
+
+  @override
+  String get registerComingSoonDesc =>
+      'Here we will have a stepper form to collect the merchant data (Tax ID, Legal Name, etc).';
+
+  @override
+  String get profileLogout => 'Logout';
+
+  @override
+  String get profileTitle => 'My Profile';
+
+  @override
+  String get profileComingSoon => 'Coming soon: Merchant Settings';
+
+  @override
+  String get bottomNavHome => 'Home';
+
+  @override
+  String get bottomNavTransactions => 'Transactions';
+
+  @override
+  String get bottomNavCharges => 'Charge';
+
+  @override
+  String get bottomNavProfile => 'Profile';
 }

@@ -6,5 +6,21 @@
   "todaySales": "Today's sales",
   "transactions": "Transactions",
   "charges": "Charges",
-  "profile": "Profile"
+  "profile": "Profile",
+  "loginTitle": "Sign In",
+  "loginEmailLabel": "Email",
+  "loginPasswordLabel": "Password",
+  "loginButton": "Login",
+  "loginGoogleButton": "Sign in with Google",
+  "loginRegisterPrompt": "Don't have an account? Sign up",
+  "registerTitle": "Create Account",
+  "registerComingSoonTitle": "Registration Flow under construction",
+  "registerComingSoonDesc": "Here we will have a stepper form to collect the merchant data (Tax ID, Legal Name, etc).",
+  "profileLogout": "Logout",
+  "profileTitle": "My Profile",
+  "profileComingSoon": "Coming soon: Merchant Settings",
+  "bottomNavHome": "Home",
+  "bottomNavTransactions": "Transactions",
+  "bottomNavCharges": "Charge",
+  "bottomNavProfile": "Profile"
 }
