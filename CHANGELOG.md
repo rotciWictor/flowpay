@@ -4,6 +4,18 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 
 ---
 
+## [0.2.2] - Localização (i18n): Dicionários e Seletor Dinâmico
+
+### `(tbd)` - Dicionários ARB e Integração do flutter_localizations
+- **Tradução Total da UI (i18n)**: Limpeza profunda de dívida técnica. Todas as strings físicas (hardcoded) nas páginas `LoginPage`, `RegisterPage`, `ProfilePage` e `AppBottomNav` foram extraídas e registradas em dicionários tipados no formato ARB (`app_pt.arb` e `app_en.arb`). O `flutter gen-l10n` foi executado para prover a reatividade via `AppLocalizations.of(context)`.
+
+### `(tbd)` - Seletor de Idiomas Dinâmico (LocaleCubit)
+- **Gerenciador de Estado de Localidade (`LocaleCubit`)**: Implementação de um Cubit dedicado à retenção do estado de idioma ativo.
+- **Árvore de Widget Reativa**: O `MaterialApp` base no `main.dart` foi envelopado dentro de um `BlocBuilder<LocaleCubit, Locale>`. Isso converte o aplicativo inteiro em uma árvore reativa onde qualquer alteração de idioma propaga a renderização de strings de maneira global, síncrona e "em tempo real".
+- **UX**: Adição de uma "Bandeirinha" discreta (`IconButton` com ícone de linguagem) no canto superior direito do Auth Flow para demonstrações visuais do poder do framework de trocar de idioma sem necessidade de *hot reload*.
+
+---
+
 ## [0.2.1] - Auth: Melhorias UX, Google Sign-in e Modo Demo
 
 ### `(tbd)` - Easter Egg, Roteamento e Setup Google Auth
