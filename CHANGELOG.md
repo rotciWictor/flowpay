@@ -4,6 +4,32 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 
 ---
 
+## [0.3.0] - Dashboard Financeiro Premium & UX Overhaul
+
+### `(tbd)` - Diário de Design (O Processo e Iterações)
+- **Fase 1: O "Efeito Foom"**: A primeira versão do dashboard utilizava componentes nativos e rígidos (Roboto, BarCharts e cores sólidas), resultando num aspecto "sem vida" (wireframe funcional). Após consultoria de design via IA (Gemini), identificamos a falta de "ar" (padding), a dissonância da tipografia padrão e a falta de hierarquia.
+- **Fase 2: A Busca pela Tipografia e Contraste**: Inicialmente dividimos as fontes (`Space Grotesk` para números e `Inter` para texto) e tentamos substituir o Verde Neon por um Verde Menta mais calmo. Porém, o Verde Menta "chapou" o design. Voltamos o **Verde Neon Original** como Primário para manter a agressividade da marca, mas isolamos o Verde Menta (`successMint`) apenas para valores positivos na lista de transações, resolvendo o contraste com o branco.
+- **Fase 3: Os Bugs Visuais do Gráfico (fl_chart)**: A transição de gráfico de barras para linha (Bezier) expôs três problemas reais: (1) O eixo X repetia os dias, resolvido forçando `interval: 1`; (2) O Tooltip vazava a tela nas extremidades, corrigido com `fitInsideHorizontally/Vertically`; (3) Quedas bruscas de valor faziam a curva furar o eixo zero (overshooting), contido com `preventCurveOverShooting: true`.
+- **Fase 4: A Decisão Final (Figma & Outfit)**: Baseado em uma referência premium do Figma focada na *Product Sans*, abandonamos a abordagem multi-fontes e migramos 100% da tipografia para **Outfit** (a gêmea open-source da fonte do Google). Acentuamos o "Glassmorphism" aumentando as bordas semitransparentes para `alpha: 0.08`.
+- **Fase 5: O Glitch do Spinner**: Tentativa de aplicar o gradiente neon no `CircularProgressIndicator` da Splash via `ShaderMask`. O redimensionamento orgânico do loading corrompia a máscara gerando "flashes brancos". Solucionado prendendo o spinner em um `SizedBox(40x40)` estático e trocando para um `SweepGradient` atrelado ao `BlendMode.srcIn`.
+
+### `(tbd)` - UI/UX: Implementação "Dark Fintech"
+- **Tipografia Consolidada (Outfit)**: Refatoração global da tipografia para a fonte geométrica `Outfit`, replicando o padrão visual de fintechs tier-1 (semelhante ao Product Sans). Implementada hierarquia de tamanhos extrema (ex: `fontSize: 44` para saldos) e tracking negativo (`letterSpacing: -1.0`) para condensar o volume visual, conferindo um design denso, premium e autoritário.
+- **Glassmorphism e Contorno Luminoso**: Substituição de caixas sem vida por cartões ancorados. Aplicação de um *border* branco translúcido (`alpha: 0.08`) nas bordas arredondadas e nos botões de ação rápida (`BoxShape.circle`), gerando um efeito de refração sutil que destaca a profundidade da superfície contra o fundo escuro de carvão.
+- **Gradients de Foco (Neon & Cyan)**: Criação de um `LinearGradient` na camada do saldo "A receber amanhã", transitando do Verde Neon para Azul Ciano antes de desaparecer em transparente (`Colors.transparent`). Essa iluminação direciona o olho do Gestor Matinal diretamente para os dados cruciais.
+- **Fix de Artefatos no Spinner (ShaderMask)**: Correção avançada de rendering no `CircularProgressIndicator` da Splash Screen. Devido à constante animação de expansão, a máscara sofria de "glitch". Enclausuramos o loading em um `SizedBox(40x40)` travando o *bounding box* matemático da máscara e utilizamos um `SweepGradient` atrelado ao `BlendMode.srcIn`, resultando num giro de gradiente neon suave e sem frames vazados (flickering).
+
+### `(tbd)` - Dashboard: Gráficos Interativos (fl_chart) e Shimmer Loading
+- **Gráfico de Linhas Interativo e Curvo**: Substituição de barras sólidas (estilo Excel) por um gráfico de linha contínua (Bezier curve) via pacote `fl_chart`. Ativado o `preventCurveOverShooting` para suprimir "quedas irreais" da linha matemática em picos bruscos de dados.
+- **Data Tooltips Financeiras**: Implementado o `touchTooltipData` com detecção de toque (`lineTouchData`). Ao escanear o gráfico com o dedo, o aplicativo renderiza em bolhas dinâmicas com fundo escuro os valores reais diários formatados e a exata data (`dd/mm`) embaixo da linha de Bezier sem estourar as margens da tela (`fitInsideHorizontally` e `fitInsideVertically`).
+- **Shimmer de Skeleton Personalizado**: Removido o padrão nativo agressivo e incluído o pacote `shimmer`. O app agora emite, durante chamadas assíncronas de rede, marcações suaves "skeleton" com máscaras dimensionais espelhando fielmente os contornos dos objetos finais.
+
+### `(tbd)` - Core: Dinheiro Estrito e Camada de Domínio do Dashboard
+- **Value Equality e Moeda (money2)**: Configurada infraestrutura de tipo estrito `Money` usando o pacote `money2`, com parsing rigoroso na formatação de `BRL`. As propriedades `decimalSeparator` e `groupSeparator` do padrão internacional blindam falhas de casting entre Inteiros e Floats (Floating Point errors), blindando o motor financeiro contra centavos perdidos.
+- **Domain Layer (DashboardData)**: Criação dos casos de uso, Entidades e DTOs (`GetDashboardData`, `DashboardDataEntity`, `DailySale`). A camada de dados filtra organicamente os inputs das transações em `TransactionsRepositoryImpl`, extraindo saldo aprovado e repasses pendentes para criar arrays agrupados dos últimos 7 dias, despachando tudo unificado para o `DashboardCubit`.
+
+---
+
 ## [0.2.2] - Localização (i18n): Dicionários e Seletor Dinâmico
 
 ### `(tbd)` - Dicionários ARB e Integração do flutter_localizations
