@@ -62,38 +62,42 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
         }
       }
 
-      // Calculate next settlement (mock logic: sum of pending transactions)
+      DateTime _getNextBusinessDay() {
+        var nextDay = DateTime.now().add(const Duration(days: 1));
+        while (nextDay.weekday == DateTime.saturday || nextDay.weekday == DateTime.sunday) {
+          nextDay = nextDay.add(const Duration(days: 1));
+        }
+        return nextDay;
+      }
+
+      // Calculate next settlement (sum of pending transactions)
       for (var t in transactions) {
         if (t.status == TransactionStatus.pending) {
           nextSettlementAmount = nextSettlementAmount + t.netAmount;
-          if (nextSettlementDate == null || t.createdAt.isBefore(nextSettlementDate)) {
-            nextSettlementDate = t.createdAt.add(const Duration(days: 1)); // Mock settlement day
-          }
         }
       }
       
-      if (nextSettlementDate == null && nextSettlementAmount.isZero) {
-          nextSettlementDate = DateTime.now().add(const Duration(days: 1));
-      }
+      // O recebimento sempre cai no próximo dia útil
+      nextSettlementDate = _getNextBusinessDay();
 
-      // Calculate weekly sales (last 7 days grouped by day)
+      // Calculate weekly sales (9 days to allow chart bleed: 8 days ago to tomorrow)
       final now = DateTime.now();
       final Map<int, Money> salesByDay = {};
-      for (int i = 6; i >= 0; i--) {
+      for (int i = 7; i >= -1; i--) {
         salesByDay[i] = Money.fromIntWithCurrency(0, brlCurrency);
       }
 
       for (var t in transactions) {
         if (t.status == TransactionStatus.approved || t.status == TransactionStatus.pending) {
           final difference = now.difference(t.createdAt).inDays;
-          if (difference >= 0 && difference < 7) {
+          if (difference >= -1 && difference <= 7) {
             salesByDay[difference] = (salesByDay[difference] ?? Money.fromIntWithCurrency(0, brlCurrency)) + t.amount;
           }
         }
       }
 
       final List<DailySale> weeklySales = [];
-      for (int i = 6; i >= 0; i--) {
+      for (int i = 7; i >= -1; i--) {
         weeklySales.add(DailySale(
           date: now.subtract(Duration(days: i)),
           totalAmount: salesByDay[i]!,
