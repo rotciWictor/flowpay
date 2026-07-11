@@ -22,6 +22,10 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 - **Pull-to-Refresh em Listas Vazias**: Adicionado o componente `RefreshIndicator` com a propriedade `AlwaysScrollableScrollPhysics` na lista. Isso permite que a tela seja puxada de cima para baixo para atualizar mesmo quando não existem transações.
 - **Loading Silencioso (Pull-to-Refresh)**: Alteramos a lógica de carregamento. O Shimmer (esqueleto cinza piscando na tela inteira) só aparece quando você abre a tela pela primeira vez. Se você usar o gesto de puxar a tela para baixo, o Shimmer não apaga o que você estava lendo; apenas a setinha de carregar aparece no topo, colorida em verde e ciano.
 
+### `(tbd)` - Internacionalização (i18n) e Chaves Agnósticas
+- **Extrato Multilíngue**: Todas as palavras e frases (hardcoded) do Extrato e do Filtro foram extraídas e colocadas nos arquivos `.arb` (`app_pt.arb` e `app_en.arb`). A tela agora traduz em tempo real se o idioma do app mudar.
+- **Estado Seguro Contra Tradução**: Ao invés do filtro salvar as palavras que estavam na tela (ex: "Vendas") para lembrar o estado, ele agora usa chaves imutáveis por baixo dos panos (ex: `'sales'`). Assim, o filtro continua funcionando perfeitamente independente do idioma escolhido.
+
 ### `(tbd)` - Lógica do Filtro e Base de Dados
 - **Filtro de "Movimentações da Conta"**: O Usecase `GetTransactions` foi alterado para aceitar uma lista de tipos (`List<TransactionType>`) em vez de um único tipo. Com isso, ao selecionar "Movimentações da Conta", o app agora busca tanto as saídas (`transfer_out`) quanto as entradas (`transfer_in`) ao mesmo tempo.
 - **Consultas Otimizadas no Supabase**: A chamada no servidor foi atualizada para usar a instrução `.filter('coluna', 'in', lista)` do Supabase, o que permite fazer a busca de vários tipos ou vários status de uma vez só no banco, deixando a busca mais rápida.

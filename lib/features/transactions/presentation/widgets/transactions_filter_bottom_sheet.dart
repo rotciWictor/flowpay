@@ -3,6 +3,7 @@ import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 import 'package:flowpay/features/transactions/domain/entities/transaction.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
 
 class TransactionsFilterBottomSheet extends StatefulWidget {
   final Map<String, dynamic>? initialFilter;
@@ -14,22 +15,24 @@ class TransactionsFilterBottomSheet extends StatefulWidget {
 }
 
 class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottomSheet> {
-  String _selectedPeriod = 'Todos'; 
-  String _selectedMovementType = 'Todas'; 
+  String _selectedPeriod = 'all'; 
+  String _selectedMovementType = 'all'; 
   List<String> _selectedStatuses = [];
 
   @override
   void initState() {
     super.initState();
     if (widget.initialFilter != null) {
-      _selectedPeriod = widget.initialFilter!['period'] ?? 'Todos';
-      _selectedMovementType = widget.initialFilter!['movementType'] ?? 'Todas';
+      _selectedPeriod = widget.initialFilter!['period'] ?? 'all';
+      _selectedMovementType = widget.initialFilter!['movementType'] ?? 'all';
       _selectedStatuses = List<String>.from(widget.initialFilter!['statuses'] ?? []);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Container(
       decoration: const BoxDecoration(
         color: FlowColors.background,
@@ -58,28 +61,28 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
           ),
           const SizedBox(height: FlowSpacing.lg),
           Text(
-            'Filtrar Extrato',
+            l10n.filterTitle,
             style: FlowTypography.headlineSmall.copyWith(color: FlowColors.primary),
           ),
           const SizedBox(height: FlowSpacing.xl),
 
           // 1. Tipo de Movimentação
-          Text('TIPO DE MOVIMENTAÇÃO', style: _labelStyle()),
+          Text(l10n.filterTypeLabel, style: _labelStyle()),
           const SizedBox(height: FlowSpacing.xs),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                _buildChoiceChip('Todas', _selectedMovementType == 'Todas', () {
-                  setState(() => _selectedMovementType = 'Todas');
+                _buildChoiceChip(l10n.filterTypeAll, _selectedMovementType == 'all', () {
+                  setState(() => _selectedMovementType = 'all');
                 }),
                 const SizedBox(width: FlowSpacing.sm),
-                _buildChoiceChip('Vendas', _selectedMovementType == 'Vendas', () {
-                  setState(() => _selectedMovementType = 'Vendas');
+                _buildChoiceChip(l10n.filterTypeSales, _selectedMovementType == 'sales', () {
+                  setState(() => _selectedMovementType = 'sales');
                 }),
                 const SizedBox(width: FlowSpacing.sm),
-                _buildChoiceChip('Movimentações da conta', _selectedMovementType == 'Movimentações da conta', () {
-                  setState(() => _selectedMovementType = 'Movimentações da conta');
+                _buildChoiceChip(l10n.filterTypeBanking, _selectedMovementType == 'banking', () {
+                  setState(() => _selectedMovementType = 'banking');
                 }),
               ],
             ),
@@ -87,31 +90,31 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
           const SizedBox(height: FlowSpacing.lg),
 
           // 2. Período
-          Text('PERÍODO', style: _labelStyle()),
+          Text(l10n.filterPeriodLabel, style: _labelStyle()),
           const SizedBox(height: FlowSpacing.xs),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                _buildChoiceChip('Qualquer data', _selectedPeriod == 'Todos', () {
-                  setState(() => _selectedPeriod = 'Todos');
+                _buildChoiceChip(l10n.filterPeriodAny, _selectedPeriod == 'all', () {
+                  setState(() => _selectedPeriod = 'all');
                 }),
                 const SizedBox(width: FlowSpacing.sm),
-                _buildChoiceChip('Hoje', _selectedPeriod == 'Hoje', () {
-                  setState(() => _selectedPeriod = 'Hoje');
+                _buildChoiceChip(l10n.filterPeriodToday, _selectedPeriod == 'today', () {
+                  setState(() => _selectedPeriod = 'today');
                 }),
                 const SizedBox(width: FlowSpacing.sm),
-                _buildChoiceChip('Últimos 7 dias', _selectedPeriod == '7d', () {
+                _buildChoiceChip(l10n.filterPeriod7d, _selectedPeriod == '7d', () {
                   setState(() => _selectedPeriod = '7d');
                 }),
                 const SizedBox(width: FlowSpacing.sm),
-                _buildChoiceChip('Customizado', _selectedPeriod == 'Custom', () async {
-                  setState(() => _selectedPeriod = 'Custom');
+                _buildChoiceChip(l10n.filterPeriodCustom, _selectedPeriod == 'custom', () async {
+                  setState(() => _selectedPeriod = 'custom');
                 }),
               ],
             ),
           ),
-          if (_selectedPeriod == 'Custom') ...[
+          if (_selectedPeriod == 'custom') ...[
             const SizedBox(height: FlowSpacing.sm),
             Container(
               padding: const EdgeInsets.all(FlowSpacing.sm),
@@ -144,16 +147,16 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
           const SizedBox(height: FlowSpacing.lg),
 
           // 3. Status
-          Text('STATUS', style: _labelStyle()),
+          Text(l10n.filterStatusLabel, style: _labelStyle()),
           const SizedBox(height: FlowSpacing.xs),
           Wrap(
             spacing: FlowSpacing.sm,
             runSpacing: FlowSpacing.sm,
             children: [
-              _buildFilterChip('Aprovada'),
-              _buildFilterChip('Pendente'),
-              _buildFilterChip('Falha'),
-              _buildFilterChip('Reembolsada'),
+              _buildFilterChip(l10n.filterStatusApproved, 'approved'),
+              _buildFilterChip(l10n.filterStatusPending, 'pending'),
+              _buildFilterChip(l10n.filterStatusFailed, 'failed'),
+              _buildFilterChip(l10n.filterStatusRefunded, 'refunded'),
             ],
           ),
           const SizedBox(height: FlowSpacing.xl),
@@ -165,25 +168,25 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
             child: ElevatedButton(
               onPressed: () {
                 List<TransactionType>? types;
-                if (_selectedMovementType == 'Vendas') types = [TransactionType.sale];
-                if (_selectedMovementType == 'Movimentações da conta') {
+                if (_selectedMovementType == 'sales') types = [TransactionType.sale];
+                if (_selectedMovementType == 'banking') {
                   types = [TransactionType.transferOut, TransactionType.transferIn];
                 }
                 
                 DateTime? start;
                 DateTime? end;
                 final now = DateTime.now();
-                if (_selectedPeriod == 'Hoje') {
+                if (_selectedPeriod == 'today') {
                   start = DateTime(now.year, now.month, now.day);
                 } else if (_selectedPeriod == '7d') {
                   start = now.subtract(const Duration(days: 7));
                 }
                 
                 List<TransactionStatus> statuses = [];
-                if (_selectedStatuses.contains('Aprovada')) statuses.add(TransactionStatus.approved);
-                if (_selectedStatuses.contains('Pendente')) statuses.add(TransactionStatus.pending);
-                if (_selectedStatuses.contains('Falha')) statuses.add(TransactionStatus.declined);
-                if (_selectedStatuses.contains('Reembolsada')) statuses.add(TransactionStatus.refunded);
+                if (_selectedStatuses.contains('approved')) statuses.add(TransactionStatus.approved);
+                if (_selectedStatuses.contains('pending')) statuses.add(TransactionStatus.pending);
+                if (_selectedStatuses.contains('failed')) statuses.add(TransactionStatus.declined);
+                if (_selectedStatuses.contains('refunded')) statuses.add(TransactionStatus.refunded);
 
                 Navigator.pop(context, {
                   'transactionTypes': types,
@@ -204,9 +207,9 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
                   borderRadius: BorderRadius.circular(FlowSpacing.radiusMd),
                 ),
               ),
-              child: const Text(
-                'Aplicar Filtros',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              child: Text(
+                l10n.filterApplyBtn,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
           ),
@@ -246,22 +249,22 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
     );
   }
 
-  Widget _buildFilterChip(String label) {
-    final isSelected = _selectedStatuses.contains(label);
+  Widget _buildFilterChip(String label, String key) {
+    final isSelected = _selectedStatuses.contains(key);
     return GestureDetector(
       onTap: () {
         setState(() {
           if (isSelected) {
-            _selectedStatuses.remove(label);
+            _selectedStatuses.remove(key);
           } else {
-            _selectedStatuses.add(label);
+            _selectedStatuses.add(key);
           }
         });
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? FlowColors.primaryGradientEnd : FlowColors.surface, // Usando Ciano (accent) pros status pra dar o contraste que o user pediu!
+          color: isSelected ? FlowColors.primaryGradientEnd : FlowColors.surface,
           borderRadius: BorderRadius.circular(FlowSpacing.radiusPill),
           border: Border.all(
             color: isSelected ? FlowColors.primaryGradientEnd : Colors.transparent,

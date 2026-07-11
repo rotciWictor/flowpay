@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
 import 'package:flowpay/core/utils/date_formatter.dart';
 import 'package:flowpay/features/transactions/domain/entities/transaction.dart';
 import 'package:flowpay/features/transactions/presentation/cubit/transactions_cubit.dart';
@@ -29,13 +30,14 @@ class TransactionsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: FlowColors.background,
       appBar: AppBar(
         backgroundColor: FlowColors.background,
         elevation: 0,
         title: Text(
-          'Extrato',
+          l10n.transactionsTitle,
           style: FlowTypography.headlineSmall.copyWith(
             color: FlowColors.textPrimary,
           ),
@@ -92,7 +94,7 @@ class TransactionsView extends StatelessWidget {
                     height: MediaQuery.of(context).size.height - 200,
                     alignment: Alignment.center,
                     child: Text(
-                      'Nenhuma transação encontrada.',
+                      l10n.transactionsEmpty,
                       style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textSecondary),
                     ),
                   ),

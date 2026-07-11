@@ -295,6 +295,114 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Ver todas'**
   String get dashboardSeeAll;
+
+  /// No description provided for @transactionsTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Extrato'**
+  String get transactionsTitle;
+
+  /// No description provided for @transactionsEmpty.
+  ///
+  /// In pt, this message translates to:
+  /// **'Nenhuma transação encontrada.'**
+  String get transactionsEmpty;
+
+  /// No description provided for @filterTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Filtrar Extrato'**
+  String get filterTitle;
+
+  /// No description provided for @filterTypeLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'TIPO DE MOVIMENTAÇÃO'**
+  String get filterTypeLabel;
+
+  /// No description provided for @filterTypeAll.
+  ///
+  /// In pt, this message translates to:
+  /// **'Todas'**
+  String get filterTypeAll;
+
+  /// No description provided for @filterTypeSales.
+  ///
+  /// In pt, this message translates to:
+  /// **'Vendas'**
+  String get filterTypeSales;
+
+  /// No description provided for @filterTypeBanking.
+  ///
+  /// In pt, this message translates to:
+  /// **'Movimentações da conta'**
+  String get filterTypeBanking;
+
+  /// No description provided for @filterPeriodLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'PERÍODO'**
+  String get filterPeriodLabel;
+
+  /// No description provided for @filterPeriodAny.
+  ///
+  /// In pt, this message translates to:
+  /// **'Qualquer data'**
+  String get filterPeriodAny;
+
+  /// No description provided for @filterPeriodToday.
+  ///
+  /// In pt, this message translates to:
+  /// **'Hoje'**
+  String get filterPeriodToday;
+
+  /// No description provided for @filterPeriod7d.
+  ///
+  /// In pt, this message translates to:
+  /// **'Últimos 7 dias'**
+  String get filterPeriod7d;
+
+  /// No description provided for @filterPeriodCustom.
+  ///
+  /// In pt, this message translates to:
+  /// **'Customizado'**
+  String get filterPeriodCustom;
+
+  /// No description provided for @filterStatusLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'STATUS'**
+  String get filterStatusLabel;
+
+  /// No description provided for @filterStatusApproved.
+  ///
+  /// In pt, this message translates to:
+  /// **'Aprovada'**
+  String get filterStatusApproved;
+
+  /// No description provided for @filterStatusPending.
+  ///
+  /// In pt, this message translates to:
+  /// **'Pendente'**
+  String get filterStatusPending;
+
+  /// No description provided for @filterStatusFailed.
+  ///
+  /// In pt, this message translates to:
+  /// **'Falha'**
+  String get filterStatusFailed;
+
+  /// No description provided for @filterStatusRefunded.
+  ///
+  /// In pt, this message translates to:
+  /// **'Reembolsada'**
+  String get filterStatusRefunded;
+
+  /// No description provided for @filterApplyBtn.
+  ///
+  /// In pt, this message translates to:
+  /// **'Aplicar Filtros'**
+  String get filterApplyBtn;
 }
 
 class _AppLocalizationsDelegate

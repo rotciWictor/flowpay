@@ -107,4 +107,58 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get dashboardSeeAll => 'Ver todas';
+
+  @override
+  String get transactionsTitle => 'Extrato';
+
+  @override
+  String get transactionsEmpty => 'Nenhuma transação encontrada.';
+
+  @override
+  String get filterTitle => 'Filtrar Extrato';
+
+  @override
+  String get filterTypeLabel => 'TIPO DE MOVIMENTAÇÃO';
+
+  @override
+  String get filterTypeAll => 'Todas';
+
+  @override
+  String get filterTypeSales => 'Vendas';
+
+  @override
+  String get filterTypeBanking => 'Movimentações da conta';
+
+  @override
+  String get filterPeriodLabel => 'PERÍODO';
+
+  @override
+  String get filterPeriodAny => 'Qualquer data';
+
+  @override
+  String get filterPeriodToday => 'Hoje';
+
+  @override
+  String get filterPeriod7d => 'Últimos 7 dias';
+
+  @override
+  String get filterPeriodCustom => 'Customizado';
+
+  @override
+  String get filterStatusLabel => 'STATUS';
+
+  @override
+  String get filterStatusApproved => 'Aprovada';
+
+  @override
+  String get filterStatusPending => 'Pendente';
+
+  @override
+  String get filterStatusFailed => 'Falha';
+
+  @override
+  String get filterStatusRefunded => 'Reembolsada';
+
+  @override
+  String get filterApplyBtn => 'Aplicar Filtros';
 }

@@ -107,4 +107,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dashboardSeeAll => 'See all';
+
+  @override
+  String get transactionsTitle => 'Statement';
+
+  @override
+  String get transactionsEmpty => 'No transactions found.';
+
+  @override
+  String get filterTitle => 'Filter Statement';
+
+  @override
+  String get filterTypeLabel => 'MOVEMENT TYPE';
+
+  @override
+  String get filterTypeAll => 'All';
+
+  @override
+  String get filterTypeSales => 'Sales';
+
+  @override
+  String get filterTypeBanking => 'Banking movements';
+
+  @override
+  String get filterPeriodLabel => 'PERIOD';
+
+  @override
+  String get filterPeriodAny => 'Any date';
+
+  @override
+  String get filterPeriodToday => 'Today';
+
+  @override
+  String get filterPeriod7d => 'Last 7 days';
+
+  @override
+  String get filterPeriodCustom => 'Custom';
+
+  @override
+  String get filterStatusLabel => 'STATUS';
+
+  @override
+  String get filterStatusApproved => 'Approved';
+
+  @override
+  String get filterStatusPending => 'Pending';
+
+  @override
+  String get filterStatusFailed => 'Failed';
+
+  @override
+  String get filterStatusRefunded => 'Refunded';
+
+  @override
+  String get filterApplyBtn => 'Apply Filters';
 }
