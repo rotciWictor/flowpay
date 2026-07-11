@@ -52,32 +52,76 @@ SET business_name = 'FlowPay Demo Store',
     segment = 'retail'
 WHERE user_id = '00000000-0000-0000-0000-000000000000';
 
--- 2. Inserir 100 Transações Realistas para os últimos 30 dias
+-- 2. Limpar transações antigas do usuário Demo (Evita dados duplicados/sujos)
+DELETE FROM public.transactions 
+WHERE merchant_id = '00000000-0000-0000-0000-000000000000';
+
+-- 3. Inserir 150 Transações Realistas para os últimos 30 dias
 -- Vamos usar uma CTE (Common Table Expression) e randomização do Postgres para gerar dados orgânicos.
 
 WITH data_generator AS (
   SELECT 
-    generate_series(1, 100) AS i,
+    generate_series(1, 150) AS i,
     '00000000-0000-0000-0000-000000000000'::uuid AS merchant_id,
-    -- Valor aleatório entre 25.00 e 4500.00 convertido para centavos (INTEGER)
     floor((random() * 4475 + 25) * 100)::integer AS amount,
-    -- Tipo de pagamento randômico (credit, debit, pix)
+    (ARRAY['sale', 'sale', 'sale', 'sale', 'transfer_out', 'transfer_in'])[floor(random() * 6 + 1)] AS transaction_type,
     (ARRAY['credit', 'credit', 'credit', 'pix', 'pix', 'debit'])[floor(random() * 6 + 1)] AS payment_method,
-    -- Status da transação randômico (80% aprovado, o resto varia)
-    (ARRAY['approved', 'approved', 'approved', 'approved', 'approved', 'approved', 'approved', 'approved', 'pending', 'declined', 'refunded', 'chargeback'])[floor(random() * 12 + 1)] AS status,
-    -- Data variando de 30 dias atrás até agora
+    (ARRAY['approved', 'approved', 'approved', 'approved', 'approved', 'approved', 'approved', 'pending', 'declined', 'refunded', 'chargeback'])[floor(random() * 11 + 1)] AS status,
+    (ARRAY['visa', 'mastercard', 'elo', 'mastercard', 'visa', 'amex'])[floor(random() * 6 + 1)] AS card_brand,
+    (ARRAY['João Silva', 'Maria Oliveira', 'Carlos Santos', 'Ana Souza', 'Empresa XYZ', 'Cliente Final', 'Pedro Costa', 'Fernanda Lima'])[floor(random() * 8 + 1)] AS customer_name_sale,
+    (ARRAY['Fornecedor A', 'Conta de Luz', 'Internet', 'Marketing Ads'])[floor(random() * 4 + 1)] AS customer_name_transfer_out,
     (now() - (random() * 30 || ' days')::interval) AS created_at
 )
-INSERT INTO public.transactions (merchant_id, amount, net_amount, fee_amount, payment_method, status, created_at)
+INSERT INTO public.transactions (merchant_id, transaction_type, amount, net_amount, fee_amount, payment_method, card_brand, customer_name, status, created_at)
 SELECT 
   merchant_id, 
+  
+  -- Ajustar transaction type pra ter certeza
+  transaction_type,
+  
   amount, 
-  floor(amount * 0.95)::integer AS net_amount, -- Simulando taxa de 5%
-  floor(amount * 0.05)::integer AS fee_amount,
-  payment_method, 
-  status, 
+  
+  -- Lógica de valor líquido (dinheiro no bolso)
+  CASE 
+    WHEN transaction_type = 'transfer_out' THEN -amount -- Transferência é saída total
+    WHEN transaction_type = 'transfer_in' THEN amount -- Transferência recebida é entrada total
+    WHEN status IN ('chargeback', 'refunded') THEN -amount -- Devolução é saída
+    WHEN status = 'declined' THEN 0
+    ELSE floor(amount * 0.95)::integer -- Venda normal tira a taxa
+  END AS net_amount,
+  
+  -- Taxa cobrada
+  CASE 
+    WHEN transaction_type = 'transfer_out' OR transaction_type = 'transfer_in' THEN 0 -- Pix não tem taxa pra transferir
+    WHEN status IN ('declined', 'chargeback', 'refunded') THEN 0
+    ELSE floor(amount * 0.05)::integer 
+  END AS fee_amount,
+  
+  CASE WHEN transaction_type IN ('transfer_out', 'transfer_in') THEN 'pix' ELSE payment_method END AS payment_method, 
+  CASE WHEN transaction_type IN ('transfer_out', 'transfer_in') OR payment_method = 'pix' THEN NULL ELSE card_brand END AS card_brand,
+  CASE 
+    WHEN transaction_type = 'transfer_out' THEN customer_name_transfer_out 
+    ELSE customer_name_sale 
+  END AS customer_name,
+  
+  -- Regras Reais de Negócio para o Status
+  CASE 
+    -- 1. Transferências (IN/OUT): Podem estar pendentes (agendadas), aprovadas ou falhas, mas nunca chargeback/estorno
+    WHEN transaction_type IN ('transfer_out', 'transfer_in') THEN 
+      CASE 
+        WHEN status IN ('chargeback', 'refunded') THEN 'pending' -- Transforma os impossíveis em Agendamentos/Pendentes
+        ELSE status 
+      END
+    -- 2. Pix (Vendas): Não tem chargeback de cartão, vira Devolução (refunded). E falhas são mais raras.
+    WHEN payment_method = 'pix' THEN 
+      CASE 
+        WHEN status = 'chargeback' THEN 'refunded'
+        WHEN status = 'declined' THEN 'approved' -- Evita o "Pix recusado"
+        ELSE status 
+      END
+    -- 3. Cartões: Segue o sorteio normal (pode ter tudo)
+    ELSE status 
+  END AS status, 
   created_at
 FROM data_generator
 ON CONFLICT DO NOTHING;
-
--- Opcionalmente, pode ser gerado mais dados para faturas e recebíveis (charges) depois.

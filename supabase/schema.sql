@@ -14,6 +14,7 @@ CREATE TABLE merchants (
 CREATE TABLE transactions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   merchant_id UUID REFERENCES merchants(id) ON DELETE CASCADE,
+  transaction_type TEXT NOT NULL DEFAULT 'sale', -- sale, transfer_in, transfer_out
   amount INTEGER NOT NULL,           -- valor em centavos (R$ 150,00 = 15000)
   net_amount INTEGER NOT NULL,       -- valor líquido (após taxas)
   fee_amount INTEGER NOT NULL,       -- valor da taxa
