@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -27,14 +28,14 @@ class RegisterPage extends StatelessWidget {
               SizedBox(height: FlowSpacing.md),
               Text(
                 AppLocalizations.of(context)!.registerComingSoonTitle,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: FlowTypography.titleLarge,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: FlowSpacing.sm),
               Text(
                 AppLocalizations.of(context)!.registerComingSoonDesc,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.grey),
+                style: FlowTypography.bodyMedium.copyWith(color: FlowColors.textSecondary),
               ),
             ],
           ),

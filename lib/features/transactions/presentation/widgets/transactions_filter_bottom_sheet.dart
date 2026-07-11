@@ -138,7 +138,7 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
                   ),
                   TextButton(
                     onPressed: () {},
-                    child: const Text('Alterar', style: TextStyle(color: FlowColors.primary)),
+                    child: Text('Alterar', style: FlowTypography.labelLarge.copyWith(color: FlowColors.primary)),
                   )
                 ],
               ),
@@ -209,7 +209,7 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
               ),
               child: Text(
                 l10n.filterApplyBtn,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: FlowTypography.titleMedium,
               ),
             ),
           ),
@@ -230,7 +230,7 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.lg, vertical: FlowSpacing.md),
         decoration: BoxDecoration(
           color: isSelected ? FlowColors.primary : FlowColors.surface,
           borderRadius: BorderRadius.circular(FlowSpacing.radiusPill),
@@ -262,7 +262,7 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
         });
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.lg, vertical: FlowSpacing.sm),
         decoration: BoxDecoration(
           color: isSelected ? FlowColors.primaryGradientEnd : FlowColors.surface,
           borderRadius: BorderRadius.circular(FlowSpacing.radiusPill),

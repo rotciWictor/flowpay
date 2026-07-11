@@ -7,6 +7,7 @@ import 'package:flowpay/features/transactions/presentation/cubit/dashboard_state
 import 'package:shimmer/shimmer.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 
 // Components
 import 'package:flowpay/features/dashboard/presentation/widgets/dashboard_header.dart';
@@ -84,7 +85,7 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
                           const SizedBox(height: FlowSpacing.lg),
                           Text(
                             AppLocalizations.of(context)!.dashboardWeeklySales,
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: FlowTypography.titleLarge,
                           ),
                           const SizedBox(height: FlowSpacing.md),
                           WeeklySalesChart(weeklySales: data.weeklySales),
@@ -125,13 +126,13 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
             const SizedBox(height: FlowSpacing.lg),
             Text(
               AppLocalizations.of(context)!.dashboardErrorTitle,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+              style: FlowTypography.titleLarge.copyWith(color: FlowColors.textPrimary),
             ),
             const SizedBox(height: FlowSpacing.sm),
             Text(
               message, 
               textAlign: TextAlign.center,
-              style: const TextStyle(color: FlowColors.textSecondary, fontSize: 14),
+              style: FlowTypography.bodyMedium.copyWith(color: FlowColors.textSecondary),
             ),
             const SizedBox(height: FlowSpacing.xl),
             ElevatedButton.icon(
@@ -140,9 +141,9 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
               label: Text(AppLocalizations.of(context)!.dashboardTryAgain),
               style: ElevatedButton.styleFrom(
                 backgroundColor: FlowColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                foregroundColor: FlowColors.textPrimary,
+                padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.xxl, vertical: FlowSpacing.md),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(FlowSpacing.radiusMd)),
               ),
             ),
           ],
@@ -164,16 +165,16 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Header
-                  Container(width: 120, height: 14, color: Colors.white),
-                  const SizedBox(height: 8),
-                  Container(width: 200, height: 40, color: Colors.white),
+                  Container(width: 120, height: 14, color: FlowColors.surface),
+                  const SizedBox(height: FlowSpacing.sm),
+                  Container(width: 200, height: 40, color: FlowColors.surface),
                   const SizedBox(height: FlowSpacing.lg),
                   
                   // NextSettlementCard
                   Container(
                     width: double.infinity,
                     height: 80,
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+                    decoration: BoxDecoration(color: FlowColors.surface, borderRadius: BorderRadius.circular(FlowSpacing.radiusLg)),
                   ),
                   const SizedBox(height: FlowSpacing.lg),
                   
@@ -182,28 +183,28 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: List.generate(4, (index) => Column(
                       children: [
-                        Container(width: 56, height: 56, decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle)),
-                        const SizedBox(height: 8),
-                        Container(width: 40, height: 10, color: Colors.white),
+                        Container(width: 56, height: 56, decoration: const BoxDecoration(color: FlowColors.surface, shape: BoxShape.circle)),
+                        const SizedBox(height: FlowSpacing.sm),
+                        Container(width: 40, height: 10, color: FlowColors.surface),
                       ],
                     )),
                   ),
                   const SizedBox(height: FlowSpacing.lg),
                   
                   // Chart Title
-                  Container(width: 150, height: 20, color: Colors.white),
+                  Container(width: 150, height: 20, color: FlowColors.surface),
                   const SizedBox(height: FlowSpacing.md),
                   
                   // Chart
                   Container(
                     width: double.infinity,
                     height: 200,
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+                    decoration: BoxDecoration(color: FlowColors.surface, borderRadius: BorderRadius.circular(FlowSpacing.radiusLg)),
                   ),
                   const SizedBox(height: FlowSpacing.lg),
                   
                   // Transactions Title
-                  Container(width: 160, height: 20, color: Colors.white),
+                  Container(width: 160, height: 20, color: FlowColors.surface),
                   const SizedBox(height: FlowSpacing.md),
                 ],
               ),
@@ -215,10 +216,10 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 return ListTile(
-                  leading: const CircleAvatar(backgroundColor: Colors.white),
-                  title: Container(width: 80, height: 16, color: Colors.white),
-                  subtitle: Container(width: 60, height: 12, color: Colors.white),
-                  trailing: Container(width: 40, height: 12, color: Colors.white),
+                  leading: const CircleAvatar(backgroundColor: FlowColors.surface),
+                  title: Container(width: 80, height: 16, color: FlowColors.surface),
+                  subtitle: Container(width: 60, height: 12, color: FlowColors.surface),
+                  trailing: Container(width: 40, height: 12, color: FlowColors.surface),
                 );
               },
               childCount: 5,

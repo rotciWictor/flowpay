@@ -6,6 +6,7 @@ import 'package:flowpay/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:flowpay/features/auth/presentation/cubit/auth_state.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 import 'package:flowpay/core/bloc/locale_cubit.dart';
 import 'package:country_flags/country_flags.dart';
@@ -187,10 +188,10 @@ class _LoginPageState extends State<LoginPage> {
                                               )
                                             : Text(
                                                 AppLocalizations.of(context)!.loginButton,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold, 
+                                                style: FlowTypography.labelLarge.copyWith(
                                                   fontSize: 16,
                                                   letterSpacing: 1.0,
+                                                  color: FlowColors.textPrimary,
                                                 ),
                                               ),
                                       ),
@@ -211,9 +212,8 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: () => context.push('/register'),
                                 child: Text(
                                   AppLocalizations.of(context)!.loginRegisterPrompt,
-                                  style: const TextStyle(
-                                    color: Colors.white70,
-                                    fontWeight: FontWeight.w500,
+                                  style: FlowTypography.labelMedium.copyWith(
+                                    color: FlowColors.textSecondary,
                                   ),
                                 ),
                               ),

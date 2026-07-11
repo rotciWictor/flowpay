@@ -27,11 +27,11 @@ class LatestTransactionsList extends StatelessWidget {
           child: Center(
             child: Column(
               children: [
-                Icon(Icons.receipt_long, size: 48, color: Colors.grey.shade800),
+                Icon(Icons.receipt_long, size: 48, color: FlowColors.surface),
                 const SizedBox(height: FlowSpacing.md),
                 Text(
                   'Nenhuma transação recente',
-                  style: FlowTypography.bodyMedium.copyWith(color: Colors.grey.shade500),
+                  style: FlowTypography.bodyMedium.copyWith(color: FlowColors.textTertiary),
                 ),
               ],
             ),
@@ -71,13 +71,13 @@ class LatestTransactionsList extends StatelessWidget {
             (context, index) {
               final tx = transactions[index];
               final isIncome = tx.amount.minorUnits.toInt() > 0 && tx.status == TransactionStatus.approved;
-              final amountColor = isIncome ? FlowColors.successLight : Colors.white;
+              final amountColor = isIncome ? FlowColors.successLight : FlowColors.textPrimary;
 
               return FlowListTile(
                 title: tx.amount.toString(),
                 subtitle: tx.status.displayName,
                 icon: isIncome ? Icons.arrow_downward : Icons.credit_card,
-                iconColor: isIncome ? FlowColors.primary : Colors.grey,
+                iconColor: isIncome ? FlowColors.primary : FlowColors.textSecondary,
                 iconBackgroundColor: isIncome ? FlowColors.primary.withValues(alpha: 0.1) : FlowColors.surfaceVariant,
                 valueColor: amountColor,
                 trailingText: '${tx.createdAt.day.toString().padLeft(2, '0')}/${tx.createdAt.month.toString().padLeft(2, '0')}',

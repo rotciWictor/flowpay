@@ -91,7 +91,7 @@ class TransactionsView extends StatelessWidget {
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   child: Container(
-                    height: MediaQuery.of(context).size.height - 200,
+                    height: MediaQuery.of(context).size.height - FlowSpacing.xxl * 4,
                     alignment: Alignment.center,
                     child: Text(
                       l10n.transactionsEmpty,
@@ -255,7 +255,7 @@ class _TransactionItem extends StatelessWidget {
 
   Widget _buildStatusBadge(Color color) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.sm, vertical: FlowSpacing.xs),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(FlowSpacing.radiusPill),

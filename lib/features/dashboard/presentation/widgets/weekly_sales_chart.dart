@@ -2,7 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flowpay/features/transactions/domain/entities/dashboard_data.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 
 class WeeklySalesChart extends StatelessWidget {
   final List<DailySale> weeklySales;
@@ -33,7 +34,7 @@ class WeeklySalesChart extends StatelessWidget {
 
     return Container(
       height: 200,
-      padding: const EdgeInsets.only(top: 24, bottom: 8, left: 0, right: 0),
+      padding: const EdgeInsets.only(top: FlowSpacing.xxl, bottom: FlowSpacing.sm, left: 0, right: 0),
       decoration: BoxDecoration(
         color: FlowColors.surfaceVariant,
         borderRadius: BorderRadius.circular(16),
@@ -52,7 +53,7 @@ class WeeklySalesChart extends StatelessWidget {
             touchTooltipData: LineTouchTooltipData(
               fitInsideHorizontally: true,
               fitInsideVertically: true,
-              getTooltipColor: (group) => Colors.black87,
+              getTooltipColor: (group) => FlowColors.surface,
               getTooltipItems: (touchedSpots) {
                 return touchedSpots.map((spot) {
                   final index = spot.x.toInt();
@@ -61,7 +62,7 @@ class WeeklySalesChart extends StatelessWidget {
                   
                   return LineTooltipItem(
                     'R\$ ${spot.y.toStringAsFixed(2)}\nem $dateStr',
-                    GoogleFonts.outfit(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14),
+                    FlowTypography.labelLarge.copyWith(color: FlowColors.textPrimary),
                   );
                 }).toList();
               },
@@ -86,7 +87,7 @@ class WeeklySalesChart extends StatelessWidget {
                         meta,
                         distanceFromEdge: 0,
                       ),
-                      child: Text(text, style: GoogleFonts.outfit(color: Colors.grey, fontSize: 10)),
+                      child: Text(text, style: FlowTypography.labelSmall.copyWith(color: FlowColors.textSecondary)),
                     );
                   }
                   return const SizedBox.shrink();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
+import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 import 'dart:math' as math;
 
 class DashboardHeader extends StatelessWidget {
@@ -25,16 +26,16 @@ class DashboardHeader extends StatelessWidget {
           children: [
             Text(
               'Olá, FlowPay Demo',
-              style: GoogleFonts.outfit(fontSize: 14, color: Colors.grey.shade500),
+              style: FlowTypography.bodyMedium.copyWith(color: FlowColors.textSecondary),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: FlowSpacing.xs),
             Row(
               children: [
                 _NeonBorderText(text: obscureBalance ? 'R\$ •••••••' : balanceStr),
                 IconButton(
                   icon: Icon(
                     obscureBalance ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.grey.shade600,
+                    color: FlowColors.textSecondary,
                   ),
                   onPressed: onToggleObscure,
                 ),
@@ -85,9 +86,8 @@ class _NeonBorderTextState extends State<_NeonBorderText> with SingleTickerProvi
             // Camada 1: O Brilho Fixo Neon (Fundo)
             Text(
               widget.text,
-              style: GoogleFonts.outfit(
-                fontSize: 44,
-                fontWeight: FontWeight.w700,
+              style: FlowTypography.displayLarge.copyWith(
+                fontSize: 44, // Ajuste fino para encaixar no header
                 letterSpacing: -1.0,
                 color: Colors.transparent, // Corpo transparente, desenha apenas a sombra
                 shadows: [
@@ -128,25 +128,23 @@ class _NeonBorderTextState extends State<_NeonBorderText> with SingleTickerProvi
               },
               child: Text(
                 widget.text,
-                style: GoogleFonts.outfit(
+                style: FlowTypography.displayLarge.copyWith(
                   fontSize: 44,
-                  fontWeight: FontWeight.w700,
                   letterSpacing: -1.0,
                   foreground: Paint()
                     ..style = PaintingStyle.stroke
                     ..strokeWidth = 0.8 // Borda super fina, quase um fio de cabelo
-                    ..color = Colors.white, // Será colorida pelo ShaderMask
+                    ..color = FlowColors.textPrimary, // Será colorida pelo ShaderMask
                 ),
               ),
             ),
             // Camada 3: O Texto Branco Sólido no Topo
             Text(
               widget.text,
-              style: GoogleFonts.outfit(
+              style: FlowTypography.displayLarge.copyWith(
                 fontSize: 44,
-                fontWeight: FontWeight.w700,
                 letterSpacing: -1.0,
-                color: Colors.white,
+                color: FlowColors.textPrimary,
                 // Sem sombras aqui, elas já estão na Camada 1
               ),
             ),

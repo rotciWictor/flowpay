@@ -52,7 +52,7 @@ class NextSettlementCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.md, vertical: FlowSpacing.sm),
                 decoration: BoxDecoration(
                   color: FlowColors.surfaceVariant,
                   borderRadius: BorderRadius.circular(FlowSpacing.radiusLg),
@@ -69,7 +69,7 @@ class NextSettlementCard extends StatelessWidget {
               const SizedBox(width: FlowSpacing.sm),
               Icon(
                 Icons.chevron_right,
-                color: Colors.grey.shade600,
+                color: FlowColors.textSecondary,
                 size: 20,
               ),
             ],
