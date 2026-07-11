@@ -16,10 +16,20 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
   @override
   Future<Either<Failure, List<TransactionEntity>>> getTransactions({
     int? limit,
+    DateTime? startDate,
+    DateTime? endDate,
+    List<TransactionStatus>? statuses,
+    PaymentMethod? paymentMethod,
+    List<TransactionType>? transactionTypes,
   }) async {
     try {
       final transactions = await remoteDatasource.getTransactions(
         limit: limit,
+        startDate: startDate,
+        endDate: endDate,
+        statuses: statuses,
+        paymentMethod: paymentMethod,
+        transactionTypes: transactionTypes,
       );
       return Right(transactions);
     } on ServerException catch (e) {
@@ -34,7 +44,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
       
       var total = Money.fromIntWithCurrency(0, brlCurrency);
       for (var t in transactions) {
-        if (t.status == TransactionStatus.approved) {
+        if (t.status == TransactionStatus.approved || t.status == TransactionStatus.refunded || t.status == TransactionStatus.chargeback) {
           total = total + t.netAmount;
         }
       }
@@ -53,9 +63,9 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
       var nextSettlementAmount = Money.fromIntWithCurrency(0, brlCurrency);
       DateTime? nextSettlementDate;
       
-      // Calculate available balance (all approved transactions)
+      // Calculate available balance (all approved transactions, plus negative impacts of refunds/chargebacks)
       for (var t in transactions) {
-        if (t.status == TransactionStatus.approved) {
+        if (t.status == TransactionStatus.approved || t.status == TransactionStatus.refunded || t.status == TransactionStatus.chargeback) {
           availableBalance = availableBalance + t.netAmount;
         }
       }

@@ -9,6 +9,11 @@ abstract class TransactionsRepository {
   /// If [limit] is provided, it limits the number of transactions returned.
   Future<Either<Failure, List<TransactionEntity>>> getTransactions({
     int? limit,
+    DateTime? startDate,
+    DateTime? endDate,
+    List<TransactionStatus>? statuses,
+    PaymentMethod? paymentMethod,
+    List<TransactionType>? transactionTypes,
   });
 
   /// Calculates the total available balance for a given merchant.
