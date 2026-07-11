@@ -51,6 +51,7 @@ dependencies:
   country_flags: ^4.1.2
   money2: ^6.3.0
   liquid_glass_renderer: ^0.2.0-dev.4
+  flutter_credit_card_brazilian: ^2.0.0
 
 dev_dependencies:
   flutter_test:

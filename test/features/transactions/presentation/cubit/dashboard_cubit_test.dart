@@ -48,6 +48,7 @@ void main() {
         status: TransactionStatus.approved,
         paymentMethod: PaymentMethod.credit,
         createdAt: tNow,
+        updatedAt: tNow,
       ),
       TransactionModel(
         id: '2',
@@ -58,6 +59,7 @@ void main() {
         status: TransactionStatus.pending,
         paymentMethod: PaymentMethod.pix,
         createdAt: tNow,
+        updatedAt: tNow,
       )
     ];
 

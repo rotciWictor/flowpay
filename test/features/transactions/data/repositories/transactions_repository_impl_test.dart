@@ -22,37 +22,41 @@ void main() {
   });
 
   group('TransactionsRepositoryImpl - getAvailableBalance', () {
-    final tNow = DateTime.now();
-    final List<TransactionModel> tTransactions = [
+    final tTransactionModel = TransactionModel(
+      id: '123',
+      merchantId: 'merchant1',
+      amount: Money.fromIntWithCurrency(15000, brlCurrency),
+      netAmount: Money.fromIntWithCurrency(14500, brlCurrency),
+      feeAmount: Money.fromIntWithCurrency(500, brlCurrency),
+      status: TransactionStatus.approved,
+      paymentMethod: PaymentMethod.credit,
+      createdAt: DateTime.parse('2026-07-10T12:00:00Z'),
+      updatedAt: DateTime.parse('2026-07-10T12:00:00Z'),
+    );
+
+    final tTransactions = [
+      tTransactionModel,
       TransactionModel(
-        id: '1',
-        merchantId: 'merchant-1',
-        amount: Money.fromIntWithCurrency(1000, brlCurrency),
-        feeAmount: Money.fromIntWithCurrency(50, brlCurrency),
-        netAmount: Money.fromIntWithCurrency(950, brlCurrency), // R$ 9.50
-        status: TransactionStatus.approved,
-        paymentMethod: PaymentMethod.credit,
-        createdAt: tNow,
-      ),
-      TransactionModel(
-        id: '2',
-        merchantId: 'merchant-1',
+        id: '456',
+        merchantId: 'merchant1',
         amount: Money.fromIntWithCurrency(5000, brlCurrency),
-        feeAmount: Money.fromIntWithCurrency(250, brlCurrency),
-        netAmount: Money.fromIntWithCurrency(4750, brlCurrency), // R$ 47.50
-        status: TransactionStatus.pending, // Pendentes não entram no available balance
+        netAmount: Money.fromIntWithCurrency(4900, brlCurrency),
+        feeAmount: Money.fromIntWithCurrency(100, brlCurrency),
+        status: TransactionStatus.pending,
         paymentMethod: PaymentMethod.pix,
-        createdAt: tNow,
+        createdAt: DateTime.parse('2026-07-10T13:00:00Z'),
+        updatedAt: DateTime.parse('2026-07-10T13:00:00Z'),
       ),
       TransactionModel(
-        id: '3',
-        merchantId: 'merchant-1',
-        amount: Money.fromIntWithCurrency(2000, brlCurrency),
-        feeAmount: Money.fromIntWithCurrency(100, brlCurrency),
-        netAmount: Money.fromIntWithCurrency(1900, brlCurrency), // R$ 19.00
-        status: TransactionStatus.failed, // Failed (previously rejected, changed to avoid error) não entram no available balance
-        paymentMethod: PaymentMethod.credit,
-        createdAt: tNow,
+        id: '789',
+        merchantId: 'merchant1',
+        amount: Money.fromIntWithCurrency(20000, brlCurrency),
+        netAmount: Money.fromIntWithCurrency(19000, brlCurrency),
+        feeAmount: Money.fromIntWithCurrency(1000, brlCurrency),
+        status: TransactionStatus.declined,
+        paymentMethod: PaymentMethod.debit,
+        createdAt: DateTime.parse('2026-07-10T14:00:00Z'),
+        updatedAt: DateTime.parse('2026-07-10T14:00:00Z'),
       ),
     ];
 

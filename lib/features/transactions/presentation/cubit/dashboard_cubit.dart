@@ -10,8 +10,10 @@ class DashboardCubit extends Cubit<DashboardState> {
     required this.getDashboardData,
   }) : super(DashboardInitial());
 
-  Future<void> fetchDashboard() async {
-    emit(DashboardLoading());
+  Future<void> fetchDashboard({bool isRefresh = false}) async {
+    if (!isRefresh) {
+      emit(DashboardLoading());
+    }
 
     final result = await getDashboardData(const NoParams());
 

@@ -334,6 +334,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.1.1"
+  flutter_credit_card_brazilian:
+    dependency: "direct main"
+    description:
+      name: flutter_credit_card_brazilian
+      sha256: "3ccbdc090dcc610e70502ae03a7d842001d98ff6d5e19a16e81f82efae8dd64e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   flutter_dotenv:
     dependency: "direct main"
     description:

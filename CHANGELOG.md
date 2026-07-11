@@ -4,6 +4,31 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 
 ---
 
+## [0.5.0] - Extrato Financeiro, Filtros e Lista de Movimentações
+
+### `(tbd)` - Fundação do Extrato (Página de Transações)
+- **Nova Tela de Extrato (TransactionsPage)**: Criamos a tela completa do Extrato Financeiro, integrando a navegação na barra inferior. A tela possui um cabeçalho fixo com o saldo total do usuário e uma lista interativa que mostra o histórico de tudo o que entrou e saiu da conta.
+- **Lista de Movimentações (FlowListTile)**: Construímos a interface da lista onde cada transação exibe informações vitais de forma clara:
+  - **Ícones de Dinâmica Visual**: Setinhas apontando para fora (vermelhas) para saídas, logo de lojas para vendas, e ícones do Pix, Master e Visa quando necessário.
+  - **Identificação de Valores**: Valores positivos (vendas e recebimentos) ficam em cor neutra na interface, enquanto saídas de dinheiro (boletos, transferências) ganham a cor vermelha com sinal negativo para alertar rapidamente.
+  - **Badges de Status (Etiquetas)**: O status de cada transação (Aprovada, Pendente, Falha, Reembolsada, Cancelada) ganhou etiquetas visuais no canto direito da lista, com cores semânticas que ajudam o gestor a bater o olho e entender se deu certo.
+- **Gerenciamento de Estado (TransactionsCubit)**: Implementamos o controle inteligente da página. Quando a tela abre, ela mostra automaticamente um "esqueleto de carregamento" (Shimmer) enquanto busca os dados, e trata possíveis erros de rede mostrando mensagens amigáveis ao usuário.
+- **Camada de Conexão com o Banco (Domain & Data)**: Criamos toda a estrutura por trás da tela (Arquitetura Limpa): a Entidade `Transaction`, o caso de uso `GetTransactions` e o `TransactionsRemoteDatasource`, que faz a requisição pro servidor Supabase puxando todas as transações, ordenadas da mais recente para a mais antiga.
+
+### `(tbd)` - UI/UX: Filtro, Cores e Pull-to-Refresh
+- **Criação do Painel de Filtros**: Desenhamos e implementamos o `TransactionsFilterBottomSheet`, um painel deslizante para o usuário filtrar as transações por Tipo (Vendas, Movimentações), Período (Hoje, 7 dias, etc) e Status.
+- **Memória do Filtro**: O filtro agora salva as opções que o usuário marcou. Ao fechar e abrir de novo, os botões continuam selecionados. O `TransactionsCubit` guarda esses dados para você não precisar reconfigurar tudo.
+- **Estilo dos Botões e Cores**: Todos os botões do filtro agora ficam preenchidos com cor sólida quando ativados. Usamos o verde primário para as opções de cima e o azul ciano para a opção de Status. O texto "Todos" no período mudou para "Qualquer data".
+- **Pull-to-Refresh em Listas Vazias**: Adicionado o componente `RefreshIndicator` com a propriedade `AlwaysScrollableScrollPhysics` na lista. Isso permite que a tela seja puxada de cima para baixo para atualizar mesmo quando não existem transações.
+- **Loading Silencioso (Pull-to-Refresh)**: Alteramos a lógica de carregamento. O Shimmer (esqueleto cinza piscando na tela inteira) só aparece quando você abre a tela pela primeira vez. Se você usar o gesto de puxar a tela para baixo, o Shimmer não apaga o que você estava lendo; apenas a setinha de carregar aparece no topo, colorida em verde e ciano.
+
+### `(tbd)` - Lógica do Filtro e Base de Dados
+- **Filtro de "Movimentações da Conta"**: O Usecase `GetTransactions` foi alterado para aceitar uma lista de tipos (`List<TransactionType>`) em vez de um único tipo. Com isso, ao selecionar "Movimentações da Conta", o app agora busca tanto as saídas (`transfer_out`) quanto as entradas (`transfer_in`) ao mesmo tempo.
+- **Consultas Otimizadas no Supabase**: A chamada no servidor foi atualizada para usar a instrução `.filter('coluna', 'in', lista)` do Supabase, o que permite fazer a busca de vários tipos ou vários status de uma vez só no banco, deixando a busca mais rápida.
+- **Conserto na Comparação de Estado**: Corrigimos um bug no domínio onde filtros diferentes não forçavam a atualização da tela.
+- **Dados Fictícios Corrigidos e Novas Transações**: O script de criação do banco (`seed_demo.sql`) foi consertado. Retiramos os erros de dados impossíveis como "Chargeback" para "Pix". Além disso, adicionamos `transfer_in` (recebimento de transferências em verde) e configuramos as contas de luz fixas como saída.
+
+
 ## [0.4.0] - Fundação do Design System e Refatoração UI
 
 ### `(tbd)` - Tokens, Behavior e Componentes (Arquitetura)

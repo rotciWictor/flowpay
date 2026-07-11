@@ -14,7 +14,9 @@ import 'features/transactions/data/datasources/transactions_remote_datasource.da
 import 'features/transactions/data/repositories/transactions_repository_impl.dart';
 import 'features/transactions/domain/repositories/transactions_repository.dart';
 import 'features/transactions/domain/usecases/get_dashboard_data.dart';
+import 'features/transactions/domain/usecases/get_transactions.dart';
 import 'features/transactions/presentation/cubit/dashboard_cubit.dart';
+import 'features/transactions/presentation/cubit/transactions_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -63,11 +65,17 @@ void setupDependencies() {
 
   // Transactions Feature - UseCases
   sl.registerLazySingleton(() => GetDashboardData(sl()));
+  sl.registerLazySingleton(() => GetTransactions(sl()));
 
   // Transactions Feature - Cubit
   sl.registerFactory(
     () => DashboardCubit(
       getDashboardData: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => TransactionsCubit(
+      getTransactions: sl(),
     ),
   );
 }

@@ -21,4 +21,11 @@ O objetivo deste projeto é simular o painel (dashboard) de um lojista/merchant,
 - **fl_chart** (Gráficos de vendas)
 
 ---
+
+## 💾 Mock Data & Seed
+Para avaliadores ou recrutadores testarem o app rapidamente (Modo Demo), um script SQL foi disponibilizado:
+- Localização: `supabase/seed_demo.sql`
+- **O que faz:** Cria a conta `demo@flowpay.com` e injeta centenas de transações orgânicas (com datas móveis atreladas à função `now()`), englobando Entradas (Cash In: Vendas aprovadas, Pix) e Saídas (Cash Out: Chargebacks, Estornos, Retiradas). Isso garante que os gráficos e filtros do app se comportem como uma aplicação viva.
+
+---
 *Este aplicativo foi desenhado focando em densidade de dados e confiança, os pilares da UX para produtos financeiros B2B.*

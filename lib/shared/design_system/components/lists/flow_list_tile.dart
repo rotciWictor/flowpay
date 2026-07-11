@@ -13,23 +13,29 @@ class FlowListTile extends StatelessWidget {
   final String subtitle;
   final String? value;
   final String? trailingText;
-  final IconData icon;
-  final Color iconColor;
-  final Color iconBackgroundColor;
+  final IconData? icon;
+  final Color? iconColor;
+  final Color? iconBackgroundColor;
   final Color? valueColor;
   final VoidCallback onTap;
+  
+  // Custom slots for advanced usage (e.g. Card Brand icons or custom trailing badges)
+  final Widget? leadingWidget;
+  final Widget? trailingWidget;
 
   const FlowListTile({
     super.key,
     required this.title,
     required this.subtitle,
-    required this.icon,
-    required this.iconColor,
-    required this.iconBackgroundColor,
     required this.onTap,
+    this.icon,
+    this.iconColor,
+    this.iconBackgroundColor,
     this.value,
     this.trailingText,
     this.valueColor,
+    this.leadingWidget,
+    this.trailingWidget,
   });
 
   @override
@@ -43,17 +49,18 @@ class FlowListTile extends StatelessWidget {
         horizontal: FlowSpacing.md,
         vertical: FlowSpacing.xs,
       ),
-      leading: CircleAvatar(
-        backgroundColor: iconBackgroundColor,
-        child: Icon(
-          icon,
-          color: iconColor,
-        ),
-      ),
+      leading: leadingWidget ??
+          CircleAvatar(
+            backgroundColor: iconBackgroundColor ?? FlowColors.surface,
+            child: Icon(
+              icon ?? Icons.circle,
+              color: iconColor ?? FlowColors.primary,
+            ),
+          ),
       title: Text(
         title,
         style: FlowTypography.moneySmall.copyWith(
-          color: valueColor ?? FlowColors.textPrimary,
+          color: FlowColors.textPrimary,
           fontSize: 16,
         ),
       ),
@@ -61,22 +68,26 @@ class FlowListTile extends StatelessWidget {
         subtitle,
         style: FlowTypography.bodySmall,
       ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (trailingText != null)
-            Text(
-              trailingText!,
-              style: FlowTypography.bodySmall,
-            ),
-          if (trailingText != null) const SizedBox(width: FlowSpacing.sm),
-          Icon(
-            Icons.chevron_right,
-            color: Colors.grey.shade700,
-            size: 20,
+      trailing: trailingWidget ??
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (trailingText != null)
+                Text(
+                  trailingText!,
+                  style: FlowTypography.moneySmall.copyWith(
+                    color: valueColor ?? FlowColors.textPrimary,
+                    fontSize: 16,
+                  ),
+                ),
+              if (trailingText != null) const SizedBox(width: FlowSpacing.sm),
+              Icon(
+                Icons.chevron_right,
+                color: Colors.grey.shade700,
+                size: 20,
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 }

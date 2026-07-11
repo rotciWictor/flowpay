@@ -43,7 +43,9 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
     // Note: Scaffold is provided by the global AppBottomNav ShellRoute.
     return SafeArea(
       child: RefreshIndicator(
-        onRefresh: () => context.read<DashboardCubit>().fetchDashboard(),
+        color: FlowColors.primaryGradientEnd,
+        backgroundColor: FlowColors.surfaceHighlight, // Fundo escuro levemente destacado, spinner ciano
+        onRefresh: () => context.read<DashboardCubit>().fetchDashboard(isRefresh: true),
         child: BlocBuilder<DashboardCubit, DashboardState>(
           builder: (context, state) {
             if (state is DashboardInitial || state is DashboardLoading) {
