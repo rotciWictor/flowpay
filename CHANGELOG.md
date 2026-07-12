@@ -4,21 +4,34 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 
 ---
 
-## [0.6.0] - Refinamento de UX/UI e Consistência (Capítulo 10)
+## [0.6.0] - Refinamento de UX/UI e Consistência
 
-### `(tbd)` - Dashboard: Affordance e Espelhamento do Extrato
-- **Affordance em Listas**: Baseado no princípio de "Não me faça pensar" para Mobile (onde não há mouse para *hover*), adicionamos dicas explícitas de interação visual nas listas, para que o elemento indique claramente que é clicável. Também aumentamos as legendas do `WeeklySalesChart` e adicionamos um texto de dica de interação no topo do gráfico.
-- **Espelhamento do Extrato**: Refatoramos o widget `LatestTransactionsList` na Dashboard para espelhar perfeitamente a riqueza visual do `_TransactionItem` da página de Transações. A lista da Home agora exibe o **Nome do Cliente** como título (removendo a abstração falha de exibir apenas o valor numérico), **sinal financeiro** no valor (+ ou -), **ícone contextual do leading** (Pix, Bandeira do Cartão, Seta de Transferência) e a **etiqueta de status colorida** (Aprovada/Pendente/Falha).
-- **Correção de Scroll "Vazio"**: Removemos uma injeção manual de 80px no `CustomScrollView` da Dashboard que criava um espaço morto infinito (um buraco negro no fundo da tela). Delegamos a responsabilidade de Padding inferior exclusivamente para o `Scaffold` que detém a Bottom Navigation.
+### `(tbd)` - Dashboard: Ajustes Técnicos de UX (Capítulo 10)
+- **WeeklySalesChart**: 
+  - Aumentamos o `fontSize` do eixo X (`bottomTitles`) de `labelSmall` (10px) para `labelMedium` (12px) para melhorar legibilidade.
+  - Como não há *hover* em mobile, envolvemos o `LineChart` em um `Stack` e adicionamos um `Positioned` no topo esquerdo com um `Icon(Icons.touch_app)` e o texto "Toque no gráfico para detalhes" para indicar interatividade explícita.
+- **LatestTransactionsList (Espelhamento do Extrato)**: 
+  - Substituímos a implementação básica que mostrava apenas o valor numérico solto no título.
+  - Reconstruímos o item copiando a lógica do `_TransactionItem` (do Extrato):
+    - O título agora é o nome do cliente (`customerName`).
+    - O subtítulo agora concatena a hora, o método e a bandeira do cartão.
+    - O `trailingWidget` exibe o valor contábil com sinal (ex: `- R$ 600,00` em vermelho) e o badge de status (ex: `Aprovada`).
+  - Adicionado o ícone de affordance explícito (`chevron_right`) do lado direito, para indicar que a linha inteira é clicável.
+- **Correção de Scroll Vazio na Dashboard**:
+  - Havia um `SizedBox(height: 80)` *hardcoded* no fim do `CustomScrollView` (em `dashboard_page.dart`) colocado com a intenção de não esconder o fim da lista atrás do menu de navegação.
+  - Removemos esse widget, pois o `Scaffold` com bottom nav já delega e gerencia esse espaço (safe area). Reduzido para `SizedBox(height: FlowSpacing.md)` apenas para evitar que o último item encoste perfeitamente na barra inferior.
 
-### `(tbd)` - Padronização do Design System no Filtro
-- **Botões Visíveis e Coesos**: Os *Chips* inativos do Filtro de Extrato (`TransactionsFilterBottomSheet`) abandonaram a cor `surface` lisa e adotaram `surfaceVariant` com uma borda branda semi-transparente, tornando as opções de escolha fisicamente legíveis contra o fundo da tela.
-- **Micro-Interações e Hierarquia**: Inserimos um `AnimatedContainer` nativo para criar transições de cores em 200ms na seleção de filtros. Unificamos o "Verde Primário" como cor universal de seleção, banindo misturas aleatórias com "Ciano" que causavam dissonância cognitiva. Os cabeçalhos institucionais também foram polidos (de ALL CAPS esticado para Mixed Case limpo no estilo `labelLarge`).
-- **Função 'Limpar tudo' Dinâmica**: Adicionado um reset prático no cabeçalho. A opção surge apenas quando o estado de busca destoa do padrão nativo, permitindo ao lojista resetar o formulário completo em apenas um toque, mitigando a frustração operacional de desmarcar filtro por filtro.
+### `(tbd)` - Refatoração do Filtro (TransactionsFilterBottomSheet)
+- **Correção de Contraste**: Os botões do tipo `ChoiceChip` (Vendas, Períodos, etc) que não estavam selecionados usavam `FlowColors.surface` sem borda, ficando praticamente invisíveis contra o fundo escuro. Alteramos para `FlowColors.surfaceVariant` (cinza claro) + borda branca translúcida (`Colors.white.withValues(alpha: 0.08)`).
+- **Tipografia Menos Corporativa**: Substituímos os cabeçalhos das sessões (TIPO DE MOVIMENTAÇÃO) que usavam ALL CAPS esticado, para tipografia natural em caixa baixa `labelLarge`.
+- **Animações (Micro-interações)**: Trocamos o `Container` dos chips por um `AnimatedContainer(duration: 200ms)` para a cor de preenchimento suavizar ao clicar.
+- **Simplificação de Cores**: As opções de Status (Aprovado, Pendente) usavam um azul ciano ao selecionar (`primaryGradientEnd`), enquanto as demais usavam o verde primário. Refatoramos para que **todos** os chips do filtro usem `FlowColors.primary` ao serem selecionados.
+- **Limpar Filtros**: Adicionamos um texto clicável "Limpar tudo" ancorado no `Row` superior. Ele possui uma condicional `hasActiveFilters` para só renderizar se o usuário modificou o padrão, disparando um `setState` que reseta as variáveis internas.
 
-### `(tbd)` - Componentização Premium (FlowButton)
-- **Extração do Botão Primário "Liquid Glass"**: Todo o intrincado código de estilização (Containers duplos, linear gradients transicionais e neon shadows) orquestrado originalmente na tela de `Login` foi extraído para o catálogo global como `FlowButton` (dentro de `shared/design_system/components/buttons`).
-- **Implementação DRY**: O componente refatorado substituiu quase 60 linhas literais na `LoginPage` e unificou o botão principal do painel de Filtros, vacinando a UI contra derivação de estilo.
+### `(tbd)` - Componentização: Botão Primário
+- **Criação do FlowButton**: O botão principal do app (com gradiente na borda e fundo em vidro escuro) existia com cerca de 60 linhas literais (hardcoded) dentro da `LoginPage`. 
+- Extraímos esse bloco completo para `lib/shared/design_system/components/buttons/flow_button.dart`.
+- Injetamos o `FlowButton` na `LoginPage` e o substituímos no `TransactionsFilterBottomSheet` (que antes usava uma versão simplificada verde sólida e depois uma versão de código duplicado). Agora o Design System blinda a coesão do botão primário do app.
 
 ---
 

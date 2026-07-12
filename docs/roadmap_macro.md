@@ -32,10 +32,11 @@ Foco na visão principal do lojista (Dash) e fundação do Design System.
 
 ---
 
-### 🟡 DIA 3 — Lista Paginada, Filtros e Recebíveis (EM ANDAMENTO)
-- ⏳ **Lista Paginada de Transações**: Tela dedicada de Transações (Scroll infinito + Supabase).
-- ⏳ **Filtros e Busca**: Filtrar por Status, Bandeira, Método de Pagamento.
-- ⏳ **Detalhe da Transação**: Timeline (criada → autorizada → liquidada) e dados completos.
+### 🟡 DIA 3 — Extrato, Filtros e Recebíveis (EM ANDAMENTO)
+- ✅ **Extrato de Transações**: Tela dedicada de Histórico (TransactionsPage) com agrupamento de datas.
+- ✅ **Filtros de Extrato**: Painel inteligente (TransactionsFilterBottomSheet) integrado ao BLoC e Design System.
+- ⏳ **Detalhe da Transação**: Timeline (criada → autorizada → liquidada) e dados completos via Modal ou Página Detaillhe.
+- ⏳ **Paginação (Infinite Scroll)**: Scroll infinito na tela de Transações para grandes volumes de dados.
 - ⏳ **Agenda de Recebíveis**: Timeline dia a dia dos próximos pagamentos (ReceivablesCubit).
 
 ---
@@ -57,4 +58,4 @@ As bases dessa fase já foram adiantadas para garantir qualidade contínua.
 
 ---
 
-> **Próximo Alvo Recomendado:** Iniciar a tela completa de **Transações / Extrato**, fazendo uso do novo Design System.
+> **Próximo Alvo Recomendado:** Construir o modal de **Detalhes da Transação**, onde o usuário poderá ver a linha do tempo exata de uma venda, e na sequência, plugar a **Paginação Infinita (Infinite Scroll)** na lista do Extrato.
