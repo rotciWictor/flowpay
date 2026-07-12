@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flowpay/core/config/env.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,13 +13,10 @@ import 'package:flowpay/core/bloc/locale_cubit.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load environment variables
-  await dotenv.load(fileName: ".env");
-
-  // Initialize Supabase
+  // Initialize Supabase using --dart-define
   await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL']!,
-    publishableKey: dotenv.env['SUPABASE_ANON_KEY']!,
+    url: Env.supabaseUrl,
+    publishableKey: Env.supabaseAnonKey,
   );
 
   // Setup Dependency Injection

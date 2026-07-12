@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "FlowPay (Debug)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define",
+        "SUPABASE_URL=https://btbmjvsgnctrskksitwt.supabase.co",
+        "--dart-define",
+        "SUPABASE_ANON_KEY=sb_publishable_rbm_nVAJ279My0H--YivAw_e-Gr5osi"
+      ]
+    }
+  ]
+}
