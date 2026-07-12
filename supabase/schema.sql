@@ -25,6 +25,7 @@ CREATE TABLE transactions (
   customer_name TEXT,
   card_last_four TEXT,               -- últimos 4 dígitos
   authorization_code TEXT,
+  return_code TEXT,                  -- Código de retorno ISO (ex: 00, 51)
   nsu TEXT,
   description TEXT,
   created_at TIMESTAMPTZ DEFAULT now(),
@@ -38,6 +39,22 @@ ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Merchants see own data" ON merchants
   FOR ALL USING (id = auth.uid());
   
+-- ==================================================
+-- FEES (Taxas Comerciais do Lojista)
+-- ==================================================
+CREATE TABLE merchant_fees (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  merchant_id UUID REFERENCES merchants(id) ON DELETE CASCADE,
+  payment_method TEXT NOT NULL,      -- debit, credit, pix
+  card_brand TEXT,                   -- visa, mastercard, elo, amex (ou NULL)
+  base_rate NUMERIC(5, 4) NOT NULL,
+  installment_rate NUMERIC(5, 4) DEFAULT 0,
+  UNIQUE (merchant_id, payment_method, card_brand)
+);
+
+ALTER TABLE merchant_fees ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Merchants see own fees" ON merchant_fees 
+  FOR SELECT USING (merchant_id = auth.uid());
 CREATE POLICY "Merchants see own transactions" ON transactions
   FOR ALL USING (merchant_id = auth.uid());
 

@@ -19,6 +19,7 @@ class TransactionModel extends TransactionEntity {
     super.authorizationCode,
     super.nsu,
     super.description,
+    super.returnCode,
     required super.createdAt,
     required super.updatedAt,
   });
@@ -40,6 +41,7 @@ class TransactionModel extends TransactionEntity {
       authorizationCode: json['authorization_code'] as String?,
       nsu: json['nsu'] as String?,
       description: json['description'] as String?,
+      returnCode: json['return_code'] as String?,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );

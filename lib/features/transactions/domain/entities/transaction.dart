@@ -72,6 +72,7 @@ class TransactionEntity extends Equatable {
   final String? authorizationCode;
   final String? nsu;
   final String? description;
+  final String? returnCode;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -91,6 +92,7 @@ class TransactionEntity extends Equatable {
     this.authorizationCode,
     this.nsu,
     this.description,
+    this.returnCode,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -112,6 +114,7 @@ class TransactionEntity extends Equatable {
         authorizationCode,
         nsu,
         description,
+        returnCode,
         createdAt,
         updatedAt,
       ];
