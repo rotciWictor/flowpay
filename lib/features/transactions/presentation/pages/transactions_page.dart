@@ -12,6 +12,7 @@ import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 import 'package:flowpay/features/transactions/presentation/widgets/transactions_filter_bottom_sheet.dart';
 import 'package:flowpay/features/transactions/presentation/widgets/transaction_details_modal.dart';
+import 'package:flowpay/features/transactions/data/services/report_service.dart';
 import 'package:shimmer/shimmer.dart';
 
 class TransactionsPage extends StatelessWidget {
@@ -44,6 +45,10 @@ class TransactionsView extends StatelessWidget {
           ),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.download_rounded, color: FlowColors.textSecondary),
+            onPressed: () => _showExportDialog(context),
+          ),
           BlocBuilder<TransactionsCubit, TransactionsState>(
             builder: (context, state) {
               final currentCubit = context.read<TransactionsCubit>();
@@ -160,6 +165,149 @@ class TransactionsView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _showExportDialog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: FlowColors.background,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(FlowSpacing.lg),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Exportar Relatório',
+                style: FlowTypography.headlineSmall.copyWith(color: FlowColors.textPrimary),
+              ),
+              const SizedBox(height: FlowSpacing.md),
+              Text(
+                'Como você deseja exportar os dados das transações?',
+                style: FlowTypography.bodyMedium.copyWith(color: FlowColors.textSecondary),
+              ),
+              const SizedBox(height: FlowSpacing.lg),
+              ListTile(
+                leading: const Icon(Icons.calendar_month, color: FlowColors.primary),
+                title: Text('Relatório Mensal (PDF)', style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
+                subtitle: Text('Escolha um mês específico para exportar', style: FlowTypography.bodySmall.copyWith(color: FlowColors.textTertiary)),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _showMonthSelectionDialog(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.picture_as_pdf, color: FlowColors.primary),
+                title: Text('Período Atual (PDF)', style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
+                subtitle: Text('Usa os filtros aplicados na tela', style: FlowTypography.bodySmall.copyWith(color: FlowColors.textTertiary)),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _exportReport(context, format: 'pdf', isMonthly: false);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.code, color: FlowColors.primary),
+                title: Text('Período Atual (XML)', style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
+                subtitle: Text('Exportação de dados estruturados', style: FlowTypography.bodySmall.copyWith(color: FlowColors.textTertiary)),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _exportReport(context, format: 'xml', isMonthly: false);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showMonthSelectionDialog(BuildContext context) {
+    final now = DateTime.now();
+    final months = List.generate(12, (index) => DateTime(now.year, now.month - index, 1));
+    final monthNames = [
+      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: FlowColors.background,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(FlowSpacing.lg),
+              child: Text('Selecione o Mês', style: FlowTypography.headlineSmall.copyWith(color: FlowColors.textPrimary)),
+            ),
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: months.length,
+                itemBuilder: (context, index) {
+                  final date = months[index];
+                  final label = '${monthNames[date.month - 1]} de ${date.year}';
+                  return ListTile(
+                    leading: const Icon(Icons.date_range, color: FlowColors.textSecondary),
+                    title: Text(label, style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      _exportReport(context, format: 'pdf', specificMonth: date);
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _exportReport(BuildContext context, {required String format, bool isMonthly = false, DateTime? specificMonth}) async {
+    Map<String, dynamic> apiFilters = {};
+
+    if (specificMonth != null) {
+      final start = DateTime(specificMonth.year, specificMonth.month, 1);
+      final end = DateTime(specificMonth.year, specificMonth.month + 1, 0, 23, 59, 59);
+      apiFilters['startDate'] = start.toIso8601String();
+      apiFilters['endDate'] = end.toIso8601String();
+    } else {
+      final currentCubit = context.read<TransactionsCubit>();
+      final filters = currentCubit.lastUiFilterState;
+      
+      if (filters != null) {
+        if (filters['customStartDate'] != null) apiFilters['startDate'] = (filters['customStartDate'] as DateTime).toIso8601String();
+        if (filters['customEndDate'] != null) apiFilters['endDate'] = (filters['customEndDate'] as DateTime).toIso8601String();
+      }
+    }
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const Center(child: CircularProgressIndicator(color: FlowColors.primary)),
+    );
+
+    try {
+      final service = ReportService();
+      await service.generateAndShareReport(format: format, filters: apiFilters);
+      if (context.mounted) Navigator.pop(context); // Fechar loading
+    } catch (e) {
+      if (context.mounted) {
+        Navigator.pop(context); // Fechar loading
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao exportar: $e', style: FlowTypography.bodyMedium.copyWith(color: FlowColors.background)),
+            backgroundColor: FlowColors.error,
+          )
+        );
+      }
+    }
   }
 }
 

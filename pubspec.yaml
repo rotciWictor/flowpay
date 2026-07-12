@@ -51,6 +51,8 @@ dependencies:
   money2: ^6.3.0
   liquid_glass_renderer: ^0.2.0-dev.4
   flutter_credit_card_brazilian: ^2.0.0
+  path_provider: ^2.1.6
+  http: ^1.6.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

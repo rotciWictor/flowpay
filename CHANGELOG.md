@@ -24,6 +24,23 @@ Este documento registra as implementações do projeto em detalhes, explicando n
   - **Datas Nativas:** Ao invés de um texto falso "hardcoded", agora ao clicar em Customizado ou Alterar, o sistema invoca o `showDateRangePicker` nativo do Flutter. Envelopamos ele em um `ThemeData.dark` injetado com `FlowColors.primary` para manter a imersão visual do design system.
   - **Filtro Avançado de Horas:** O container customizado agora exibe o texto "+ horário". Ao tocar, o usuário consegue refinar a filtragem até o minuto exato usando o `showTimePicker`. Caso ele não adicione, a lógica por trás adota `00:00:00` para a data de início e `23:59:59` para a data de fim automaticamente.
 
+### Motor de Relatórios Serverless (PDF e XML)
+- **Supabase Edge Function (`generate-report`):**
+  - Implementação de um microserviço em Deno/TypeScript no ecossistema do Supabase. Para contornar as limitações de memória da V8 Engine (que não suportaria renderizar HTML via Chromium/Playwright sem esgotar o limite da Edge Function), a geração do PDF foi feita programaticamente utilizando a biblioteca Javascript pura `pdf-lib` via CDN.
+  - O motor recebe os filtros ativos (ou o mês escolhido), efetua a query nas transações (respeitando o RLS validado pelo token JWT) e converte os dados em uma tabela PDF formatada ou num arquivo XML estruturado.
+  - Upload automático do binário gerado para o bucket privado `reports` no Supabase Storage e devolução instantânea de uma *Signed URL* válida por 1 hora.
+- **Integração no App (Flutter):**
+  - Criado o `ReportService` que gerencia o fluxo de requisição para a Edge Function via pacote `http`, faz o download do arquivo binário e o salva no diretório local usando `path_provider`.
+  - Integrada a biblioteca `share_plus`. Ao finalizar o download invisível, o aplicativo abre a gaveta de compartilhamento nativa do OS (Android/iOS), permitindo o envio do relatório direto para o WhatsApp, Telegram ou e-mail.
+- **UX do Modal de Exportação (`TransactionsPage`):**
+  - Adicionado ícone de download na AppBar. Ao clicar, o lojista aciona um BottomSheet sofisticado com 3 opções:
+    1. **Relatório Mensal (PDF):** Ignora os filtros da tela e abre um segundo BottomSheet (Month Picker) listando os últimos 12 meses nomeados de forma amigável para extração direta de caixa mensal.
+    2. **Período Atual (PDF):** Utiliza as datas exatas filtradas pelo lojista na tela de extrato.
+    3. **Período Atual (XML):** Voltado para contabilidade e ERPs, utilizando os filtros ativos.
+- **Infraestrutura de Storage:**
+  - Inserida instrução de criação automática do bucket `reports` (privado) ao final do arquivo `seed_demo.sql` (`insert into storage.buckets...`), garantindo que o pipeline de deploy e resets de banco mantenham a arquitetura de relatórios funcionando em qualquer ambiente local ou remoto.
+
+
 ### Ajustes no Motor Financeiro (SQL e Domínio)
 - **Correção Crítica no `seed_demo.sql`:** 
   - Resolvido o aborto de execução no Supabase Studio alterando o comando falho `WHERE user_id =` para `WHERE id =` na atualização de `merchants`.
