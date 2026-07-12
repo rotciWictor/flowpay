@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
+import 'package:flowpay/shared/design_system/components/buttons/flow_button.dart';
 import 'package:flowpay/features/transactions/domain/entities/transaction.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 
@@ -26,6 +27,11 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
       _selectedPeriod = widget.initialFilter!['period'] ?? 'all';
       _selectedMovementType = widget.initialFilter!['movementType'] ?? 'all';
       _selectedStatuses = List<String>.from(widget.initialFilter!['statuses'] ?? []);
+      if (_selectedStatuses.isEmpty) {
+        _selectedStatuses = ['all'];
+      }
+    } else {
+      _selectedStatuses = ['all'];
     }
   }
 
@@ -33,10 +39,17 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     
+    final bool hasActiveFilters = _selectedPeriod != 'all' || 
+        _selectedMovementType != 'all' || 
+        !_selectedStatuses.contains('all') || _selectedStatuses.length > 1;
+
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: FlowColors.background,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        border: Border(
+          top: BorderSide(color: FlowColors.primary.withValues(alpha: 0.15), width: 1),
+        ),
       ),
       padding: EdgeInsets.only(
         left: FlowSpacing.md,
@@ -60,15 +73,34 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
             ),
           ),
           const SizedBox(height: FlowSpacing.lg),
-          Text(
-            l10n.filterTitle,
-            style: FlowTypography.headlineSmall.copyWith(color: FlowColors.primary),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                l10n.filterTitle,
+                style: FlowTypography.headlineSmall.copyWith(color: FlowColors.primary),
+              ),
+              if (hasActiveFilters)
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _selectedPeriod = 'all';
+                      _selectedMovementType = 'all';
+                      _selectedStatuses = ['all'];
+                    });
+                  },
+                  child: Text(
+                    'Limpar tudo',
+                    style: FlowTypography.labelMedium.copyWith(color: FlowColors.textSecondary),
+                  ),
+                ),
+            ],
           ),
           const SizedBox(height: FlowSpacing.xl),
 
           // 1. Tipo de Movimentação
-          Text(l10n.filterTypeLabel, style: _labelStyle()),
-          const SizedBox(height: FlowSpacing.xs),
+          Text(l10n.filterTypeLabel, style: _sectionHeaderStyle()),
+          const SizedBox(height: FlowSpacing.sm),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -90,8 +122,8 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
           const SizedBox(height: FlowSpacing.lg),
 
           // 2. Período
-          Text(l10n.filterPeriodLabel, style: _labelStyle()),
-          const SizedBox(height: FlowSpacing.xs),
+          Text(l10n.filterPeriodLabel, style: _sectionHeaderStyle()),
+          const SizedBox(height: FlowSpacing.sm),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -147,101 +179,87 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
           const SizedBox(height: FlowSpacing.lg),
 
           // 3. Status
-          Text(l10n.filterStatusLabel, style: _labelStyle()),
-          const SizedBox(height: FlowSpacing.xs),
+          Text(l10n.filterStatusLabel, style: _sectionHeaderStyle()),
+          const SizedBox(height: FlowSpacing.sm),
           Wrap(
             spacing: FlowSpacing.sm,
             runSpacing: FlowSpacing.sm,
             children: [
+              _buildFilterChip('Todos', 'all'),
               _buildFilterChip(l10n.filterStatusApproved, 'approved'),
               _buildFilterChip(l10n.filterStatusPending, 'pending'),
               _buildFilterChip(l10n.filterStatusFailed, 'failed'),
               _buildFilterChip(l10n.filterStatusRefunded, 'refunded'),
             ],
           ),
-          const SizedBox(height: FlowSpacing.xl),
-          const SizedBox(height: FlowSpacing.xl),
+          const SizedBox(height: FlowSpacing.xxl),
 
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton(
-              onPressed: () {
-                List<TransactionType>? types;
-                if (_selectedMovementType == 'sales') types = [TransactionType.sale];
-                if (_selectedMovementType == 'banking') {
-                  types = [TransactionType.transferOut, TransactionType.transferIn];
-                }
-                
-                DateTime? start;
-                DateTime? end;
-                final now = DateTime.now();
-                if (_selectedPeriod == 'today') {
-                  start = DateTime(now.year, now.month, now.day);
-                } else if (_selectedPeriod == '7d') {
-                  start = now.subtract(const Duration(days: 7));
-                }
-                
-                List<TransactionStatus> statuses = [];
-                if (_selectedStatuses.contains('approved')) statuses.add(TransactionStatus.approved);
-                if (_selectedStatuses.contains('pending')) statuses.add(TransactionStatus.pending);
-                if (_selectedStatuses.contains('failed')) statuses.add(TransactionStatus.declined);
-                if (_selectedStatuses.contains('refunded')) statuses.add(TransactionStatus.refunded);
+          // Botão com gradiente consistente com o app
+          FlowButton(
+            label: l10n.filterApplyBtn,
+            onPressed: () {
+              List<TransactionType>? types;
+              if (_selectedMovementType == 'sales') types = [TransactionType.sale];
+              if (_selectedMovementType == 'banking') {
+                types = [TransactionType.transferOut, TransactionType.transferIn];
+              }
+              
+              DateTime? start;
+              DateTime? end;
+              final now = DateTime.now();
+              if (_selectedPeriod == 'today') {
+                start = DateTime(now.year, now.month, now.day);
+              } else if (_selectedPeriod == '7d') {
+                start = now.subtract(const Duration(days: 7));
+              }
+              
+              List<TransactionStatus> statuses = [];
+              if (_selectedStatuses.contains('approved') && !_selectedStatuses.contains('all')) statuses.add(TransactionStatus.approved);
+              if (_selectedStatuses.contains('pending') && !_selectedStatuses.contains('all')) statuses.add(TransactionStatus.pending);
+              if (_selectedStatuses.contains('failed') && !_selectedStatuses.contains('all')) statuses.add(TransactionStatus.declined);
+              if (_selectedStatuses.contains('refunded') && !_selectedStatuses.contains('all')) statuses.add(TransactionStatus.refunded);
 
-                Navigator.pop(context, {
-                  'transactionTypes': types,
-                  'startDate': start,
-                  'endDate': end,
-                  'statuses': statuses,
-                  'uiFilterState': {
-                    'period': _selectedPeriod,
-                    'movementType': _selectedMovementType,
-                    'statuses': _selectedStatuses,
-                  }
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: FlowColors.primary,
-                foregroundColor: FlowColors.background,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(FlowSpacing.radiusMd),
-                ),
-              ),
-              child: Text(
-                l10n.filterApplyBtn,
-                style: FlowTypography.titleMedium,
-              ),
-            ),
+              Navigator.pop(context, {
+                'transactionTypes': types,
+                'startDate': start,
+                'endDate': end,
+                'statuses': statuses,
+                'uiFilterState': {
+                  'period': _selectedPeriod,
+                  'movementType': _selectedMovementType,
+                  'statuses': _selectedStatuses,
+                }
+              });
+            },
           ),
         ],
       ),
     );
   }
 
-  TextStyle _labelStyle() {
-    return FlowTypography.labelSmall.copyWith(
-      color: FlowColors.primary,
-      fontWeight: FontWeight.bold,
-      letterSpacing: 1.2,
+  TextStyle _sectionHeaderStyle() {
+    return FlowTypography.labelLarge.copyWith(
+      color: FlowColors.textSecondary,
     );
   }
 
   Widget _buildChoiceChip(String label, bool isSelected, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.lg, vertical: FlowSpacing.md),
         decoration: BoxDecoration(
-          color: isSelected ? FlowColors.primary : FlowColors.surface,
+          color: isSelected ? FlowColors.primary : FlowColors.surfaceVariant,
           borderRadius: BorderRadius.circular(FlowSpacing.radiusPill),
           border: Border.all(
-            color: isSelected ? FlowColors.primary : Colors.transparent,
+            color: isSelected ? FlowColors.primary : Colors.white.withValues(alpha: 0.08),
           ),
         ),
         child: Text(
           label,
           style: FlowTypography.labelMedium.copyWith(
-            color: isSelected ? FlowColors.background : FlowColors.textSecondary,
+            color: isSelected ? FlowColors.background : FlowColors.textPrimary,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),
@@ -254,26 +272,33 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
     return GestureDetector(
       onTap: () {
         setState(() {
-          if (isSelected) {
-            _selectedStatuses.remove(key);
+          if (key == 'all') {
+            _selectedStatuses = ['all'];
           } else {
-            _selectedStatuses.add(key);
+            _selectedStatuses.remove('all');
+            if (isSelected) {
+              _selectedStatuses.remove(key);
+              if (_selectedStatuses.isEmpty) _selectedStatuses = ['all'];
+            } else {
+              _selectedStatuses.add(key);
+            }
           }
         });
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.lg, vertical: FlowSpacing.sm),
         decoration: BoxDecoration(
-          color: isSelected ? FlowColors.primaryGradientEnd : FlowColors.surface,
+          color: isSelected ? FlowColors.primary : FlowColors.surfaceVariant,
           borderRadius: BorderRadius.circular(FlowSpacing.radiusPill),
           border: Border.all(
-            color: isSelected ? FlowColors.primaryGradientEnd : Colors.transparent,
+            color: isSelected ? FlowColors.primary : Colors.white.withValues(alpha: 0.08),
           ),
         ),
         child: Text(
           label,
           style: FlowTypography.labelMedium.copyWith(
-            color: isSelected ? FlowColors.background : FlowColors.textSecondary,
+            color: isSelected ? FlowColors.background : FlowColors.textPrimary,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),

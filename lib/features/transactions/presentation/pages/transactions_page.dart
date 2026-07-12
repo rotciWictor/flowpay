@@ -43,73 +43,189 @@ class TransactionsView extends StatelessWidget {
           ),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_list, color: FlowColors.textSecondary),
-            onPressed: () async {
+          BlocBuilder<TransactionsCubit, TransactionsState>(
+            builder: (context, state) {
               final currentCubit = context.read<TransactionsCubit>();
-              final result = await showModalBottomSheet<Map<String, dynamic>>(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => TransactionsFilterBottomSheet(
-                  initialFilter: currentCubit.lastUiFilterState,
-                ),
-              );
+              final bool isFiltered = currentCubit.lastUiFilterState != null && 
+                  (currentCubit.lastUiFilterState!['period'] != 'all' || 
+                   currentCubit.lastUiFilterState!['movementType'] != 'all' || 
+                   (currentCubit.lastUiFilterState!['statuses'] as List).where((e) => e != 'all').isNotEmpty);
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.filter_list, color: FlowColors.textSecondary),
+                    onPressed: () async {
+                      final currentCubit = context.read<TransactionsCubit>();
+                      final result = await showModalBottomSheet<Map<String, dynamic>>(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => TransactionsFilterBottomSheet(
+                          initialFilter: currentCubit.lastUiFilterState,
+                        ),
+                      );
 
-              if (result != null) {
-                if (context.mounted) {
-                  context.read<TransactionsCubit>().fetchTransactions(
-                    transactionTypes: result['transactionTypes'],
-                    startDate: result['startDate'],
-                    endDate: result['endDate'],
-                    statuses: result['statuses'],
-                    uiFilterState: result['uiFilterState'],
-                  );
-                }
-              }
+                      if (result != null) {
+                        if (context.mounted) {
+                          context.read<TransactionsCubit>().fetchTransactions(
+                            transactionTypes: result['transactionTypes'],
+                            startDate: result['startDate'],
+                            endDate: result['endDate'],
+                            statuses: result['statuses'],
+                            uiFilterState: result['uiFilterState'],
+                          );
+                        }
+                      }
+                    },
+                  ),
+                  if (isFiltered)
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: FlowColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                ],
+              );
             },
           )
         ],
       ),
-      body: BlocBuilder<TransactionsCubit, TransactionsState>(
-        builder: (context, state) {
-          if (state is TransactionsLoading || state is TransactionsInitial) {
-            return const _TransactionsLoadingView();
-          } else if (state is TransactionsError) {
-            return Center(
-              child: Text(
-                state.message,
-                style: FlowTypography.bodyLarge.copyWith(color: FlowColors.error),
-              ),
-            );
-          } else if (state is TransactionsLoaded) {
-            if (state.transactions.isEmpty) {
-              return RefreshIndicator(
-                color: FlowColors.primary,
-                backgroundColor: FlowColors.surfaceHighlight, // Fundo escuro com spinner neon green
-                onRefresh: () => context.read<TransactionsCubit>().fetchTransactions(isRefresh: true),
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height - FlowSpacing.xxl * 4,
-                    alignment: Alignment.center,
+      body: Column(
+        children: [
+          _TransactionsQuickFilters(),
+          Expanded(
+            child: BlocBuilder<TransactionsCubit, TransactionsState>(
+              builder: (context, state) {
+                if (state is TransactionsLoading || state is TransactionsInitial) {
+                  return const _TransactionsLoadingView();
+                } else if (state is TransactionsError) {
+                  return Center(
                     child: Text(
-                      l10n.transactionsEmpty,
-                      style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textSecondary),
+                      state.message,
+                      style: FlowTypography.bodyLarge.copyWith(color: FlowColors.error),
                     ),
-                  ),
-                ),
+                  );
+                } else if (state is TransactionsLoaded) {
+                  final currentCubit = context.read<TransactionsCubit>();
+                  final bool isFiltered = currentCubit.lastUiFilterState != null && 
+                      (currentCubit.lastUiFilterState!['period'] != 'all' || 
+                       currentCubit.lastUiFilterState!['movementType'] != 'all' || 
+                       (currentCubit.lastUiFilterState!['statuses'] as List).where((e) => e != 'all').isNotEmpty);
+                  
+                  if (state.transactions.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            isFiltered ? "Nenhum resultado para estes filtros" : l10n.transactionsEmpty,
+                            style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textSecondary),
+                          ),
+                          if (isFiltered) ...[
+                            const SizedBox(height: FlowSpacing.md),
+                            TextButton(
+                              onPressed: () {
+                                context.read<TransactionsCubit>().fetchTransactions(
+                                  uiFilterState: {'period': 'all', 'movementType': 'all', 'statuses': ['all']},
+                                );
+                              },
+                              child: Text('Limpar Filtros', style: FlowTypography.labelLarge.copyWith(color: FlowColors.primary)),
+                            ),
+                          ]
+                        ],
+                      ),
+                    );
+                  }
+
+                  return RefreshIndicator(
+                    color: FlowColors.primary,
+                    backgroundColor: FlowColors.surfaceHighlight,
+                    onRefresh: () => context.read<TransactionsCubit>().fetchTransactions(isRefresh: true),
+                    child: _TransactionsListView(transactions: state.transactions),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TransactionsQuickFilters extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final currentCubit = context.watch<TransactionsCubit>();
+    final uiFilterState = currentCubit.lastUiFilterState;
+    final movementType = uiFilterState?['movementType'] ?? 'all';
+    final period = uiFilterState?['period'] ?? 'all';
+
+    return Container(
+      padding: const EdgeInsets.only(bottom: FlowSpacing.sm),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.md),
+        child: Row(
+          children: [
+            _buildQuickChip(context, 'Tudo', movementType == 'all' && period == 'all', () {
+              context.read<TransactionsCubit>().fetchTransactions(
+                uiFilterState: {'period': 'all', 'movementType': 'all', 'statuses': ['all']},
               );
-            }
-            return RefreshIndicator(
-              color: FlowColors.primary,
-              backgroundColor: FlowColors.surfaceHighlight,
-              onRefresh: () => context.read<TransactionsCubit>().fetchTransactions(isRefresh: true),
-              child: _TransactionsListView(transactions: state.transactions),
-            );
-          }
-          return const SizedBox.shrink();
-        },
+            }),
+            _buildQuickChip(context, 'Vendas', movementType == 'sales' && period == 'all', () {
+              context.read<TransactionsCubit>().fetchTransactions(
+                transactionTypes: [TransactionType.sale],
+                uiFilterState: {'period': 'all', 'movementType': 'sales', 'statuses': ['all']},
+              );
+            }),
+            _buildQuickChip(context, 'Transferências', movementType == 'banking' && period == 'all', () {
+              context.read<TransactionsCubit>().fetchTransactions(
+                transactionTypes: [TransactionType.transferIn, TransactionType.transferOut],
+                uiFilterState: {'period': 'all', 'movementType': 'banking', 'statuses': ['all']},
+              );
+            }),
+            _buildQuickChip(context, 'Últimos 7 dias', period == '7d', () {
+              context.read<TransactionsCubit>().fetchTransactions(
+                startDate: DateTime.now().subtract(const Duration(days: 7)),
+                uiFilterState: {'period': '7d', 'movementType': movementType, 'statuses': uiFilterState?['statuses'] ?? ['all']},
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickChip(BuildContext context, String label, bool isSelected, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(right: FlowSpacing.sm),
+        padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.md, vertical: FlowSpacing.xs),
+        decoration: BoxDecoration(
+          color: isSelected ? FlowColors.surfaceHighlight : FlowColors.surface,
+          borderRadius: BorderRadius.circular(FlowSpacing.radiusPill),
+          border: Border.all(
+            color: isSelected ? FlowColors.primary.withValues(alpha: 0.5) : Colors.transparent,
+          ),
+        ),
+        child: Text(
+          label,
+          style: FlowTypography.labelMedium.copyWith(
+            color: isSelected ? FlowColors.primary : FlowColors.textSecondary,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
       ),
     );
   }
@@ -122,7 +238,6 @@ class _TransactionsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Agrupar por data
     final grouped = <String, List<TransactionEntity>>{};
     for (var t in transactions) {
       final dateStr = DateFormatter.formatRelative(t.createdAt);
@@ -140,7 +255,7 @@ class _TransactionsListView extends StatelessWidget {
         left: FlowSpacing.md,
         right: FlowSpacing.md,
         top: FlowSpacing.sm,
-        bottom: 120.0, // Espaço extra para não esconder atrás da dock
+        bottom: 120.0,
       ),
       itemCount: keys.length,
       itemBuilder: (context, index) {
@@ -154,8 +269,8 @@ class _TransactionsListView extends StatelessWidget {
               padding: const EdgeInsets.only(top: FlowSpacing.md, bottom: FlowSpacing.sm, left: FlowSpacing.xs),
               child: Text(
                 dateKey,
-                style: FlowTypography.labelMedium.copyWith(
-                  color: FlowColors.textSecondary,
+                style: FlowTypography.titleMedium.copyWith(
+                  color: FlowColors.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -185,23 +300,31 @@ class _TransactionItem extends StatelessWidget {
       trailingText: displayAmount.toString(),
       valueColor: amountColor,
       leadingWidget: _buildLeadingIcon(),
-      trailingWidget: Column(
+      trailingWidget: Row(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            (transaction.type == TransactionType.transferOut || 
-             transaction.status == TransactionStatus.refunded || 
-             transaction.status == TransactionStatus.chargeback) 
-                ? '- $displayAmount' 
-                : '+ $displayAmount',
-            style: FlowTypography.moneySmall.copyWith(
-              color: amountColor,
-              fontSize: 16,
-            ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                (transaction.type == TransactionType.transferOut || 
+                 transaction.status == TransactionStatus.refunded || 
+                 transaction.status == TransactionStatus.chargeback) 
+                    ? '- $displayAmount' 
+                    : '+ $displayAmount',
+                style: FlowTypography.moneySmall.copyWith(
+                  color: amountColor,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: FlowSpacing.xs),
+              _buildStatusBadge(badgeColor),
+            ],
           ),
-          const SizedBox(height: 4),
-          _buildStatusBadge(badgeColor),
+          const SizedBox(width: FlowSpacing.sm),
+          const Icon(Icons.chevron_right, color: FlowColors.textTertiary, size: 20),
         ],
       ),
       onTap: () {

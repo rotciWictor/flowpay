@@ -4,6 +4,24 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 
 ---
 
+## [0.6.0] - Refinamento de UX/UI e Consistência (Capítulo 10)
+
+### `(tbd)` - Dashboard: Affordance e Espelhamento do Extrato
+- **Affordance em Listas**: Baseado no princípio de "Não me faça pensar" para Mobile (onde não há mouse para *hover*), adicionamos dicas explícitas de interação visual nas listas, para que o elemento indique claramente que é clicável. Também aumentamos as legendas do `WeeklySalesChart` e adicionamos um texto de dica de interação no topo do gráfico.
+- **Espelhamento do Extrato**: Refatoramos o widget `LatestTransactionsList` na Dashboard para espelhar perfeitamente a riqueza visual do `_TransactionItem` da página de Transações. A lista da Home agora exibe o **Nome do Cliente** como título (removendo a abstração falha de exibir apenas o valor numérico), **sinal financeiro** no valor (+ ou -), **ícone contextual do leading** (Pix, Bandeira do Cartão, Seta de Transferência) e a **etiqueta de status colorida** (Aprovada/Pendente/Falha).
+- **Correção de Scroll "Vazio"**: Removemos uma injeção manual de 80px no `CustomScrollView` da Dashboard que criava um espaço morto infinito (um buraco negro no fundo da tela). Delegamos a responsabilidade de Padding inferior exclusivamente para o `Scaffold` que detém a Bottom Navigation.
+
+### `(tbd)` - Padronização do Design System no Filtro
+- **Botões Visíveis e Coesos**: Os *Chips* inativos do Filtro de Extrato (`TransactionsFilterBottomSheet`) abandonaram a cor `surface` lisa e adotaram `surfaceVariant` com uma borda branda semi-transparente, tornando as opções de escolha fisicamente legíveis contra o fundo da tela.
+- **Micro-Interações e Hierarquia**: Inserimos um `AnimatedContainer` nativo para criar transições de cores em 200ms na seleção de filtros. Unificamos o "Verde Primário" como cor universal de seleção, banindo misturas aleatórias com "Ciano" que causavam dissonância cognitiva. Os cabeçalhos institucionais também foram polidos (de ALL CAPS esticado para Mixed Case limpo no estilo `labelLarge`).
+- **Função 'Limpar tudo' Dinâmica**: Adicionado um reset prático no cabeçalho. A opção surge apenas quando o estado de busca destoa do padrão nativo, permitindo ao lojista resetar o formulário completo em apenas um toque, mitigando a frustração operacional de desmarcar filtro por filtro.
+
+### `(tbd)` - Componentização Premium (FlowButton)
+- **Extração do Botão Primário "Liquid Glass"**: Todo o intrincado código de estilização (Containers duplos, linear gradients transicionais e neon shadows) orquestrado originalmente na tela de `Login` foi extraído para o catálogo global como `FlowButton` (dentro de `shared/design_system/components/buttons`).
+- **Implementação DRY**: O componente refatorado substituiu quase 60 linhas literais na `LoginPage` e unificou o botão principal do painel de Filtros, vacinando a UI contra derivação de estilo.
+
+---
+
 ## [0.5.0] - Extrato Financeiro, Filtros e Lista de Movimentações
 
 ### `(tbd)` - Fundação do Extrato (Página de Transações)

@@ -40,7 +40,24 @@ class WeeklySalesChart extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1),
       ),
-      child: LineChart(
+      child: Stack(
+        children: [
+          // Dica de Interatividade
+          Positioned(
+            top: 4, // Como temos padding top xxl, a dica fica lá em cima
+            left: FlowSpacing.md,
+            child: Row(
+              children: [
+                Icon(Icons.touch_app, size: 14, color: FlowColors.textTertiary),
+                const SizedBox(width: FlowSpacing.xs),
+                Text(
+                  'Toque no gráfico para detalhes',
+                  style: FlowTypography.labelSmall.copyWith(color: FlowColors.textTertiary),
+                ),
+              ],
+            ),
+          ),
+          LineChart(
         LineChartData(
           clipData: const FlClipData.all(),
           minX: 1,
@@ -87,7 +104,7 @@ class WeeklySalesChart extends StatelessWidget {
                         meta,
                         distanceFromEdge: 0,
                       ),
-                      child: Text(text, style: FlowTypography.labelSmall.copyWith(color: FlowColors.textSecondary)),
+                      child: Text(text, style: FlowTypography.labelMedium.copyWith(color: FlowColors.textSecondary)),
                     );
                   }
                   return const SizedBox.shrink();
@@ -142,8 +159,10 @@ class WeeklySalesChart extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
+        ), // LineChartData
+          ), // LineChart
+        ], // Stack children
+      ), // Stack
+    ); // Container
   }
 }

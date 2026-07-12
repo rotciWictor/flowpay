@@ -103,8 +103,7 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
                       // TODO: Open transaction details modal
                     },
                   ),
-                  // Add bottom padding for the scroll view so it doesn't get hidden behind bottom nav
-                  const SliverToBoxAdapter(child: SizedBox(height: 80)),
+                  const SliverToBoxAdapter(child: SizedBox(height: FlowSpacing.md)),
                 ],
               );
             }

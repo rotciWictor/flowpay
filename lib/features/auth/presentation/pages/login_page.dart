@@ -9,6 +9,7 @@ import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 import 'package:flowpay/core/bloc/locale_cubit.dart';
+import 'package:flowpay/shared/design_system/components/buttons/flow_button.dart';
 import 'package:country_flags/country_flags.dart';
 
 class LoginPage extends StatefulWidget {
@@ -148,54 +149,10 @@ class _LoginPageState extends State<LoginPage> {
                               BlocBuilder<AuthCubit, AuthState>(
                                 builder: (context, state) {
                                   final isLoading = state is AuthLoading;
-                                  return Container(
-                                    // Outer Container acts as the Gradient Border
-                                    padding: const EdgeInsets.all(1.5),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(14),
-                                      gradient: const LinearGradient(
-                                        colors: [FlowColors.primary, FlowColors.primaryGradientEnd],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: FlowColors.primary.withValues(alpha: 0.2),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Container(
-                                      // Inner Container is the dark body of the Ghost Button
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12.5),
-                                        color: const Color(0xFF1A1D27).withValues(alpha: 0.95),
-                                      ),
-                                      child: ElevatedButton(
-                                        onPressed: isLoading ? null : _login,
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.transparent,
-                                          shadowColor: Colors.transparent,
-                                          foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(vertical: 16),
-                                        ),
-                                        child: isLoading
-                                            ? const SizedBox(
-                                                height: 20,
-                                                width: 20,
-                                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                                              )
-                                            : Text(
-                                                AppLocalizations.of(context)!.loginButton,
-                                                style: FlowTypography.labelLarge.copyWith(
-                                                  fontSize: 16,
-                                                  letterSpacing: 1.0,
-                                                  color: FlowColors.textPrimary,
-                                                ),
-                                              ),
-                                      ),
-                                    ),
+                                  return FlowButton(
+                                    label: AppLocalizations.of(context)!.loginButton,
+                                    isLoading: isLoading,
+                                    onPressed: _login,
                                   );
                                 },
                               ),
@@ -233,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                 icon: BlocBuilder<LocaleCubit, Locale>(
                   builder: (context, locale) {
                     return CountryFlag.fromCountryCode(
-                      locale.languageCode == 'pt' ? 'US' : 'BR',
+                      locale.languageCode == 'pt' ? 'BR' : 'US',
                       theme: const ImageTheme(
                         shape: Circle(),
                         width: 24,
