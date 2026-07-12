@@ -1,0 +1,12 @@
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: false
+  image_path: "assets/images/logoF.png"
+  adaptive_icon_background: "#0F111A"
+  adaptive_icon_foreground: "assets/images/logoF.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/images/logoF.png"
+    background_color: "#0F111A"
+    theme_color: "#0F111A"
