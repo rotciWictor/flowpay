@@ -19,6 +19,10 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
   String _selectedPeriod = 'all'; 
   String _selectedMovementType = 'all'; 
   List<String> _selectedStatuses = [];
+  DateTime? _customStartDate;
+  DateTime? _customEndDate;
+  TimeOfDay? _customStartTime;
+  TimeOfDay? _customEndTime;
 
   @override
   void initState() {
@@ -27,12 +31,127 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
       _selectedPeriod = widget.initialFilter!['period'] ?? 'all';
       _selectedMovementType = widget.initialFilter!['movementType'] ?? 'all';
       _selectedStatuses = List<String>.from(widget.initialFilter!['statuses'] ?? []);
+      _customStartDate = widget.initialFilter!['customStartDate'];
+      _customEndDate = widget.initialFilter!['customEndDate'];
+      _customStartTime = widget.initialFilter!['customStartTime'];
+      _customEndTime = widget.initialFilter!['customEndTime'];
       if (_selectedStatuses.isEmpty) {
         _selectedStatuses = ['all'];
       }
     } else {
       _selectedStatuses = ['all'];
     }
+  }
+
+  Widget _buildPickerTheme(Widget child) {
+    return Theme(
+      data: ThemeData.dark().copyWith(
+        colorScheme: const ColorScheme.dark(
+          primary: FlowColors.primary,
+          onPrimary: FlowColors.background,
+          surface: FlowColors.surface,
+          onSurface: FlowColors.textPrimary,
+        ),
+        datePickerTheme: DatePickerThemeData(
+          backgroundColor: FlowColors.background,
+          surfaceTintColor: Colors.transparent,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          headerBackgroundColor: FlowColors.surface,
+          headerForegroundColor: FlowColors.textPrimary,
+          rangePickerBackgroundColor: FlowColors.background,
+          rangePickerHeaderBackgroundColor: FlowColors.surface,
+          rangePickerShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+          dividerColor: Colors.white.withValues(alpha: 0.05),
+          rangeSelectionOverlayColor: WidgetStateProperty.all(FlowColors.primary.withValues(alpha: 0.15)),
+          dayStyle: FlowTypography.bodyMedium,
+          yearStyle: FlowTypography.bodyLarge,
+          todayForegroundColor: WidgetStateProperty.resolveWith((states) => 
+            states.contains(WidgetState.selected) ? FlowColors.background : FlowColors.primary
+          ),
+        ),
+        timePickerTheme: TimePickerThemeData(
+          backgroundColor: FlowColors.background,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          hourMinuteShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          hourMinuteColor: WidgetStateColor.resolveWith((states) => 
+            states.contains(WidgetState.selected) ? FlowColors.primary.withValues(alpha: 0.15) : FlowColors.surface
+          ),
+          hourMinuteTextColor: WidgetStateColor.resolveWith((states) => 
+            states.contains(WidgetState.selected) ? FlowColors.primary : FlowColors.textPrimary
+          ),
+          dialBackgroundColor: FlowColors.surface,
+          dialHandColor: FlowColors.primary,
+          dialTextColor: WidgetStateColor.resolveWith((states) => 
+            states.contains(WidgetState.selected) ? FlowColors.background : FlowColors.textPrimary
+          ),
+          entryModeIconColor: FlowColors.textSecondary,
+          helpTextStyle: FlowTypography.labelMedium.copyWith(color: FlowColors.textSecondary),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: FlowColors.primary,
+            textStyle: FlowTypography.labelLarge.copyWith(fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+      child: child,
+    );
+  }
+
+  Future<void> _pickDateRange() async {
+    final picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+      initialDateRange: _customStartDate != null && _customEndDate != null 
+          ? DateTimeRange(start: _customStartDate!, end: _customEndDate!) 
+          : null,
+      builder: (context, child) {
+        return _buildPickerTheme(child!);
+      },
+    );
+
+    if (picked != null) {
+      setState(() {
+        _customStartDate = picked.start;
+        _customEndDate = picked.end;
+        _selectedPeriod = 'custom';
+      });
+    }
+  }
+
+  Future<void> _pickTime({required bool isStart}) async {
+    final initialTime = isStart 
+        ? (_customStartTime ?? const TimeOfDay(hour: 0, minute: 0))
+        : (_customEndTime ?? const TimeOfDay(hour: 23, minute: 59));
+
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+      builder: (context, child) {
+        return _buildPickerTheme(child!);
+      },
+    );
+
+    if (picked != null) {
+      setState(() {
+        if (isStart) {
+          _customStartTime = picked;
+        } else {
+          _customEndTime = picked;
+        }
+      });
+    }
+  }
+
+  String _formatDate(DateTime? date) {
+    if (date == null) return '--/--/----';
+    return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+  }
+
+  String _formatTime(TimeOfDay? time) {
+    if (time == null) return '';
+    return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -124,53 +243,68 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
           // 2. Período
           Text(l10n.filterPeriodLabel, style: _sectionHeaderStyle()),
           const SizedBox(height: FlowSpacing.sm),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                _buildChoiceChip(l10n.filterPeriodAny, _selectedPeriod == 'all', () {
-                  setState(() => _selectedPeriod = 'all');
-                }),
-                const SizedBox(width: FlowSpacing.sm),
-                _buildChoiceChip(l10n.filterPeriodToday, _selectedPeriod == 'today', () {
-                  setState(() => _selectedPeriod = 'today');
-                }),
-                const SizedBox(width: FlowSpacing.sm),
-                _buildChoiceChip(l10n.filterPeriod7d, _selectedPeriod == '7d', () {
-                  setState(() => _selectedPeriod = '7d');
-                }),
-                const SizedBox(width: FlowSpacing.sm),
-                _buildChoiceChip(l10n.filterPeriodCustom, _selectedPeriod == 'custom', () async {
-                  setState(() => _selectedPeriod = 'custom');
-                }),
-              ],
-            ),
+          Wrap(
+            spacing: FlowSpacing.sm,
+            runSpacing: FlowSpacing.sm,
+            children: [
+              _buildChoiceChip(l10n.filterPeriodAny, _selectedPeriod == 'all', () {
+                setState(() => _selectedPeriod = 'all');
+              }),
+              _buildChoiceChip(l10n.filterPeriodToday, _selectedPeriod == 'today', () {
+                setState(() => _selectedPeriod = 'today');
+              }),
+              _buildChoiceChip(l10n.filterPeriod7d, _selectedPeriod == '7d', () {
+                setState(() => _selectedPeriod = '7d');
+              }),
+              _buildChoiceChip(l10n.filterPeriodCustom, _selectedPeriod == 'custom', () async {
+                setState(() => _selectedPeriod = 'custom');
+                if (_customStartDate == null) {
+                  await _pickDateRange();
+                }
+              }),
+            ],
           ),
           if (_selectedPeriod == 'custom') ...[
-            const SizedBox(height: FlowSpacing.sm),
+            const SizedBox(height: FlowSpacing.md),
             Container(
-              padding: const EdgeInsets.all(FlowSpacing.sm),
+              padding: const EdgeInsets.all(FlowSpacing.md),
               decoration: BoxDecoration(
                 color: FlowColors.surface,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: FlowColors.primary.withValues(alpha: 0.3)),
+                borderRadius: BorderRadius.circular(FlowSpacing.radiusMd),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
               ),
-              child: Row(
+              child: Column(
                 children: [
-                  const Icon(Icons.calendar_month, color: FlowColors.primary, size: 20),
-                  const SizedBox(width: FlowSpacing.sm),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Início: 10/07/2026 às 14:00', style: FlowTypography.bodySmall.copyWith(color: FlowColors.textPrimary)),
-                        Text('Fim: 11/07/2026 às 15:00', style: FlowTypography.bodySmall.copyWith(color: FlowColors.textPrimary)),
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.date_range, color: FlowColors.primary, size: 16),
+                          const SizedBox(width: FlowSpacing.sm),
+                          Text('Período Selecionado', style: FlowTypography.labelMedium.copyWith(color: FlowColors.textSecondary)),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: _pickDateRange,
+                        child: Text('Alterar datas', style: FlowTypography.labelMedium.copyWith(color: FlowColors.primary, fontWeight: FontWeight.bold)),
+                      ),
+                    ],
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text('Alterar', style: FlowTypography.labelLarge.copyWith(color: FlowColors.primary)),
+                  const SizedBox(height: FlowSpacing.md),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildDateCard('Início', _customStartDate, _customStartTime, true),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: FlowSpacing.sm),
+                        child: Icon(Icons.arrow_forward, color: FlowColors.textTertiary, size: 16),
+                      ),
+                      Expanded(
+                        child: _buildDateCard('Fim', _customEndDate, _customEndTime, false),
+                      ),
+                    ],
                   )
                 ],
               ),
@@ -211,6 +345,27 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
                 start = DateTime(now.year, now.month, now.day);
               } else if (_selectedPeriod == '7d') {
                 start = now.subtract(const Duration(days: 7));
+              } else if (_selectedPeriod == 'custom') {
+                if (_customStartDate != null) {
+                  start = DateTime(
+                    _customStartDate!.year,
+                    _customStartDate!.month,
+                    _customStartDate!.day,
+                    _customStartTime?.hour ?? 0,
+                    _customStartTime?.minute ?? 0,
+                  );
+                }
+                
+                if (_customEndDate != null) {
+                  end = DateTime(
+                    _customEndDate!.year,
+                    _customEndDate!.month,
+                    _customEndDate!.day,
+                    _customEndTime?.hour ?? 23,
+                    _customEndTime?.minute ?? 59,
+                    _customEndTime == null ? 59 : 0, 
+                  );
+                }
               }
               
               List<TransactionStatus> statuses = [];
@@ -228,6 +383,10 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
                   'period': _selectedPeriod,
                   'movementType': _selectedMovementType,
                   'statuses': _selectedStatuses,
+                  'customStartDate': _customStartDate,
+                  'customEndDate': _customEndDate,
+                  'customStartTime': _customStartTime,
+                  'customEndTime': _customEndTime,
                 }
               });
             },
@@ -240,6 +399,66 @@ class _TransactionsFilterBottomSheetState extends State<TransactionsFilterBottom
   TextStyle _sectionHeaderStyle() {
     return FlowTypography.labelLarge.copyWith(
       color: FlowColors.textSecondary,
+    );
+  }
+
+  Widget _buildDateCard(String label, DateTime? date, TimeOfDay? time, bool isStart) {
+    return Container(
+      padding: const EdgeInsets.all(FlowSpacing.md),
+      decoration: BoxDecoration(
+        color: FlowColors.surfaceHighlight,
+        borderRadius: BorderRadius.circular(FlowSpacing.radiusSm),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: FlowTypography.labelSmall.copyWith(color: FlowColors.textTertiary)),
+          const SizedBox(height: FlowSpacing.xs),
+          Text(
+            _formatDate(date),
+            style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: FlowSpacing.sm),
+          GestureDetector(
+            onTap: () => _pickTime(isStart: isStart),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.sm, vertical: 6),
+              decoration: BoxDecoration(
+                color: time != null ? FlowColors.primary.withValues(alpha: 0.1) : Colors.transparent,
+                border: Border.all(
+                  color: time != null ? FlowColors.primary.withValues(alpha: 0.3) : FlowColors.textTertiary.withValues(alpha: 0.3),
+                ),
+                borderRadius: BorderRadius.circular(FlowSpacing.radiusPill),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    time != null ? Icons.access_time_filled : Icons.access_time, 
+                    size: 12, 
+                    color: time != null ? FlowColors.primary : FlowColors.textTertiary,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    time != null ? _formatTime(time) : 'Adicionar hora',
+                    style: FlowTypography.labelSmall.copyWith(
+                      color: time != null ? FlowColors.primary : FlowColors.textTertiary,
+                      fontWeight: time != null ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  ),
+                  if (time != null) ...[
+                    const SizedBox(width: 6),
+                    GestureDetector(
+                      onTap: () => setState(() => isStart ? _customStartTime = null : _customEndTime = null),
+                      child: const Icon(Icons.close, size: 12, color: FlowColors.primary),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

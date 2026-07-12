@@ -19,6 +19,10 @@ Este documento registra as implementações do projeto em detalhes, explicando n
   - Removida a redundância de texto (`R$ R$`) causada pela injeção dupla do símbolo da moeda.
   - A label "Líquido" agora só aparece estritamente para **Vendas Aprovadas** no cartão de crédito ou débito. Transações Pix, chargebacks, estornos e declínios possuem regras de liquidação síncronas que dispensam a distinção de um valor contábil secundário.
   - O componente `FlowListTile` na lista de extrato e na dashboard ganhou "respiro" lateral (remoção do padding global que limitava os cards) e margin inferior (`FlowSpacing.md`) para aliviar a densidade visual da lista e deixar a UI mais clara.
+- **Refatoração do Filtro (TransactionsFilterBottomSheet):**
+  - **Fim do "Scroll Cortado":** O carrossel horizontal de períodos (`SingleChildScrollView`) que deixava o chip "Customiza..." cortado na tela foi substituído por um componente `Wrap` dinâmico. Agora os botões fluem e quebram linha de forma responsiva.
+  - **Datas Nativas:** Ao invés de um texto falso "hardcoded", agora ao clicar em Customizado ou Alterar, o sistema invoca o `showDateRangePicker` nativo do Flutter. Envelopamos ele em um `ThemeData.dark` injetado com `FlowColors.primary` para manter a imersão visual do design system.
+  - **Filtro Avançado de Horas:** O container customizado agora exibe o texto "+ horário". Ao tocar, o usuário consegue refinar a filtragem até o minuto exato usando o `showTimePicker`. Caso ele não adicione, a lógica por trás adota `00:00:00` para a data de início e `23:59:59` para a data de fim automaticamente.
 
 ### Ajustes no Motor Financeiro (SQL e Domínio)
 - **Correção Crítica no `seed_demo.sql`:** 
