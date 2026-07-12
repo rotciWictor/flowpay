@@ -68,6 +68,13 @@ abstract class FlowTypography {
         height: 1.4,
       );
 
+  static TextStyle get titleSmall => GoogleFonts.outfit(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        color: FlowColors.textPrimary,
+        height: 1.4,
+      );
+
   // ===========================================================================
   // 4. BODY (Texto de parágrafos, descrições)
   // ===========================================================================

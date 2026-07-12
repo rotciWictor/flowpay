@@ -7,9 +7,10 @@ import 'package:flowpay/features/auth/presentation/cubit/auth_state.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
+import 'package:flowpay/shared/design_system/components/buttons/flow_button.dart';
+import 'package:flowpay/shared/design_system/components/layout/flow_background.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 import 'package:flowpay/core/bloc/locale_cubit.dart';
-import 'package:flowpay/shared/design_system/components/buttons/flow_button.dart';
 import 'package:country_flags/country_flags.dart';
 
 class LoginPage extends StatefulWidget {
@@ -70,18 +71,8 @@ class _LoginPageState extends State<LoginPage> {
         }
       },
       child: Scaffold(
-        // Adding a subtle gradient background for the premium feel
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: RadialGradient(
-              center: Alignment(-0.8, -0.6),
-              radius: 1.5,
-              colors: [
-                Color(0xFF1E2433), // Slightly lighter at top left
-                FlowColors.background,
-              ],
-            ),
-          ),
+        backgroundColor: Colors.transparent,
+        body: FlowBackground(
           child: SafeArea(
             child: Stack(
               children: [

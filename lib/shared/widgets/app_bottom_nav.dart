@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 
+import 'package:flowpay/shared/design_system/components/layout/flow_background.dart';
+
 class AppBottomNav extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
@@ -23,8 +25,11 @@ class AppBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       // The body is the current branch of the StatefulShellRoute
-      body: navigationShell,
+      body: FlowBackground(
+        child: navigationShell,
+      ),
       extendBody: true, // Crucial to make the glass effect visible over the content
       bottomNavigationBar: ClipRRect(
         // ClipRRect prevents the blur from bleeding outside the nav bar

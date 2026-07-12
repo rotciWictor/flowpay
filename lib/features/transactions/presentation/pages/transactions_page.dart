@@ -32,9 +32,9 @@ class TransactionsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: FlowColors.background,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: FlowColors.background,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
           l10n.transactionsTitle,

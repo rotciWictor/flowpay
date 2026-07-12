@@ -4,7 +4,51 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 
 ---
 
+## [0.7.0] - Core Financeiro, SecOps e Refinamentos UI
+
+### Detalhamento da Transação e Mapeamento de Erros
+- **Modal de Detalhes da Transação:** Criamos um componente visual rico para detalhar vendas.
+  - Implementado tratamento responsivo com `SafeArea` para evitar sobreposição da StatusBar.
+  - Implementada a exibição inteligente do valor "Líquido" (apenas para transações de cartão, não aparece para Pix).
+  - O botão de ação principal foi configurado para exibir "Estornar" para Pix, ou "Contestar / Fraude" condicionalmente, com estilo adaptativo (Outline vermelho para estornos).
+- **Tradução de Códigos de Retorno (ISO/SPI):** 
+  - Adicionado suporte à coluna `return_code` nas entidades e modelos (`transaction.dart`, `transaction_model.dart`).
+  - Mapeado o dicionário do BCB e Redes Adquirentes: Falhas de Pix agora exibem detalhes (ex: *AM04 - Saldo Insuficiente*, *BE17 - QR Code Rejeitado*), e erros de cartão mostram códigos ISO (ex: *51 - Saldo Insuficiente*, *05 - Não Autorizada*).
+- **Bandeiras Renderizadas:** Integrado o pacote `flutter_credit_card_brazilian` apenas como provider de Assets visuais. A UI agora extrai a logo nativa (Visa, Master, Elo, Amex) e exibe ao lado do nome da bandeira na tela de detalhes.
+
+### Database-Driven Fee Engine (Motor de Taxas Comerciais)
+- **Documentação de Taxas (`docs/taxas_comerciais.md`):** Consolidamos as taxas comerciais da Adquirente fictícia (Débito: 1.5%, Crédito: 3.5% + 1.5% ao mês, Elo: 4.5%, Pix: 0%).
+- **Schema e Tabela Dedicada:** 
+  - Ao invés de *hardcodar* regras de negócio no código-fonte, criamos a tabela `merchant_fees` no `schema.sql` (Database-Driven Architecture), com políticas de segurança (RLS).
+- **Seed Refatorado:** 
+  - O `seed_demo.sql` foi reescrito utilizando 3 camadas lógicas em CTEs (`data_generator`, `refined_data`, `fee_calculation`).
+  - A geração de transações passou a fazer um `JOIN` relacional com `merchant_fees`, simulando exatamente a cobrança real (descontando 20% numa venda em 12x, por exemplo).
+
+### Migração de SecOps (Segurança de Ambiente)
+- **Substituição do `flutter_dotenv`:** 
+  - O `.env` embutido no APK é uma falha de segurança potencial (vazamento via engenharia reversa). 
+  - Removemos o pacote do `pubspec.yaml` e deletamos o asset para impedir injeção.
+- **Injeção em Tempo de Compilação (`--dart-define`):** 
+  - Criada a classe `lib/core/config/env.dart` encapsulando as variáveis secretas através do `String.fromEnvironment`.
+  - Essa abordagem protege as credenciais do backend (Supabase) e prepara o terreno perfeitamente para esteiras automatizadas de CI/CD (ex: GitHub Actions) sem depender de artefatos não comitados.
+  - Para Developer Experience (DX), geramos automaticamente a configuração `.vscode/launch.json` injetando as variáveis no ambiente de Debug local.
+
+### Ajustes Estéticos (Design System)
+- **Liquid Glass Restaurado:** O `FlowButton` teve seu design revisto para garantir fidelidade ao estilo *Glassmorphism* (fundo translúcido `0xFF1A1D27` 95%, com bordas neon finas).
+- **Refatoração do FlowListTile:** Removemos o widget nativo do Flutter e reescrevemos o componente do zero usando `Row` e `Column` encapsulados em um `Container` limitador, extinguindo totalmente os problemas de *Overflow* no extrato na renderização dos nomes de lojistas muito longos.
+
 ## [0.6.0] - Refinamento de UX/UI e Consistência
+
+### `(tbd)` - Perfumaria Nativa e Fundo Global
+- **Ícone e Splash Screen (Nativo)**:
+  - Instalamos `flutter_launcher_icons` e `flutter_native_splash`.
+  - No ícone do app (`launcher_icon`), removemos a logo em texto que espremia a arte. Configuramos o Android Adaptive Icons para usar o fundo nativo `#0F111A` e o "F" em alta resolução.
+  - Na Splash Screen nativa, notamos que o "F" ficava enorme. Criamos um script Python (`pad_icon.py`) para reduzir a imagem a 60% e gerar uma margem invisível (`logoF_padded.png`), aplicando ela na splash para uma abertura minimalista.
+- **Correção de Nome de Build**: Corrigido `android:label` no `AndroidManifest.xml` de "fintech_app" para "FlowPay" (agora o nome real aparece sob o ícone no Android).
+- **FlowBackground Global**: 
+  - Para evitar uma quebra brusca entre a Splash Nativa (sólida) e a Tela de Login (gradiente), decidimos unificar a identidade visual de *todo o app*.
+  - Extraímos o `RadialGradient` do Login para um componente `FlowBackground`.
+  - Injetamos o `FlowBackground` na raiz do `AppBottomNav` (tornando os `Scaffolds` da Dashboard e do Extrato transparentes), o que significa que o degradê tecnológico premium agora banha o app inteiro por trás das listas e gráficos.
 
 ### `(tbd)` - Dashboard: Ajustes Técnicos de UX (Capítulo 10)
 - **WeeklySalesChart**: 

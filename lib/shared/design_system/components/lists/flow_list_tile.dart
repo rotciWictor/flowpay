@@ -40,54 +40,75 @@ class FlowListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () async {
-        await FlowHaptics.lightImpact();
-        onTap();
-      },
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: FlowSpacing.md,
-        vertical: FlowSpacing.xs,
-      ),
-      leading: leadingWidget ??
-          CircleAvatar(
-            backgroundColor: iconBackgroundColor ?? FlowColors.surface,
-            child: Icon(
-              icon ?? Icons.circle,
-              color: iconColor ?? FlowColors.primary,
-            ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () async {
+          await FlowHaptics.lightImpact();
+          onTap();
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: FlowSpacing.md,
+            vertical: FlowSpacing.sm,
           ),
-      title: Text(
-        title,
-        style: FlowTypography.moneySmall.copyWith(
-          color: FlowColors.textPrimary,
-          fontSize: 16,
-        ),
-      ),
-      subtitle: Text(
-        subtitle,
-        style: FlowTypography.bodySmall,
-      ),
-      trailing: trailingWidget ??
-          Row(
-            mainAxisSize: MainAxisSize.min,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (trailingText != null)
-                Text(
-                  trailingText!,
-                  style: FlowTypography.moneySmall.copyWith(
-                    color: valueColor ?? FlowColors.textPrimary,
-                    fontSize: 16,
+              leadingWidget ??
+                  CircleAvatar(
+                    backgroundColor: iconBackgroundColor ?? FlowColors.surface,
+                    child: Icon(
+                      icon ?? Icons.circle,
+                      color: iconColor ?? FlowColors.primary,
+                    ),
                   ),
+              const SizedBox(width: FlowSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      title,
+                      style: FlowTypography.moneySmall.copyWith(
+                        color: FlowColors.textPrimary,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: FlowTypography.bodySmall,
+                    ),
+                  ],
                 ),
-              if (trailingText != null) const SizedBox(width: FlowSpacing.sm),
-              Icon(
-                Icons.chevron_right,
-                color: Colors.grey.shade700,
-                size: 20,
               ),
+              const SizedBox(width: FlowSpacing.sm),
+              trailingWidget ??
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (trailingText != null)
+                        Text(
+                          trailingText!,
+                          style: FlowTypography.moneySmall.copyWith(
+                            color: valueColor ?? FlowColors.textPrimary,
+                            fontSize: 16,
+                          ),
+                        ),
+                      if (trailingText != null) const SizedBox(width: FlowSpacing.sm),
+                      Icon(
+                        Icons.chevron_right,
+                        color: Colors.grey.shade700,
+                        size: 20,
+                      ),
+                    ],
+                  ),
             ],
           ),
+        ),
+      ),
     );
   }
 }

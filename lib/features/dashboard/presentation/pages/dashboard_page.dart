@@ -15,6 +15,7 @@ import 'package:flowpay/features/dashboard/presentation/widgets/next_settlement_
 import 'package:flowpay/features/dashboard/presentation/widgets/quick_actions_row.dart';
 import 'package:flowpay/features/dashboard/presentation/widgets/weekly_sales_chart.dart';
 import 'package:flowpay/features/dashboard/presentation/widgets/latest_transactions_list.dart';
+import 'package:flowpay/features/transactions/presentation/widgets/transaction_details_modal.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -100,7 +101,13 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
                       context.go('/transactions');
                     },
                     onTransactionTap: (tx) {
-                      // TODO: Open transaction details modal
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        useSafeArea: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => TransactionDetailsModal(transaction: tx),
+                      );
                     },
                   ),
                   const SliverToBoxAdapter(child: SizedBox(height: FlowSpacing.md)),

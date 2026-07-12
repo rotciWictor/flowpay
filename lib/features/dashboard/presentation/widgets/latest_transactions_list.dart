@@ -3,6 +3,7 @@ import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 import 'package:flowpay/shared/design_system/components/lists/flow_list_tile.dart';
+import 'package:flowpay/features/transactions/presentation/widgets/transaction_details_modal.dart';
 import 'package:flowpay/features/transactions/domain/entities/transaction.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 
@@ -124,6 +125,16 @@ class _DashboardTransactionItem extends StatelessWidget {
               ),
               const SizedBox(height: FlowSpacing.xs),
               _buildStatusBadge(badgeColor),
+              if (transaction.status != TransactionStatus.declined && transaction.paymentMethod != PaymentMethod.pix) ...[
+                const SizedBox(height: FlowSpacing.xs),
+                Text(
+                  'Líquido: R\$ ${transaction.netAmount}',
+                  style: FlowTypography.labelSmall.copyWith(
+                    color: FlowColors.textTertiary,
+                    fontSize: 10,
+                  ),
+                ),
+              ],
             ],
           ),
           const SizedBox(width: FlowSpacing.sm),
@@ -138,10 +149,17 @@ class _DashboardTransactionItem extends StatelessWidget {
     final method = transaction.paymentMethod.displayName;
     final timeStr = '${transaction.createdAt.hour.toString().padLeft(2, '0')}:${transaction.createdAt.minute.toString().padLeft(2, '0')}';
 
+    String subtitle = '$timeStr • $method';
+
     if (transaction.cardBrand != null) {
-      return '$timeStr • $method • ${transaction.cardBrand!.displayName}';
+      subtitle += ' • ${transaction.cardBrand!.displayName}';
     }
-    return '$timeStr • $method';
+    
+    if (transaction.installments > 1) {
+      subtitle += ' • ${transaction.installments}x';
+    }
+    
+    return subtitle;
   }
 
   Color _getAmountColor() {
@@ -192,40 +210,46 @@ class _DashboardTransactionItem extends StatelessWidget {
   }
 
   Widget _buildLeadingIcon() {
+    IconData icon;
+    Color color;
+
+    // A cor deve respeitar primordialmente o Status
+    if (transaction.status == TransactionStatus.declined) {
+      color = FlowColors.textSecondary;
+    } else if (transaction.status == TransactionStatus.pending) {
+      color = FlowColors.warning;
+    } else {
+      if (transaction.type == TransactionType.transferOut || 
+          transaction.status == TransactionStatus.refunded || 
+          transaction.status == TransactionStatus.chargeback) {
+        color = FlowColors.error;
+      } else if (transaction.type == TransactionType.transferIn) {
+        color = FlowColors.success;
+      } else {
+        color = FlowColors.primary;
+      }
+    }
+
     if (transaction.type == TransactionType.transferOut) {
-      return Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: FlowColors.error.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(FlowSpacing.radiusSm),
-        ),
-        child: const Center(child: Icon(Icons.arrow_outward, color: FlowColors.error, size: 20)),
-      );
+      icon = Icons.arrow_outward;
+    } else if (transaction.type == TransactionType.transferIn) {
+      icon = Icons.south_west;
+    } else if (transaction.paymentMethod == PaymentMethod.pix) {
+      icon = Icons.pix;
+    } else {
+      icon = Icons.credit_card;
     }
-
-    if (transaction.type == TransactionType.transferIn) {
-      return Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: FlowColors.success.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(FlowSpacing.radiusSm),
-        ),
-        child: const Center(child: Icon(Icons.south_west, color: FlowColors.success, size: 20)),
-      );
-    }
-
-    final iconData = transaction.paymentMethod == PaymentMethod.pix ? Icons.pix : Icons.credit_card;
-
+    
     return Container(
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        color: FlowColors.surface,
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(FlowSpacing.radiusSm),
       ),
-      child: Center(child: Icon(iconData, color: FlowColors.primary, size: 20)),
+      child: Center(
+        child: Icon(icon, color: color, size: 20),
+      ),
     );
   }
 }
