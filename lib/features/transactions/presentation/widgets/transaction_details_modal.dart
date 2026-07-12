@@ -7,6 +7,7 @@ import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 import 'package:flowpay/shared/design_system/components/buttons/flow_button.dart';
 import 'dart:ui';
+import 'package:money2/money2.dart';
 
 class TransactionDetailsModal extends StatelessWidget {
   final TransactionEntity transaction;
@@ -91,7 +92,9 @@ class TransactionDetailsModal extends StatelessWidget {
     final isNegative = transaction.type == TransactionType.transferOut || 
                        transaction.status == TransactionStatus.refunded || 
                        transaction.status == TransactionStatus.chargeback;
-    final sign = isNegative ? '-' : '+';
+    final sign = transaction.status == TransactionStatus.declined 
+        ? '' 
+        : (isNegative ? '- ' : '+ ');
 
     IconData heroIcon;
     Color iconColor;
@@ -146,7 +149,7 @@ class TransactionDetailsModal extends StatelessWidget {
         ),
         const SizedBox(height: FlowSpacing.xs),
         Text(
-          '$sign ${transaction.amount}',
+          '$sign${transaction.amount}',
           style: FlowTypography.moneyMedium.copyWith(
             color: amountColor,
             fontSize: 32,
@@ -230,16 +233,28 @@ class TransactionDetailsModal extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: FlowSpacing.sm),
                 child: Divider(color: FlowColors.surfaceVariant, height: 1),
               ),
-              _buildBreakdownRow('Taxa FlowPay', '- ${transaction.feeAmount}', FlowColors.error),
+              _buildBreakdownRow(
+                'Taxa FlowPay', 
+                transaction.feeAmount.minorUnits.toInt() == 0 ? transaction.feeAmount.toString() : '- ${transaction.feeAmount}', 
+                transaction.feeAmount.minorUnits.toInt() == 0 ? FlowColors.textSecondary : FlowColors.error
+              ),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: FlowSpacing.sm),
                 child: Divider(color: FlowColors.surfaceVariant, height: 1),
               ),
-              _buildBreakdownRow(
-                'Valor Líquido', 
-                transaction.netAmount.toString(), 
-                FlowColors.success, 
-                isBold: true
+              Builder(
+                builder: (context) {
+                  final bool isNetNegative = transaction.netAmount.minorUnits.toInt() < 0;
+                  final absNet = isNetNegative 
+                      ? Money.fromIntWithCurrency(transaction.netAmount.minorUnits.toInt().abs(), transaction.netAmount.currency)
+                      : transaction.netAmount;
+                  return _buildBreakdownRow(
+                    'Valor Líquido', 
+                    isNetNegative ? '- $absNet' : absNet.toString(), 
+                    isNetNegative ? FlowColors.error : FlowColors.success, 
+                    isBold: true
+                  );
+                }
               ),
             ],
           ),
@@ -294,15 +309,20 @@ class TransactionDetailsModal extends StatelessWidget {
                 const SizedBox(height: FlowSpacing.sm),
                 _buildCopyableRow(context, 'Autorização', transaction.authorizationCode!),
               ],
-              if (transaction.status == TransactionStatus.declined && transaction.returnCode != null) ...[
+              if (transaction.returnCode != null) ...[
                 const SizedBox(height: FlowSpacing.sm),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Motivo da Recusa', style: FlowTypography.bodySmall.copyWith(color: FlowColors.textSecondary)),
+                    Text(
+                      transaction.status == TransactionStatus.declined ? 'Motivo da Recusa' : 'Cód. Retorno (Autorizador)', 
+                      style: FlowTypography.bodySmall.copyWith(color: FlowColors.textSecondary)
+                    ),
                     Text(
                       _getReturnCodeDescription(transaction.returnCode),
-                      style: FlowTypography.bodySmall.copyWith(color: FlowColors.error),
+                      style: FlowTypography.bodySmall.copyWith(
+                        color: transaction.status == TransactionStatus.declined ? FlowColors.error : FlowColors.textSecondary
+                      ),
                     ),
                   ],
                 ),

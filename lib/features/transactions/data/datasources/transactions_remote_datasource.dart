@@ -45,6 +45,7 @@ class TransactionsRemoteDatasourceImpl implements TransactionsRemoteDatasource {
         customer_name, 
         card_last_four, 
         authorization_code, 
+        return_code,
         nsu, 
         description, 
         created_at, 
@@ -98,7 +99,7 @@ class TransactionsRemoteDatasourceImpl implements TransactionsRemoteDatasource {
       final response = await supabaseClient
           .from('transactions')
           .select('''
-            id, merchant_id, transaction_type, amount, net_amount, fee_amount, status, payment_method, card_brand, installments, customer_name, card_last_four, authorization_code, nsu, description, created_at, updated_at
+            id, merchant_id, transaction_type, amount, net_amount, fee_amount, status, payment_method, card_brand, installments, customer_name, card_last_four, authorization_code, return_code, nsu, description, created_at, updated_at
           ''')
           .gte('created_at', thirtyDaysAgo)
           .order('created_at', ascending: false);

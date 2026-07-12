@@ -63,10 +63,20 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
       var nextSettlementAmount = Money.fromIntWithCurrency(0, brlCurrency);
       DateTime? nextSettlementDate;
       
-      // Calculate available balance (all approved transactions, plus negative impacts of refunds/chargebacks)
+      // Calculate available balance:
+      // - Pix e transferências caem direto no saldo (D+0)
+      // - Vendas em cartão aprovadas ficam no "A receber" (D+1), não entram aqui
+      // - Reembolsos e chargebacks saem do saldo
       for (var t in transactions) {
-        if (t.status == TransactionStatus.approved || t.status == TransactionStatus.refunded || t.status == TransactionStatus.chargeback) {
+        final isCardSale = t.type == TransactionType.sale &&
+            (t.paymentMethod == PaymentMethod.credit || t.paymentMethod == PaymentMethod.debit);
+        
+        if (t.status == TransactionStatus.approved && !isCardSale) {
+          // Pix aprovado, transferência recebida → entra no saldo
           availableBalance = availableBalance + t.netAmount;
+        } else if (t.status == TransactionStatus.refunded || t.status == TransactionStatus.chargeback) {
+          // Estorno/chargeback → sai do saldo
+          availableBalance = availableBalance + t.netAmount; // netAmount já é negativo
         }
       }
 
@@ -78,9 +88,11 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
         return nextDay;
       }
 
-      // Calculate next settlement (sum of pending transactions)
+      // Calculate next settlement: apenas vendas em cartão aprovadas (Pix liquida na hora, D+0)
       for (var t in transactions) {
-        if (t.status == TransactionStatus.pending) {
+        if (t.type == TransactionType.sale && 
+            t.status == TransactionStatus.approved &&
+            (t.paymentMethod == PaymentMethod.credit || t.paymentMethod == PaymentMethod.debit)) {
           nextSettlementAmount = nextSettlementAmount + t.netAmount;
         }
       }

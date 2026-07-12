@@ -253,8 +253,6 @@ class _TransactionsListView extends StatelessWidget {
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.only(
-        left: FlowSpacing.md,
-        right: FlowSpacing.md,
         top: FlowSpacing.sm,
         bottom: 120.0,
       ),
@@ -276,7 +274,10 @@ class _TransactionsListView extends StatelessWidget {
                 ),
               ),
             ),
-            ...dayTransactions.map((t) => _TransactionItem(transaction: t)),
+            ...dayTransactions.map((t) => Padding(
+              padding: const EdgeInsets.only(bottom: FlowSpacing.md),
+              child: _TransactionItem(transaction: t),
+            )),
           ],
         );
       },
@@ -322,10 +323,12 @@ class _TransactionItem extends StatelessWidget {
               ),
               const SizedBox(height: FlowSpacing.xs),
               _buildStatusBadge(badgeColor),
-              if (transaction.status != TransactionStatus.declined && transaction.paymentMethod != PaymentMethod.pix) ...[
+              if (transaction.status == TransactionStatus.approved && 
+                 (transaction.paymentMethod == PaymentMethod.credit || transaction.paymentMethod == PaymentMethod.debit) && 
+                 transaction.type == TransactionType.sale) ...[
                 const SizedBox(height: FlowSpacing.xs),
                 Text(
-                  'Líquido: R\$ ${transaction.netAmount}',
+                  'Líquido: ${transaction.netAmount}',
                   style: FlowTypography.labelSmall.copyWith(
                     color: FlowColors.textTertiary,
                     fontSize: 10,

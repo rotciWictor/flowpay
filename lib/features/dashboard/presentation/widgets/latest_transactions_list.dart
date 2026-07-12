@@ -71,9 +71,12 @@ class LatestTransactionsList extends StatelessWidget {
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               final tx = transactions[index];
-              return _DashboardTransactionItem(
-                transaction: tx,
-                onTap: () => onTransactionTap(tx),
+              return Padding(
+                padding: const EdgeInsets.only(bottom: FlowSpacing.md),
+                child: _DashboardTransactionItem(
+                  transaction: tx,
+                  onTap: () => onTransactionTap(tx),
+                ),
               );
             },
             childCount: transactions.length,
@@ -125,10 +128,12 @@ class _DashboardTransactionItem extends StatelessWidget {
               ),
               const SizedBox(height: FlowSpacing.xs),
               _buildStatusBadge(badgeColor),
-              if (transaction.status != TransactionStatus.declined && transaction.paymentMethod != PaymentMethod.pix) ...[
+              if (transaction.status == TransactionStatus.approved && 
+                 (transaction.paymentMethod == PaymentMethod.credit || transaction.paymentMethod == PaymentMethod.debit) && 
+                 transaction.type == TransactionType.sale) ...[
                 const SizedBox(height: FlowSpacing.xs),
                 Text(
-                  'Líquido: R\$ ${transaction.netAmount}',
+                  'Líquido: ${transaction.netAmount}',
                   style: FlowTypography.labelSmall.copyWith(
                     color: FlowColors.textTertiary,
                     fontSize: 10,

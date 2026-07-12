@@ -52,9 +52,11 @@ ON CONFLICT (id) DO NOTHING;
 UPDATE public.merchants
 SET business_name = 'FlowPay Demo Store',
     segment = 'retail'
-WHERE user_id = '00000000-0000-0000-0000-000000000000';
+WHERE id = '00000000-0000-0000-0000-000000000000';
 
 -- 2. Limpar dados antigos do usuário Demo (Evita duplicados)
+ALTER TABLE public.transactions ADD COLUMN IF NOT EXISTS return_code TEXT;
+
 DELETE FROM public.transactions 
 WHERE merchant_id = '00000000-0000-0000-0000-000000000000';
 
@@ -112,7 +114,7 @@ refined_data AS (
       WHEN raw_transaction_type IN ('transfer_out', 'transfer_in') THEN 
         CASE WHEN raw_status IN ('chargeback', 'refunded', 'declined') THEN 'pending' ELSE raw_status END
       WHEN raw_payment_method = 'pix' THEN 
-        CASE WHEN raw_status = 'chargeback' THEN 'refunded' WHEN raw_status = 'declined' THEN 'approved' ELSE raw_status END
+        CASE WHEN raw_status IN ('chargeback', 'refunded', 'declined') THEN 'approved' ELSE raw_status END
       ELSE raw_status 
     END AS status,
     -- Nome do Cliente

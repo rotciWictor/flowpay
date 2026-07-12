@@ -15,6 +15,20 @@ Este documento registra as implementações do projeto em detalhes, explicando n
   - Adicionado suporte à coluna `return_code` nas entidades e modelos (`transaction.dart`, `transaction_model.dart`).
   - Mapeado o dicionário do BCB e Redes Adquirentes: Falhas de Pix agora exibem detalhes (ex: *AM04 - Saldo Insuficiente*, *BE17 - QR Code Rejeitado*), e erros de cartão mostram códigos ISO (ex: *51 - Saldo Insuficiente*, *05 - Não Autorizada*).
 - **Bandeiras Renderizadas:** Integrado o pacote `flutter_credit_card_brazilian` apenas como provider de Assets visuais. A UI agora extrai a logo nativa (Visa, Master, Elo, Amex) e exibe ao lado do nome da bandeira na tela de detalhes.
+- **Refinamento Tipográfico e Lógico (Extrato e Dashboard):** 
+  - Removida a redundância de texto (`R$ R$`) causada pela injeção dupla do símbolo da moeda.
+  - A label "Líquido" agora só aparece estritamente para **Vendas Aprovadas** no cartão de crédito ou débito. Transações Pix, chargebacks, estornos e declínios possuem regras de liquidação síncronas que dispensam a distinção de um valor contábil secundário.
+  - O componente `FlowListTile` na lista de extrato e na dashboard ganhou "respiro" lateral (remoção do padding global que limitava os cards) e margin inferior (`FlowSpacing.md`) para aliviar a densidade visual da lista e deixar a UI mais clara.
+
+### Ajustes no Motor Financeiro (SQL e Domínio)
+- **Correção Crítica no `seed_demo.sql`:** 
+  - Resolvido o aborto de execução no Supabase Studio alterando o comando falho `WHERE user_id =` para `WHERE id =` na atualização de `merchants`.
+  - Adicionado instrução DDL protetiva (`ALTER TABLE IF EXISTS`) para auto-criação da coluna `return_code` antes das inserções, blindando o ambiente de erros fatais de migração de banco de dados.
+  - Reescrita da inteligência orgânica da geração de Pix: não são mais gerados falsos "reembolsados" via Pix. Em transações Pix, fluxos de falha são convertidos para `approved` (visto que Pix estornado na vida real segue um rito separado de MED, não sendo um estorno de aprovação simples).
+- **Corrigido Data Source (`return_code` nulo):** As requisições `select()` do Supabase RPC omitiam o campo `return_code`. Adicionamos a coluna nas *views* para injetá-lo na modelagem.
+- **Precisão Métrica no Dashboard (DashboardData):**
+  - **A receber:** Agora isola e soma unicamente vendas (Sale) de Cartão que estejam Aprovadas. Foi corrigida a anomalia que incluía transferências pendentes (gerando valores negativos no caixa projetado de D+1).
+  - **Saldo Disponível:** Ajustado para excluir vendas em cartão (que agora ficam retidas na esteira D+1 de recebíveis) e consolidar rigorosamente: Pix, Transferências de Entrada (recebimentos D+0) menos Estornos/Chargebacks.
 
 ### Database-Driven Fee Engine (Motor de Taxas Comerciais)
 - **Documentação de Taxas (`docs/taxas_comerciais.md`):** Consolidamos as taxas comerciais da Adquirente fictícia (Débito: 1.5%, Crédito: 3.5% + 1.5% ao mês, Elo: 4.5%, Pix: 0%).
