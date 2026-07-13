@@ -24,7 +24,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get transactions => 'Transações';
 
   @override
-  String get charges => 'Cobranças';
+  String get charges => 'Vender';
 
   @override
   String get profile => 'Perfil';
@@ -73,7 +73,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get bottomNavTransactions => 'Transações';
 
   @override
-  String get bottomNavCharges => 'Cobrar';
+  String get bottomNavCharges => 'Vender';
 
   @override
   String get bottomNavProfile => 'Perfil';
@@ -91,7 +91,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dashboardNextSettlement => 'A receber próx. dia útil';
 
   @override
-  String get dashboardQuickActionPix => 'Cobrar via Pix';
+  String get dashboardQuickActionPix => 'Vender via Pix';
 
   @override
   String get dashboardQuickActionLink => 'Link de Pag.';

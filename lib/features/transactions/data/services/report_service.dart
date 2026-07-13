@@ -10,7 +10,7 @@ class ReportService {
 
   ReportService({SupabaseClient? supabase}) : _supabase = supabase ?? Supabase.instance.client;
 
-  Future<void> generateAndShareReport({
+  Future<File> generateReport({
     required String format, // 'pdf' ou 'xml'
     Map<String, dynamic>? filters,
   }) async {
@@ -44,14 +44,16 @@ class ReportService {
       
       await file.writeAsBytes(fileResponse.bodyBytes);
 
-      // 4. Compartilhar o arquivo (WhatsApp, Email, etc)
-      await Share.shareXFiles(
-        [XFile(file.path)],
-        text: 'Segue o relatório de transações exportado do FlowPay.',
-      );
+      return file;
     } catch (e) {
       debugPrint('Erro ao exportar relatório: $e');
-      rethrow;
+      if (e is FunctionException) {
+        if (e.details != null && e.details.toString().contains('Bucket not found')) {
+          throw Exception('Infraestrutura incompleta: O bucket "reports" não existe no Supabase. Por favor, crie-o no painel ou rode o seed.');
+        }
+        throw Exception('Falha no servidor ao gerar relatório: ${e.reasonPhrase ?? e.details ?? "Erro desconhecido"}');
+      }
+      throw Exception('Ocorreu um erro inesperado ao gerar o relatório.');
     }
   }
 }

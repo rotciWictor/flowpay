@@ -65,8 +65,8 @@ class AppBottomNav extends StatelessWidget {
                   label: AppLocalizations.of(context)!.bottomNavTransactions,
                 ),
                 BottomNavigationBarItem(
-                  icon: const Icon(Icons.qr_code_2_outlined),
-                  activeIcon: const Icon(Icons.qr_code_2_rounded),
+                  icon: const Icon(Icons.point_of_sale_outlined),
+                  activeIcon: const Icon(Icons.point_of_sale_rounded),
                   label: AppLocalizations.of(context)!.bottomNavCharges,
                 ),
                 BottomNavigationBarItem(

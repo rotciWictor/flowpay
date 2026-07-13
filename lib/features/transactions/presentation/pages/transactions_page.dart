@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 import 'package:flowpay/core/utils/date_formatter.dart';
 import 'package:flowpay/features/transactions/domain/entities/transaction.dart';
@@ -295,8 +298,48 @@ class TransactionsView extends StatelessWidget {
 
     try {
       final service = ReportService();
-      await service.generateAndShareReport(format: format, filters: apiFilters);
-      if (context.mounted) Navigator.pop(context); // Fechar loading
+      final file = await service.generateReport(format: format, filters: apiFilters);
+      
+      if (context.mounted) {
+        Navigator.pop(context); // Fechar loading IMEDIATAMENTE após o download
+        
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: FlowColors.background,
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+          builder: (ctx) => SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(FlowSpacing.lg),
+                  child: Text('Relatório Pronto!', style: FlowTypography.headlineSmall.copyWith(color: FlowColors.primary)),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.file_open, color: FlowColors.textSecondary),
+                  title: Text('Abrir Arquivo', style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    OpenFilex.open(file.path);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.share, color: FlowColors.textSecondary),
+                  title: Text('Compartilhar', style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    Share.shareXFiles(
+                      [XFile(file.path)],
+                      text: 'Segue o relatório de transações exportado do FlowPay.',
+                    );
+                  },
+                ),
+                const SizedBox(height: FlowSpacing.md),
+              ],
+            ),
+          ),
+        );
+      }
     } catch (e) {
       if (context.mounted) {
         Navigator.pop(context); // Fechar loading

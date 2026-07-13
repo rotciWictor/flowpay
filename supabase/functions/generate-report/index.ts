@@ -69,6 +69,15 @@ serve(async (req) => {
       const page = pdfDoc.addPage([595.28, 841.89]) // A4
       const { width, height } = page.getSize()
       
+      // FIX: Fundo branco explícito para evitar "tela preta" em visualizadores nativos (ex: Android/iOS Dark Mode)
+      page.drawRectangle({
+        x: 0,
+        y: 0,
+        width: width,
+        height: height,
+        color: rgb(1, 1, 1), // Branco
+      })
+      
       page.drawText('Relatorio de Transacoes - FlowPay', {
         x: 50,
         y: height - 50,

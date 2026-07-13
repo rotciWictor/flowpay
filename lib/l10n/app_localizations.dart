@@ -131,7 +131,7 @@ abstract class AppLocalizations {
   /// No description provided for @charges.
   ///
   /// In pt, this message translates to:
-  /// **'Cobranças'**
+  /// **'Vender'**
   String get charges;
 
   /// No description provided for @profile.
@@ -227,7 +227,7 @@ abstract class AppLocalizations {
   /// No description provided for @bottomNavCharges.
   ///
   /// In pt, this message translates to:
-  /// **'Cobrar'**
+  /// **'Vender'**
   String get bottomNavCharges;
 
   /// No description provided for @bottomNavProfile.
@@ -263,7 +263,7 @@ abstract class AppLocalizations {
   /// No description provided for @dashboardQuickActionPix.
   ///
   /// In pt, this message translates to:
-  /// **'Cobrar via Pix'**
+  /// **'Vender via Pix'**
   String get dashboardQuickActionPix;
 
   /// No description provided for @dashboardQuickActionLink.
