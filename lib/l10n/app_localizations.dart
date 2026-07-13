@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
 import 'app_localizations_pt.dart';
 
 // ignore_for_file: type=lint
@@ -95,6 +96,7 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
+    Locale('es'),
     Locale('pt'),
   ];
 
@@ -109,6 +111,12 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Painel de Vendas'**
   String get dashboardTitle;
+
+  /// No description provided for @dashboardGreeting.
+  ///
+  /// In pt, this message translates to:
+  /// **'Olá, {name}'**
+  String dashboardGreeting(String name);
 
   /// No description provided for @availableBalance.
   ///
@@ -266,12 +274,6 @@ abstract class AppLocalizations {
   /// **'Vender via Pix'**
   String get dashboardQuickActionPix;
 
-  /// No description provided for @dashboardQuickActionLink.
-  ///
-  /// In pt, this message translates to:
-  /// **'Link de Pag.'**
-  String get dashboardQuickActionLink;
-
   /// No description provided for @dashboardQuickActionTransfer.
   ///
   /// In pt, this message translates to:
@@ -365,8 +367,26 @@ abstract class AppLocalizations {
   /// No description provided for @filterPeriodCustom.
   ///
   /// In pt, this message translates to:
-  /// **'Customizado'**
+  /// **'Personalizado'**
   String get filterPeriodCustom;
+
+  /// No description provided for @dateToday.
+  ///
+  /// In pt, this message translates to:
+  /// **'Hoje'**
+  String get dateToday;
+
+  /// No description provided for @dateYesterday.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ontem'**
+  String get dateYesterday;
+
+  /// No description provided for @dateTomorrow.
+  ///
+  /// In pt, this message translates to:
+  /// **'Amanhã'**
+  String get dateTomorrow;
 
   /// No description provided for @filterStatusLabel.
   ///
@@ -403,6 +423,408 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Aplicar Filtros'**
   String get filterApplyBtn;
+
+  /// No description provided for @profileSectionMyAccount.
+  ///
+  /// In pt, this message translates to:
+  /// **'Minha Conta'**
+  String get profileSectionMyAccount;
+
+  /// No description provided for @profileBusinessData.
+  ///
+  /// In pt, this message translates to:
+  /// **'Dados do Negócio'**
+  String get profileBusinessData;
+
+  /// No description provided for @profileDocument.
+  ///
+  /// In pt, this message translates to:
+  /// **'Documento (CNPJ)'**
+  String get profileDocument;
+
+  /// No description provided for @profileSecurity.
+  ///
+  /// In pt, this message translates to:
+  /// **'Segurança e Senha'**
+  String get profileSecurity;
+
+  /// No description provided for @profileSecurityDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Alterar senha, 2FA'**
+  String get profileSecurityDesc;
+
+  /// No description provided for @profileSectionFinancial.
+  ///
+  /// In pt, this message translates to:
+  /// **'Financeiro'**
+  String get profileSectionFinancial;
+
+  /// No description provided for @profileFeeTable.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tabela de Taxas'**
+  String get profileFeeTable;
+
+  /// No description provided for @profileFeeTableDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Pix, Link, Boleto, Tap to Pay'**
+  String get profileFeeTableDesc;
+
+  /// No description provided for @profileBankAccount.
+  ///
+  /// In pt, this message translates to:
+  /// **'Conta Bancária'**
+  String get profileBankAccount;
+
+  /// No description provided for @profileBankAccountDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Dados para recebimento'**
+  String get profileBankAccountDesc;
+
+  /// No description provided for @profileTaxData.
+  ///
+  /// In pt, this message translates to:
+  /// **'Dados Fiscais'**
+  String get profileTaxData;
+
+  /// No description provided for @profileTaxDataDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Nota fiscal e configuração'**
+  String get profileTaxDataDesc;
+
+  /// No description provided for @profileSectionSettings.
+  ///
+  /// In pt, this message translates to:
+  /// **'Configurações'**
+  String get profileSectionSettings;
+
+  /// No description provided for @profileLanguage.
+  ///
+  /// In pt, this message translates to:
+  /// **'Idioma'**
+  String get profileLanguage;
+
+  /// No description provided for @profileLanguagePt.
+  ///
+  /// In pt, this message translates to:
+  /// **'Português (BR)'**
+  String get profileLanguagePt;
+
+  /// No description provided for @profileLanguageEn.
+  ///
+  /// In pt, this message translates to:
+  /// **'English (US)'**
+  String get profileLanguageEn;
+
+  /// No description provided for @profileLanguageEs.
+  ///
+  /// In pt, this message translates to:
+  /// **'Español (ES)'**
+  String get profileLanguageEs;
+
+  /// No description provided for @profilePushNotifications.
+  ///
+  /// In pt, this message translates to:
+  /// **'Notificações Push'**
+  String get profilePushNotifications;
+
+  /// No description provided for @profilePushNotificationsDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Vendas, recebimentos, alertas'**
+  String get profilePushNotificationsDesc;
+
+  /// No description provided for @profileBiometrics.
+  ///
+  /// In pt, this message translates to:
+  /// **'Biometria'**
+  String get profileBiometrics;
+
+  /// No description provided for @profileBiometricsDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Desbloqueio com digital ou face'**
+  String get profileBiometricsDesc;
+
+  /// No description provided for @profileAppearance.
+  ///
+  /// In pt, this message translates to:
+  /// **'Aparência'**
+  String get profileAppearance;
+
+  /// No description provided for @profileAppearanceDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tema escuro'**
+  String get profileAppearanceDesc;
+
+  /// No description provided for @profileSectionSupport.
+  ///
+  /// In pt, this message translates to:
+  /// **'Suporte'**
+  String get profileSectionSupport;
+
+  /// No description provided for @profileHelpCenter.
+  ///
+  /// In pt, this message translates to:
+  /// **'Central de Ajuda'**
+  String get profileHelpCenter;
+
+  /// No description provided for @profileHelpCenterDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Dúvidas frequentes'**
+  String get profileHelpCenterDesc;
+
+  /// No description provided for @profileContactUs.
+  ///
+  /// In pt, this message translates to:
+  /// **'Fale Conosco'**
+  String get profileContactUs;
+
+  /// No description provided for @profileContactUsDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Chat ou e-mail'**
+  String get profileContactUsDesc;
+
+  /// No description provided for @profileTermsPolicies.
+  ///
+  /// In pt, this message translates to:
+  /// **'Termos e Políticas'**
+  String get profileTermsPolicies;
+
+  /// No description provided for @profileTermsPoliciesDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Termos de uso e privacidade'**
+  String get profileTermsPoliciesDesc;
+
+  /// No description provided for @feeTableModalSubtitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Valores por transação aprovada'**
+  String get feeTableModalSubtitle;
+
+  /// No description provided for @feeTableCredit.
+  ///
+  /// In pt, this message translates to:
+  /// **'Crédito à Vista'**
+  String get feeTableCredit;
+
+  /// No description provided for @feeTableCreditDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'+1,50% por parcela adicional'**
+  String get feeTableCreditDesc;
+
+  /// No description provided for @feeTableDisclaimer.
+  ///
+  /// In pt, this message translates to:
+  /// **'Taxas válidas para o plano atual'**
+  String get feeTableDisclaimer;
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In pt, this message translates to:
+  /// **'Em breve!'**
+  String get comingSoon;
+
+  /// No description provided for @segmentFoodBeverage.
+  ///
+  /// In pt, this message translates to:
+  /// **'Alimentação e Bebidas'**
+  String get segmentFoodBeverage;
+
+  /// No description provided for @segmentRetail.
+  ///
+  /// In pt, this message translates to:
+  /// **'Varejo'**
+  String get segmentRetail;
+
+  /// No description provided for @segmentServices.
+  ///
+  /// In pt, this message translates to:
+  /// **'Serviços'**
+  String get segmentServices;
+
+  /// No description provided for @segmentHealthBeauty.
+  ///
+  /// In pt, this message translates to:
+  /// **'Saúde e Beleza'**
+  String get segmentHealthBeauty;
+
+  /// No description provided for @segmentTechnology.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tecnologia'**
+  String get segmentTechnology;
+
+  /// No description provided for @segmentOther.
+  ///
+  /// In pt, this message translates to:
+  /// **'Outros'**
+  String get segmentOther;
+
+  /// No description provided for @chargesHowToSell.
+  ///
+  /// In pt, this message translates to:
+  /// **'Como você quer vender hoje?'**
+  String get chargesHowToSell;
+
+  /// No description provided for @chargesPaymentLink.
+  ///
+  /// In pt, this message translates to:
+  /// **'Link de Pagamento'**
+  String get chargesPaymentLink;
+
+  /// No description provided for @chargesPaymentLinkDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Venda a distância rápido'**
+  String get chargesPaymentLinkDesc;
+
+  /// No description provided for @chargesTapToPay.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tap to Pay'**
+  String get chargesTapToPay;
+
+  /// No description provided for @chargesBoleto.
+  ///
+  /// In pt, this message translates to:
+  /// **'Boleto'**
+  String get chargesBoleto;
+
+  /// No description provided for @chargesSubscription.
+  ///
+  /// In pt, this message translates to:
+  /// **'Assinatura'**
+  String get chargesSubscription;
+
+  /// No description provided for @chargesPendingSales.
+  ///
+  /// In pt, this message translates to:
+  /// **'Vendas Pendentes'**
+  String get chargesPendingSales;
+
+  /// No description provided for @chargesSeeAll.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ver todas'**
+  String get chargesSeeAll;
+
+  /// No description provided for @dashboardChartTooltip.
+  ///
+  /// In pt, this message translates to:
+  /// **'Toque no gráfico para detalhes'**
+  String get dashboardChartTooltip;
+
+  /// No description provided for @dashboardQuickActionAnticipate.
+  ///
+  /// In pt, this message translates to:
+  /// **'Antecipar'**
+  String get dashboardQuickActionAnticipate;
+
+  /// No description provided for @dashboardQuickActionPay.
+  ///
+  /// In pt, this message translates to:
+  /// **'Pagar'**
+  String get dashboardQuickActionPay;
+
+  /// No description provided for @dashboardQuickActionLink.
+  ///
+  /// In pt, this message translates to:
+  /// **'Criar Link'**
+  String get dashboardQuickActionLink;
+
+  /// No description provided for @transactionDetailsReceipt.
+  ///
+  /// In pt, this message translates to:
+  /// **'Comprovante'**
+  String get transactionDetailsReceipt;
+
+  /// No description provided for @transactionDetailsNetValue.
+  ///
+  /// In pt, this message translates to:
+  /// **'Valor líquido'**
+  String get transactionDetailsNetValue;
+
+  /// No description provided for @transactionListNetValue.
+  ///
+  /// In pt, this message translates to:
+  /// **'Líquido'**
+  String get transactionListNetValue;
+
+  /// No description provided for @transactionDetailsRefundBtn.
+  ///
+  /// In pt, this message translates to:
+  /// **'Estornar'**
+  String get transactionDetailsRefundBtn;
+
+  /// No description provided for @transactionDetailsDisputeBtn.
+  ///
+  /// In pt, this message translates to:
+  /// **'Contestar / Fraude'**
+  String get transactionDetailsDisputeBtn;
+
+  /// No description provided for @paymentMethodCredit.
+  ///
+  /// In pt, this message translates to:
+  /// **'Crédito'**
+  String get paymentMethodCredit;
+
+  /// No description provided for @paymentMethodDebit.
+  ///
+  /// In pt, this message translates to:
+  /// **'Débito'**
+  String get paymentMethodDebit;
+
+  /// No description provided for @paymentMethodPix.
+  ///
+  /// In pt, this message translates to:
+  /// **'Pix'**
+  String get paymentMethodPix;
+
+  /// No description provided for @paymentMethodBoleto.
+  ///
+  /// In pt, this message translates to:
+  /// **'Boleto'**
+  String get paymentMethodBoleto;
+
+  /// No description provided for @statusApproved.
+  ///
+  /// In pt, this message translates to:
+  /// **'Aprovada'**
+  String get statusApproved;
+
+  /// No description provided for @statusDeclined.
+  ///
+  /// In pt, this message translates to:
+  /// **'Recusada'**
+  String get statusDeclined;
+
+  /// No description provided for @statusRefunded.
+  ///
+  /// In pt, this message translates to:
+  /// **'Reembolsada'**
+  String get statusRefunded;
+
+  /// No description provided for @statusPending.
+  ///
+  /// In pt, this message translates to:
+  /// **'Pendente'**
+  String get statusPending;
+
+  /// No description provided for @statusChargeback.
+  ///
+  /// In pt, this message translates to:
+  /// **'Contestação'**
+  String get statusChargeback;
 }
 
 class _AppLocalizationsDelegate
@@ -416,7 +838,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'pt'].contains(locale.languageCode);
+      <String>['en', 'es', 'pt'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -427,6 +849,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'en':
       return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
     case 'pt':
       return AppLocalizationsPt();
   }

@@ -10,6 +10,7 @@ import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 import 'package:flowpay/shared/design_system/components/cards/flow_card.dart';
 import 'package:flowpay/core/bloc/locale_cubit.dart';
+import 'package:country_flags/country_flags.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -110,38 +111,38 @@ class ProfilePage extends StatelessWidget {
                   // =====================================================
                   // SEÇÃO: Minha Conta
                   // =====================================================
-                  _SectionTitle(title: 'Minha Conta'),
+                  _SectionTitle(title: l10n.profileSectionMyAccount),
                   const SizedBox(height: FlowSpacing.sm),
                   _ProfileMenuItem(
                     icon: Icons.store_rounded,
-                    title: 'Dados do Negócio',
-                    subtitle: _getSegmentLabel(merchant.segment),
+                    title: l10n.profileBusinessData,
+                    subtitle: _getSegmentLabel(merchant.segment, l10n),
                     onTap: () {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                        SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                       );
                     },
                   ),
                   _ProfileMenuItem(
                     icon: Icons.badge_rounded,
-                    title: 'Documento (CNPJ)',
+                    title: l10n.profileDocument,
                     subtitle: merchant.document,
                     onTap: () {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                        SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                       );
                     },
                   ),
                   _ProfileMenuItem(
                     icon: Icons.security_rounded,
-                    title: 'Segurança e Senha',
-                    subtitle: 'Alterar senha, 2FA',
+                    title: l10n.profileSecurity,
+                    subtitle: l10n.profileSecurityDesc,
                     onTap: () {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                        SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                       );
                     },
                   ),
@@ -151,36 +152,36 @@ class ProfilePage extends StatelessWidget {
                   // =====================================================
                   // SEÇÃO: Financeiro
                   // =====================================================
-                  _SectionTitle(title: 'Financeiro'),
+                  _SectionTitle(title: l10n.profileSectionFinancial),
                   const SizedBox(height: FlowSpacing.sm),
                   _ProfileMenuItem(
                     icon: Icons.percent_rounded,
-                    title: 'Tabela de Taxas',
-                    subtitle: 'Pix, Link, Boleto, Tap to Pay',
+                    title: l10n.profileFeeTable,
+                    subtitle: l10n.profileFeeTableDesc,
                     iconColor: FlowColors.warning,
                     onTap: () {
-                      _showFeeTable(context);
+                      _showFeeTable(context, l10n);
                     },
                   ),
                   _ProfileMenuItem(
                     icon: Icons.account_balance_rounded,
-                    title: 'Conta Bancária',
-                    subtitle: 'Dados para recebimento',
+                    title: l10n.profileBankAccount,
+                    subtitle: l10n.profileBankAccountDesc,
                     onTap: () {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                        SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                       );
                     },
                   ),
                   _ProfileMenuItem(
                     icon: Icons.receipt_long_rounded,
-                    title: 'Dados Fiscais',
-                    subtitle: 'Nota fiscal e configuração',
+                    title: l10n.profileTaxData,
+                    subtitle: l10n.profileTaxDataDesc,
                     onTap: () {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                        SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                       );
                     },
                   ),
@@ -190,48 +191,52 @@ class ProfilePage extends StatelessWidget {
                   // =====================================================
                   // SEÇÃO: Configurações
                   // =====================================================
-                  _SectionTitle(title: 'Configurações'),
+                  _SectionTitle(title: l10n.profileSectionSettings),
                   const SizedBox(height: FlowSpacing.sm),
                   _ProfileMenuItem(
                     icon: Icons.language_rounded,
-                    title: 'Idioma',
-                    subtitle: currentLocale.languageCode == 'pt' ? 'Português (BR)' : 'English (US)',
+                    title: l10n.profileLanguage,
+                    subtitle: currentLocale.languageCode == 'pt'
+                        ? l10n.profileLanguagePt
+                        : currentLocale.languageCode == 'en'
+                            ? l10n.profileLanguageEn
+                            : l10n.profileLanguageEs,
                     onTap: () {
-                      context.read<LocaleCubit>().toggleLocale();
+                      _showLanguagePicker(context);
                     },
                   ),
                   _ProfileToggleItem(
                     icon: Icons.notifications_rounded,
-                    title: 'Notificações Push',
-                    subtitle: 'Vendas, recebimentos, alertas',
+                    title: l10n.profilePushNotifications,
+                    subtitle: l10n.profilePushNotificationsDesc,
                     value: true,
                     onChanged: (val) {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                        SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                       );
                     },
                   ),
                   _ProfileToggleItem(
                     icon: Icons.fingerprint_rounded,
-                    title: 'Biometria',
-                    subtitle: 'Desbloqueio com digital ou face',
+                    title: l10n.profileBiometrics,
+                    subtitle: l10n.profileBiometricsDesc,
                     value: false,
                     onChanged: (val) {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                        SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                       );
                     },
                   ),
                   _ProfileMenuItem(
                     icon: Icons.palette_rounded,
-                    title: 'Aparência',
-                    subtitle: 'Tema escuro',
+                    title: l10n.profileAppearance,
+                    subtitle: l10n.profileAppearanceDesc,
                     onTap: () {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                        SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                       );
                     },
                   ),
@@ -241,38 +246,38 @@ class ProfilePage extends StatelessWidget {
                   // =====================================================
                   // SEÇÃO: Suporte
                   // =====================================================
-                  _SectionTitle(title: 'Suporte'),
+                  _SectionTitle(title: l10n.profileSectionSupport),
                   const SizedBox(height: FlowSpacing.sm),
                   _ProfileMenuItem(
                     icon: Icons.help_outline_rounded,
-                    title: 'Central de Ajuda',
-                    subtitle: 'Dúvidas frequentes',
+                    title: l10n.profileHelpCenter,
+                    subtitle: l10n.profileHelpCenterDesc,
                     onTap: () {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                        SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                       );
                     },
                   ),
                   _ProfileMenuItem(
                     icon: Icons.chat_bubble_outline_rounded,
-                    title: 'Fale Conosco',
-                    subtitle: 'Chat ou e-mail',
+                    title: l10n.profileContactUs,
+                    subtitle: l10n.profileContactUsDesc,
                     onTap: () {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                        SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                       );
                     },
                   ),
                   _ProfileMenuItem(
                     icon: Icons.description_outlined,
-                    title: 'Termos e Políticas',
-                    subtitle: 'Termos de uso e privacidade',
+                    title: l10n.profileTermsPolicies,
+                    subtitle: l10n.profileTermsPoliciesDesc,
                     onTap: () {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                        SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                       );
                     },
                   ),
@@ -342,24 +347,84 @@ class ProfilePage extends StatelessWidget {
     return name.isNotEmpty ? name[0].toUpperCase() : '?';
   }
 
-  String _getSegmentLabel(MerchantSegment segment) {
+  String _getSegmentLabel(MerchantSegment segment, AppLocalizations l10n) {
     switch (segment) {
       case MerchantSegment.foodAndBeverage:
-        return 'Alimentação e Bebidas';
+        return l10n.segmentFoodBeverage;
       case MerchantSegment.retail:
-        return 'Varejo';
+        return l10n.segmentRetail;
       case MerchantSegment.services:
-        return 'Serviços';
+        return l10n.segmentServices;
       case MerchantSegment.healthAndBeauty:
-        return 'Saúde e Beleza';
+        return l10n.segmentHealthBeauty;
       case MerchantSegment.technology:
-        return 'Tecnologia';
+        return l10n.segmentTechnology;
       case MerchantSegment.other:
-        return 'Outros';
+        return l10n.segmentOther;
     }
   }
 
-  void _showFeeTable(BuildContext context) {
+  void _showLanguagePicker(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: FlowColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(FlowSpacing.radiusXl)),
+      ),
+      builder: (bottomSheetContext) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: FlowSpacing.xl),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: FlowColors.textTertiary,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: FlowSpacing.lg),
+            Text(
+              l10n.profileLanguage,
+              style: FlowTypography.headlineSmall.copyWith(color: FlowColors.textPrimary),
+            ),
+            const SizedBox(height: FlowSpacing.xl),
+            ListTile(
+              leading: CountryFlag.fromCountryCode('BR', theme: const ImageTheme(shape: Circle(), width: 24, height: 24)),
+              title: Text(l10n.profileLanguagePt, style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
+              onTap: () {
+                context.read<LocaleCubit>().setLocale(const Locale('pt'));
+                Navigator.pop(bottomSheetContext);
+              },
+            ),
+            ListTile(
+              leading: CountryFlag.fromCountryCode('US', theme: const ImageTheme(shape: Circle(), width: 24, height: 24)),
+              title: Text(l10n.profileLanguageEn, style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
+              onTap: () {
+                context.read<LocaleCubit>().setLocale(const Locale('en'));
+                Navigator.pop(bottomSheetContext);
+              },
+            ),
+            ListTile(
+              leading: CountryFlag.fromCountryCode('ES', theme: const ImageTheme(shape: Circle(), width: 24, height: 24)),
+              title: Text(l10n.profileLanguageEs, style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
+              onTap: () {
+                context.read<LocaleCubit>().setLocale(const Locale('es'));
+                Navigator.pop(bottomSheetContext);
+              },
+            ),
+            SizedBox(height: MediaQuery.of(bottomSheetContext).padding.bottom),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showFeeTable(BuildContext context, AppLocalizations l10n) {
     showModalBottomSheet(
       context: context,
       backgroundColor: FlowColors.surface,
@@ -391,29 +456,29 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: FlowSpacing.lg),
             Text(
-              'Tabela de Taxas',
+              l10n.profileFeeTable,
               style: FlowTypography.headlineSmall.copyWith(color: FlowColors.textPrimary),
             ),
             const SizedBox(height: FlowSpacing.xs),
             Text(
-              'Valores por transação aprovada',
+              l10n.feeTableModalSubtitle,
               style: FlowTypography.bodySmall.copyWith(color: FlowColors.textSecondary),
             ),
             const SizedBox(height: FlowSpacing.xl),
 
             // PIX
             Text(
-              'Pix',
+              l10n.paymentMethodPix,
               style: FlowTypography.titleMedium.copyWith(color: FlowColors.brandPix),
             ),
             const SizedBox(height: FlowSpacing.xs),
-            const _FeeRow(brand: 'Pix', fee: '0,00%'),
+            _FeeRow(brand: l10n.paymentMethodPix, fee: '0,00%'),
 
             const SizedBox(height: FlowSpacing.lg),
 
             // DÉBITO
             Text(
-              'Débito',
+              l10n.paymentMethodDebit,
               style: FlowTypography.titleMedium.copyWith(color: FlowColors.primaryGradientEnd),
             ),
             const SizedBox(height: FlowSpacing.xs),
@@ -426,12 +491,12 @@ class ProfilePage extends StatelessWidget {
 
             // CRÉDITO
             Text(
-              'Crédito à Vista',
+              l10n.feeTableCredit,
               style: FlowTypography.titleMedium.copyWith(color: FlowColors.primary),
             ),
             const SizedBox(height: FlowSpacing.xxs),
             Text(
-              '+1,50% por parcela adicional',
+              l10n.feeTableCreditDesc,
               style: FlowTypography.bodySmall.copyWith(color: FlowColors.textTertiary),
             ),
             const SizedBox(height: FlowSpacing.xs),
@@ -445,7 +510,7 @@ class ProfilePage extends StatelessWidget {
             const SizedBox(height: FlowSpacing.sm),
             Center(
               child: Text(
-                'Taxas válidas para o plano atual',
+                l10n.feeTableDisclaimer,
                 style: FlowTypography.labelSmall,
               ),
             ),

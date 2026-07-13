@@ -41,14 +41,13 @@ Foco na visão principal do lojista (Dash) e fundação do Design System.
 
 ---
 
-### 🟡 DIA 4 — Cobranças, Perfil do Lojista e Polimento (EM ANDAMENTO)
+### 🟢 DIA 4 — Cobranças, Perfil do Lojista e Polimento (CONCLUÍDO)
 Acabamento profissional, Empty States e controle de usuário.
 - ✅ **Hub de Vendas (UI Draft)**: Criação do grid central de conversão (Pix, Link, Boleto, Tap).
-- 🔄 **Feature: Detalhes da Transação & Infinite Scroll** → Movido para GitHub Issue #3
-- 🔄 **Feature: Perfil Completo & Empty States** → Movido para GitHub Issue #4
-- 🔄 **Tech Debt: i18n & Traduções** → Movido para GitHub Issue #1
-- ⏳ **Tela de Perfil Completa**: Dados da empresa, conta bancária, taxas aplicadas.
-- ⏳ **Unhappy Paths Globais**: Padronização de telas vazias (Empty States) em todo o app.
+- ✅ **Tela de Perfil Completa**: UI do hub construída com Tabela de Taxas dinâmica e Logout funcional.
+- ✅ **Unhappy Paths Globais**: Padronização de "Em breve" mapeada para todas as rotas vazias do app.
+- 🔄 **Feature: Hub de Vendas Completo** → Movido para GitHub Issue #6
+- 🔄 **Feature: Perfil (Regras de Negócio e CRUD)** → Elevado a Epic (Issue #4) e fatiado (#7 a #12).
 
 ---
 
@@ -56,9 +55,10 @@ Acabamento profissional, Empty States e controle de usuário.
 As bases dessa fase já foram adiantadas para garantir qualidade contínua.
 - ✅ **Cobertura de Testes**: Agentic TDD já estabelecido nos blocos mais críticos (Auth e Dashboard).
 - ✅ **CI/CD Integrado**: Github Actions rodando `flutter test` e `flutter analyze` em cada commit.
+- ✅ **Demonstração Segura (MVP)**: Versão visual "fechada" pronta para validação inicial de stakeholders.
+- ⏳ **Build Release**: Compilação final `APK/AAB` (e TestFlight) focada.
 - ⏳ **README Profissional**: Documentação arquitetural "senior level" com arquitetura desenhada, justificativas, diagramas e prints de tela.
-- ⏳ **Build Release**: Compilação final `APK/AAB` para demonstração.
 
 ---
 
-> **Próximo Alvo Recomendado:** Iniciar os trabalhos através do nosso Backlog Oficial no GitHub (Issues #1 a #5), focando na finalização da Feature de Perfil ou nas Traduções Globais.
+> **Próximo Alvo Recomendado:** O app atingiu o marco de "Demo Ready" e superou o Debt Técnico de i18n (Issue #1 Finalizada). O roadmap entra na fase evolutiva baseada no Backlog (Issues #2 a #12 no GitHub), priorizando a Issue #6 (Hub de Vendas real) ou sub-tarefas da Epic do Perfil.

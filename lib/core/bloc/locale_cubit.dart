@@ -7,6 +7,8 @@ class LocaleCubit extends Cubit<Locale> {
   void toggleLocale() {
     if (state.languageCode == 'pt') {
       emit(const Locale('en'));
+    } else if (state.languageCode == 'en') {
+      emit(const Locale('es'));
     } else {
       emit(const Locale('pt'));
     }

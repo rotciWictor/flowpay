@@ -8,6 +8,7 @@ import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 import 'package:flowpay/shared/design_system/components/buttons/flow_button.dart';
 import 'dart:ui';
 import 'package:money2/money2.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
 
 class TransactionDetailsModal extends StatelessWidget {
   final TransactionEntity transaction;
@@ -47,7 +48,7 @@ class TransactionDetailsModal extends StatelessWidget {
                       const SizedBox(height: FlowSpacing.md),
                       _buildAmountHero(),
                       const SizedBox(height: FlowSpacing.lg),
-                      _buildStatusTimeline(),
+                      _buildStatusTimeline(context),
                       const SizedBox(height: FlowSpacing.lg),
                       _buildFinancialBreakdown(),
                       const SizedBox(height: FlowSpacing.lg),
@@ -159,7 +160,7 @@ class TransactionDetailsModal extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusTimeline() {
+  Widget _buildStatusTimeline(BuildContext context) {
     final statusColor = _getStatusColor();
     
     return Container(
@@ -192,7 +193,7 @@ class TransactionDetailsModal extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  transaction.status.displayName,
+                  transaction.status.getDisplayName(AppLocalizations.of(context)!),
                   style: FlowTypography.titleSmall.copyWith(
                     color: statusColor,
                     fontWeight: FontWeight.bold,
@@ -345,7 +346,7 @@ class TransactionDetailsModal extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Método', style: FlowTypography.bodySmall.copyWith(color: FlowColors.textSecondary)),
-                  Text(transaction.paymentMethod.displayName, style: FlowTypography.bodySmall.copyWith(color: FlowColors.textPrimary)),
+                  Text(transaction.paymentMethod.getDisplayName(AppLocalizations.of(context)!), style: FlowTypography.bodySmall.copyWith(color: FlowColors.textPrimary)),
                 ],
               ),
               if (transaction.paymentMethod != PaymentMethod.pix) ...[
@@ -420,6 +421,7 @@ class TransactionDetailsModal extends StatelessWidget {
                        transaction.status == TransactionStatus.refunded || 
                        transaction.status == TransactionStatus.chargeback;
 
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(FlowSpacing.lg),
       decoration: BoxDecoration(
@@ -431,11 +433,11 @@ class TransactionDetailsModal extends StatelessWidget {
       child: Column(
         children: [
           FlowButton(
-            label: 'Compartilhar Comprovante',
+            label: l10n.transactionDetailsReceipt,
             onPressed: () {
               // TODO: Implementar geração de imagem e WhatsApp
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Em breve: Integração WhatsApp')),
+                SnackBar(content: Text('${l10n.comingSoon} Integração WhatsApp')),
               );
             },
             icon: Icons.share,
@@ -443,7 +445,7 @@ class TransactionDetailsModal extends StatelessWidget {
           if (transaction.paymentMethod == PaymentMethod.pix) ...[
             const SizedBox(height: FlowSpacing.md),
             FlowButton(
-              label: isNegative ? 'Reportar Fraude / Contestar' : 'Realizar Estorno',
+              label: isNegative ? l10n.transactionDetailsDisputeBtn : l10n.transactionDetailsRefundBtn,
               onPressed: () {
                 // TODO: Abrir fluxo do MED ou Estorno
                 ScaffoldMessenger.of(context).showSnackBar(

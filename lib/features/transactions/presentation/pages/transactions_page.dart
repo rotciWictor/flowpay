@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
@@ -388,6 +388,7 @@ class TransactionsView extends StatelessWidget {
 class _TransactionsQuickFilters extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final currentCubit = context.watch<TransactionsCubit>();
     final uiFilterState = currentCubit.lastUiFilterState;
     final movementType = uiFilterState?['movementType'] ?? 'all';
@@ -400,24 +401,24 @@ class _TransactionsQuickFilters extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.md),
         child: Row(
           children: [
-            _buildQuickChip(context, 'Tudo', movementType == 'all' && period == 'all', () {
+            _buildQuickChip(context, l10n.filterTypeAll, movementType == 'all' && period == 'all', () {
               context.read<TransactionsCubit>().fetchTransactions(
                 uiFilterState: {'period': 'all', 'movementType': 'all', 'statuses': ['all']},
               );
             }),
-            _buildQuickChip(context, 'Vendas', movementType == 'sales' && period == 'all', () {
+            _buildQuickChip(context, l10n.filterTypeSales, movementType == 'sales' && period == 'all', () {
               context.read<TransactionsCubit>().fetchTransactions(
                 transactionTypes: [TransactionType.sale],
                 uiFilterState: {'period': 'all', 'movementType': 'sales', 'statuses': ['all']},
               );
             }),
-            _buildQuickChip(context, 'Transferências', movementType == 'banking' && period == 'all', () {
+            _buildQuickChip(context, l10n.filterTypeBanking, movementType == 'banking' && period == 'all', () {
               context.read<TransactionsCubit>().fetchTransactions(
                 transactionTypes: [TransactionType.transferIn, TransactionType.transferOut],
                 uiFilterState: {'period': 'all', 'movementType': 'banking', 'statuses': ['all']},
               );
             }),
-            _buildQuickChip(context, 'Últimos 7 dias', period == '7d', () {
+            _buildQuickChip(context, l10n.filterPeriod7d, period == '7d', () {
               context.read<TransactionsCubit>().fetchTransactions(
                 startDate: DateTime.now().subtract(const Duration(days: 7)),
                 uiFilterState: {'period': '7d', 'movementType': movementType, 'statuses': uiFilterState?['statuses'] ?? ['all']},
@@ -463,7 +464,7 @@ class _TransactionsListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final grouped = <String, List<TransactionEntity>>{};
     for (var t in transactions) {
-      final dateStr = DateFormatter.formatRelative(t.createdAt);
+      final dateStr = DateFormatter.formatRelative(t.createdAt, context: context);
       if (!grouped.containsKey(dateStr)) {
         grouped[dateStr] = [];
       }
@@ -520,7 +521,7 @@ class _TransactionItem extends StatelessWidget {
     
     return FlowListTile(
       title: transaction.customerName ?? 'Cliente não identificado',
-      subtitle: _getSubtitle(),
+      subtitle: _getSubtitle(context),
       trailingText: displayAmount.toString(),
       valueColor: amountColor,
       leadingWidget: _buildLeadingIcon(),
@@ -544,13 +545,13 @@ class _TransactionItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: FlowSpacing.xs),
-              _buildStatusBadge(badgeColor),
+              _buildStatusBadge(context, badgeColor),
               if (transaction.status == TransactionStatus.approved && 
                  (transaction.paymentMethod == PaymentMethod.credit || transaction.paymentMethod == PaymentMethod.debit) && 
                  transaction.type == TransactionType.sale) ...[
                 const SizedBox(height: FlowSpacing.xs),
                 Text(
-                  'Líquido: ${transaction.netAmount}',
+                  '${AppLocalizations.of(context)!.transactionListNetValue}: ${transaction.netAmount}',
                   style: FlowTypography.labelSmall.copyWith(
                     color: FlowColors.textTertiary,
                     fontSize: 10,
@@ -575,8 +576,8 @@ class _TransactionItem extends StatelessWidget {
     );
   }
 
-  String _getSubtitle() {
-    final method = transaction.paymentMethod.displayName;
+  String _getSubtitle(BuildContext context) {
+    final method = transaction.paymentMethod.getDisplayName(AppLocalizations.of(context)!);
     final timeStr = DateFormatter.formatTime(transaction.createdAt);
     
     String subtitle = '$timeStr • $method';
@@ -625,7 +626,7 @@ class _TransactionItem extends StatelessWidget {
     }
   }
 
-  Widget _buildStatusBadge(Color color) {
+  Widget _buildStatusBadge(BuildContext context, Color color) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.sm, vertical: FlowSpacing.xs),
       decoration: BoxDecoration(
@@ -633,7 +634,7 @@ class _TransactionItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(FlowSpacing.radiusPill),
       ),
       child: Text(
-        transaction.status.displayName,
+        transaction.status.getDisplayName(AppLocalizations.of(context)!),
         style: FlowTypography.labelSmall.copyWith(
           color: color,
           fontWeight: FontWeight.bold,

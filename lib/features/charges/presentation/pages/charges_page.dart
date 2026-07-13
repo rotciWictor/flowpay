@@ -63,7 +63,7 @@ class ChargesPage extends StatelessWidget {
                         onPressed: () {
                           ScaffoldMessenger.of(context).clearSnackBars();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                            SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                           );
                         },
                       ),
@@ -71,8 +71,7 @@ class ChargesPage extends StatelessWidget {
                   ),
                   const SizedBox(height: FlowSpacing.xs),
                   Text(
-                    // TODO: i18n
-                    "Como você quer vender hoje?", 
+                    l10n.chargesHowToSell, 
                     style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textSecondary),
                   ),
                   const SizedBox(height: FlowSpacing.xl),
@@ -99,7 +98,7 @@ class ChargesPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Link de Pagamento',
+                                l10n.chargesPaymentLink,
                                 style: FlowTypography.bodyLarge.copyWith(
                                   color: FlowColors.textPrimary,
                                   fontWeight: FontWeight.bold,
@@ -107,7 +106,7 @@ class ChargesPage extends StatelessWidget {
                               ),
                               const SizedBox(height: FlowSpacing.xxs),
                               Text(
-                                'Venda a distância rápido',
+                                l10n.chargesPaymentLinkDesc,
                                 style: FlowTypography.bodySmall.copyWith(
                                   color: FlowColors.textSecondary,
                                 ),
@@ -132,46 +131,46 @@ class ChargesPage extends StatelessWidget {
                     childAspectRatio: 1.5, // Aspect ratio ajustado para cards mais horizontais
                     children: [
                       _SalesActionCard(
-                        title: 'Pix', 
+                        title: l10n.paymentMethodPix, 
                         icon: Icons.pix,
                         color: FlowColors.brandPix,
                         onTap: () {
                           ScaffoldMessenger.of(context).clearSnackBars();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                            SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                           );
                         },
                       ),
                       _SalesActionCard(
-                        title: 'Tap to Pay',
+                        title: l10n.chargesTapToPay,
                         icon: Icons.contactless_outlined,
                         color: FlowColors.primaryGradientEnd,
                         onTap: () {
                           ScaffoldMessenger.of(context).clearSnackBars();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                            SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                           );
                         },
                       ),
                       _SalesActionCard(
-                        title: 'Boleto',
+                        title: l10n.chargesBoleto,
                         icon: Icons.description_rounded,
                         color: FlowColors.textSecondary,
                         onTap: () {
                           ScaffoldMessenger.of(context).clearSnackBars();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                            SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                           );
                         },
                       ),
                       _SalesActionCard(
-                        title: 'Assinatura', // Preenchendo o 4º espaço
+                        title: l10n.chargesSubscription, 
                         icon: Icons.autorenew_rounded,
                         color: FlowColors.info,
                         onTap: () {
                           ScaffoldMessenger.of(context).clearSnackBars();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                            SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                           );
                         },
                       ),
@@ -184,8 +183,7 @@ class ChargesPage extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        // TODO: i18n
-                        "Vendas Pendentes",
+                        l10n.chargesPendingSales,
                         style: FlowTypography.titleMedium.copyWith(color: FlowColors.textPrimary),
                       ),
                       const SizedBox(width: FlowSpacing.sm),
@@ -208,11 +206,11 @@ class ChargesPage extends StatelessWidget {
                         onPressed: () {
                         ScaffoldMessenger.of(context).clearSnackBars();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                          SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                         );
                       },
                         child: Text(
-                          'Ver todas',
+                          l10n.chargesSeeAll,
                           style: FlowTypography.bodySmall.copyWith(color: FlowColors.primary),
                         ),
                       ),
@@ -241,7 +239,7 @@ class ChargesPage extends StatelessWidget {
                     onTap: () {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                        SnackBar(content: Text(l10n.comingSoon), behavior: SnackBarBehavior.floating),
                       );
                     },
                   ),

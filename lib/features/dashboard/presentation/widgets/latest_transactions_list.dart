@@ -3,9 +3,8 @@ import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 import 'package:flowpay/shared/design_system/components/lists/flow_list_tile.dart';
-import 'package:flowpay/features/transactions/presentation/widgets/transaction_details_modal.dart';
-import 'package:flowpay/features/transactions/domain/entities/transaction.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
+import 'package:flowpay/features/transactions/domain/entities/transaction.dart';
 
 class LatestTransactionsList extends StatelessWidget {
   final List<TransactionEntity> transactions;
@@ -109,7 +108,7 @@ class _DashboardTransactionItem extends StatelessWidget {
 
     return FlowListTile(
       title: transaction.customerName ?? 'Cliente não identificado',
-      subtitle: _getSubtitle(),
+      subtitle: _getSubtitle(context),
       leadingWidget: _buildLeadingIcon(),
       trailingWidget: Row(
         mainAxisSize: MainAxisSize.min,
@@ -127,13 +126,13 @@ class _DashboardTransactionItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: FlowSpacing.xs),
-              _buildStatusBadge(badgeColor),
+              _buildStatusBadge(context, badgeColor),
               if (transaction.status == TransactionStatus.approved && 
                  (transaction.paymentMethod == PaymentMethod.credit || transaction.paymentMethod == PaymentMethod.debit) && 
                  transaction.type == TransactionType.sale) ...[
                 const SizedBox(height: FlowSpacing.xs),
                 Text(
-                  'Líquido: ${transaction.netAmount}',
+                  '${AppLocalizations.of(context)!.transactionListNetValue}: ${transaction.netAmount}',
                   style: FlowTypography.labelSmall.copyWith(
                     color: FlowColors.textTertiary,
                     fontSize: 10,
@@ -150,8 +149,8 @@ class _DashboardTransactionItem extends StatelessWidget {
     );
   }
 
-  String _getSubtitle() {
-    final method = transaction.paymentMethod.displayName;
+  String _getSubtitle(BuildContext context) {
+    final method = transaction.paymentMethod.getDisplayName(AppLocalizations.of(context)!);
     final timeStr = '${transaction.createdAt.hour.toString().padLeft(2, '0')}:${transaction.createdAt.minute.toString().padLeft(2, '0')}';
 
     String subtitle = '$timeStr • $method';
@@ -196,17 +195,17 @@ class _DashboardTransactionItem extends StatelessWidget {
     }
   }
 
-  Widget _buildStatusBadge(Color color) {
+  Widget _buildStatusBadge(BuildContext context, Color statusColor) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.sm, vertical: FlowSpacing.xs),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
+        color: statusColor.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(FlowSpacing.radiusPill),
       ),
       child: Text(
-        transaction.status.displayName,
+        transaction.status.getDisplayName(AppLocalizations.of(context)!),
         style: FlowTypography.labelSmall.copyWith(
-          color: color,
+          color: statusColor,
           fontWeight: FontWeight.bold,
           fontSize: 10,
         ),

@@ -15,6 +15,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dashboardTitle => 'Painel de Vendas';
 
   @override
+  String dashboardGreeting(String name) {
+    return 'Olá, $name';
+  }
+
+  @override
   String get availableBalance => 'Saldo disponível';
 
   @override
@@ -94,9 +99,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dashboardQuickActionPix => 'Vender via Pix';
 
   @override
-  String get dashboardQuickActionLink => 'Link de Pag.';
-
-  @override
   String get dashboardQuickActionTransfer => 'Transferir';
 
   @override
@@ -142,7 +144,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get filterPeriod7d => 'Últimos 7 dias';
 
   @override
-  String get filterPeriodCustom => 'Customizado';
+  String get filterPeriodCustom => 'Personalizado';
+
+  @override
+  String get dateToday => 'Hoje';
+
+  @override
+  String get dateYesterday => 'Ontem';
+
+  @override
+  String get dateTomorrow => 'Amanhã';
 
   @override
   String get filterStatusLabel => 'STATUS';
@@ -161,4 +172,205 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get filterApplyBtn => 'Aplicar Filtros';
+
+  @override
+  String get profileSectionMyAccount => 'Minha Conta';
+
+  @override
+  String get profileBusinessData => 'Dados do Negócio';
+
+  @override
+  String get profileDocument => 'Documento (CNPJ)';
+
+  @override
+  String get profileSecurity => 'Segurança e Senha';
+
+  @override
+  String get profileSecurityDesc => 'Alterar senha, 2FA';
+
+  @override
+  String get profileSectionFinancial => 'Financeiro';
+
+  @override
+  String get profileFeeTable => 'Tabela de Taxas';
+
+  @override
+  String get profileFeeTableDesc => 'Pix, Link, Boleto, Tap to Pay';
+
+  @override
+  String get profileBankAccount => 'Conta Bancária';
+
+  @override
+  String get profileBankAccountDesc => 'Dados para recebimento';
+
+  @override
+  String get profileTaxData => 'Dados Fiscais';
+
+  @override
+  String get profileTaxDataDesc => 'Nota fiscal e configuração';
+
+  @override
+  String get profileSectionSettings => 'Configurações';
+
+  @override
+  String get profileLanguage => 'Idioma';
+
+  @override
+  String get profileLanguagePt => 'Português (BR)';
+
+  @override
+  String get profileLanguageEn => 'English (US)';
+
+  @override
+  String get profileLanguageEs => 'Español (ES)';
+
+  @override
+  String get profilePushNotifications => 'Notificações Push';
+
+  @override
+  String get profilePushNotificationsDesc => 'Vendas, recebimentos, alertas';
+
+  @override
+  String get profileBiometrics => 'Biometria';
+
+  @override
+  String get profileBiometricsDesc => 'Desbloqueio com digital ou face';
+
+  @override
+  String get profileAppearance => 'Aparência';
+
+  @override
+  String get profileAppearanceDesc => 'Tema escuro';
+
+  @override
+  String get profileSectionSupport => 'Suporte';
+
+  @override
+  String get profileHelpCenter => 'Central de Ajuda';
+
+  @override
+  String get profileHelpCenterDesc => 'Dúvidas frequentes';
+
+  @override
+  String get profileContactUs => 'Fale Conosco';
+
+  @override
+  String get profileContactUsDesc => 'Chat ou e-mail';
+
+  @override
+  String get profileTermsPolicies => 'Termos e Políticas';
+
+  @override
+  String get profileTermsPoliciesDesc => 'Termos de uso e privacidade';
+
+  @override
+  String get feeTableModalSubtitle => 'Valores por transação aprovada';
+
+  @override
+  String get feeTableCredit => 'Crédito à Vista';
+
+  @override
+  String get feeTableCreditDesc => '+1,50% por parcela adicional';
+
+  @override
+  String get feeTableDisclaimer => 'Taxas válidas para o plano atual';
+
+  @override
+  String get comingSoon => 'Em breve!';
+
+  @override
+  String get segmentFoodBeverage => 'Alimentação e Bebidas';
+
+  @override
+  String get segmentRetail => 'Varejo';
+
+  @override
+  String get segmentServices => 'Serviços';
+
+  @override
+  String get segmentHealthBeauty => 'Saúde e Beleza';
+
+  @override
+  String get segmentTechnology => 'Tecnologia';
+
+  @override
+  String get segmentOther => 'Outros';
+
+  @override
+  String get chargesHowToSell => 'Como você quer vender hoje?';
+
+  @override
+  String get chargesPaymentLink => 'Link de Pagamento';
+
+  @override
+  String get chargesPaymentLinkDesc => 'Venda a distância rápido';
+
+  @override
+  String get chargesTapToPay => 'Tap to Pay';
+
+  @override
+  String get chargesBoleto => 'Boleto';
+
+  @override
+  String get chargesSubscription => 'Assinatura';
+
+  @override
+  String get chargesPendingSales => 'Vendas Pendentes';
+
+  @override
+  String get chargesSeeAll => 'Ver todas';
+
+  @override
+  String get dashboardChartTooltip => 'Toque no gráfico para detalhes';
+
+  @override
+  String get dashboardQuickActionAnticipate => 'Antecipar';
+
+  @override
+  String get dashboardQuickActionPay => 'Pagar';
+
+  @override
+  String get dashboardQuickActionLink => 'Criar Link';
+
+  @override
+  String get transactionDetailsReceipt => 'Comprovante';
+
+  @override
+  String get transactionDetailsNetValue => 'Valor líquido';
+
+  @override
+  String get transactionListNetValue => 'Líquido';
+
+  @override
+  String get transactionDetailsRefundBtn => 'Estornar';
+
+  @override
+  String get transactionDetailsDisputeBtn => 'Contestar / Fraude';
+
+  @override
+  String get paymentMethodCredit => 'Crédito';
+
+  @override
+  String get paymentMethodDebit => 'Débito';
+
+  @override
+  String get paymentMethodPix => 'Pix';
+
+  @override
+  String get paymentMethodBoleto => 'Boleto';
+
+  @override
+  String get statusApproved => 'Aprovada';
+
+  @override
+  String get statusDeclined => 'Recusada';
+
+  @override
+  String get statusRefunded => 'Reembolsada';
+
+  @override
+  String get statusPending => 'Pendente';
+
+  @override
+  String get statusChargeback => 'Contestação';
 }

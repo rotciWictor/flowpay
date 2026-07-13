@@ -3,6 +3,7 @@ import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
 import 'dart:math' as math;
+import 'package:flowpay/l10n/app_localizations.dart';
 
 class DashboardHeader extends StatelessWidget {
   final String balanceStr;
@@ -18,6 +19,7 @@ class DashboardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,7 +28,7 @@ class DashboardHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Olá, FlowPay Demo',
+              l10n.dashboardGreeting('FlowPay Demo'),
               style: FlowTypography.bodyMedium.copyWith(color: FlowColors.textSecondary),
             ),
             const SizedBox(height: FlowSpacing.xs),

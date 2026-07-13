@@ -52,6 +52,7 @@ class FlowPayApp extends StatelessWidget {
             supportedLocales: const [
               Locale('pt'),
               Locale('en'),
+              Locale('es'),
             ],
             // Dynamic Locale
             locale: locale,

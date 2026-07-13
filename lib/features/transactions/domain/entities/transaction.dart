@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
 import 'package:money2/money2.dart';
 
 enum TransactionStatus { approved, declined, refunded, pending, chargeback }
@@ -10,16 +11,16 @@ enum CardBrand { visa, mastercard, elo, amex }
 enum TransactionType { sale, transferIn, transferOut }
 
 extension PaymentMethodExtension on PaymentMethod {
-  String get displayName {
+  String getDisplayName(AppLocalizations l10n) {
     switch (this) {
       case PaymentMethod.credit:
-        return 'Crédito';
+        return l10n.paymentMethodCredit;
       case PaymentMethod.debit:
-        return 'Débito';
+        return l10n.paymentMethodDebit;
       case PaymentMethod.pix:
-        return 'Pix';
+        return l10n.paymentMethodPix;
       case PaymentMethod.boleto:
-        return 'Boleto';
+        return l10n.paymentMethodBoleto;
     }
   }
 }
@@ -40,18 +41,18 @@ extension CardBrandExtension on CardBrand {
 }
 
 extension TransactionStatusExtension on TransactionStatus {
-  String get displayName {
+  String getDisplayName(AppLocalizations l10n) {
     switch (this) {
       case TransactionStatus.approved:
-        return 'Aprovada';
+        return l10n.statusApproved;
       case TransactionStatus.declined:
-        return 'Recusada';
+        return l10n.statusDeclined;
       case TransactionStatus.refunded:
-        return 'Reembolsada';
+        return l10n.statusRefunded;
       case TransactionStatus.pending:
-        return 'Pendente';
+        return l10n.statusPending;
       case TransactionStatus.chargeback:
-        return 'Chargeback';
+        return l10n.statusChargeback;
     }
   }
 }

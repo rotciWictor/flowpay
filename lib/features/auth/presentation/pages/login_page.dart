@@ -180,8 +180,11 @@ class _LoginPageState extends State<LoginPage> {
               child: IconButton(
                 icon: BlocBuilder<LocaleCubit, Locale>(
                   builder: (context, locale) {
+                    final countryCode = locale.languageCode == 'pt' 
+                        ? 'BR' 
+                        : locale.languageCode == 'es' ? 'ES' : 'US';
                     return CountryFlag.fromCountryCode(
-                      locale.languageCode == 'pt' ? 'BR' : 'US',
+                      countryCode,
                       theme: const ImageTheme(
                         shape: Circle(),
                         width: 24,

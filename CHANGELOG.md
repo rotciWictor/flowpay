@@ -4,6 +4,20 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 
 ---
 
+## [0.8.1] - Internacionalização Absoluta (i18n) e Idioma Espanhol
+
+### Varredura Fina de i18n
+- **Novo Idioma Suportado (Espanhol)**: Adicionado o `app_es.arb` e o registro nativo de `Locale('es')` no `main.dart`, suportando a vasta gama de strings da interface.
+- **Transição de Strings Fixas para Contextuais**: 
+  - Gráficos e Ações Rápidas (`WeeklySalesChart`, `QuickActionsRow`) no Dashboard agora respondem ativamente à seleção de idiomas.
+  - A saudação principal do Dashboard (`DashboardHeader`) foi internacionalizada utilizando suporte avançado a parâmetros (`dashboardGreeting('nome')`).
+- **Hub de Transações Multi-idioma**: 
+  - Extensões de Domínio Refatoradas: Os enumeradores de base (`TransactionStatus` e `PaymentMethod`) sofreram injeção do dicionário `AppLocalizations`, eliminando literais no front-end de toda a tabela de histórico. A tradução obedece o mercado local ("Chargeback" mantido no Brasil, enquanto no idioma espanhol reflete "Contestación").
+  - Etiquetas do Filtro Rápido e Datas Relativas (`DateFormatter`) foram convertidas para variáveis da UI, corrigindo a anomalia visual onde "Ontem" ou "Vendas" permaneciam travados no idioma padrão.
+  - Label contábil `"Líquido"` que era cego à linguagem agora é devidamente renderizado em pt-BR/en-US/es-ES na Listagem e nos Detalhes.
+
+---
+
 ## [0.8.0] - Perfil do Lojista, Proteção de UX e Configurações
 
 ### Hub do Lojista (Perfil)

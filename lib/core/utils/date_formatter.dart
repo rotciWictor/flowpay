@@ -1,5 +1,8 @@
 import 'package:intl/intl.dart';
 
+import 'package:flutter/widgets.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
+
 /// Utility for formatting dates in Brazilian Portuguese.
 class DateFormatter {
   /// "08 de jul. de 2026"
@@ -28,14 +31,14 @@ class DateFormatter {
   }
 
   /// "Hoje", "Ontem", or formatted date
-  static String formatRelative(DateTime date) {
+  static String formatRelative(DateTime date, {BuildContext? context}) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final dateOnly = DateTime(date.year, date.month, date.day);
 
-    if (dateOnly == today) return 'Hoje';
-    if (dateOnly == today.subtract(const Duration(days: 1))) return 'Ontem';
-    if (dateOnly == today.add(const Duration(days: 1))) return 'Amanhã';
+    if (dateOnly == today) return context != null ? AppLocalizations.of(context)!.dateToday : 'Hoje';
+    if (dateOnly == today.subtract(const Duration(days: 1))) return context != null ? AppLocalizations.of(context)!.dateYesterday : 'Ontem';
+    if (dateOnly == today.add(const Duration(days: 1))) return context != null ? AppLocalizations.of(context)!.dateTomorrow : 'Amanhã';
 
     return formatShort(date);
   }

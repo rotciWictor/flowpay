@@ -4,6 +4,7 @@ import 'package:flowpay/features/transactions/domain/entities/dashboard_data.dar
 import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
+import 'package:flowpay/l10n/app_localizations.dart';
 
 class WeeklySalesChart extends StatelessWidget {
   final List<DailySale> weeklySales;
@@ -51,7 +52,7 @@ class WeeklySalesChart extends StatelessWidget {
                 Icon(Icons.touch_app, size: 14, color: FlowColors.textTertiary),
                 const SizedBox(width: FlowSpacing.xs),
                 Text(
-                  'Toque no gráfico para detalhes',
+                  AppLocalizations.of(context)!.dashboardChartTooltip,
                   style: FlowTypography.labelSmall.copyWith(color: FlowColors.textTertiary),
                 ),
               ],
