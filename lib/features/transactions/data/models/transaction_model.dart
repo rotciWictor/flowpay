@@ -42,8 +42,8 @@ class TransactionModel extends TransactionEntity {
       nsu: json['nsu'] as String?,
       description: json['description'] as String?,
       returnCode: json['return_code'] as String?,
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      createdAt: DateTime.parse(json['created_at']).toLocal(),
+      updatedAt: DateTime.parse(json['updated_at']).toLocal(),
     );
   }
 

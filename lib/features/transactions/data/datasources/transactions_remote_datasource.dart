@@ -53,10 +53,10 @@ class TransactionsRemoteDatasourceImpl implements TransactionsRemoteDatasource {
       ''');
 
       if (startDate != null) {
-        query = query.gte('created_at', startDate.toIso8601String());
+        query = query.gte('created_at', startDate.toUtc().toIso8601String());
       }
       if (endDate != null) {
-        query = query.lte('created_at', endDate.toIso8601String());
+        query = query.lte('created_at', endDate.toUtc().toIso8601String());
       }
       if (statuses != null && statuses.isNotEmpty) {
         final statusNames = statuses.map((s) => s.name).toList();
@@ -94,7 +94,7 @@ class TransactionsRemoteDatasourceImpl implements TransactionsRemoteDatasource {
   Future<List<TransactionModel>> getDashboardTransactions() async {
     try {
       // Fetching last 30 days of transactions for the dashboard to calculate available balance, weekly sales, and recents
-      final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30)).toIso8601String();
+      final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30)).toUtc().toIso8601String();
       
       final response = await supabaseClient
           .from('transactions')
