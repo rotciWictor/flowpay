@@ -4,6 +4,31 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 
 ---
 
+## [0.8.0] - Perfil do Lojista, Proteção de UX e Configurações
+
+### Hub do Lojista (Perfil)
+- **Criação da Tela de Perfil**: Construída a tela `ProfilePage` estruturada de acordo com o Design System. Dividida semanticamente em áreas de "Minha Conta" (Dados e CNPJ), "Financeiro" (Taxas e Conta Bancária), "Configurações" (Idioma, Push, Biometria e Tema) e "Suporte" (Central de Ajuda, Termos).
+- **Tabela de Taxas Dinâmica**: Implementação do modal de Tabela de Taxas mapeando os dados do banco fictício, exibindo a gratuidade (`0,00%`) para o Pix, e taxas segmentadas de débito e crédito para as bandeiras nativas. As propriedades `useSafeArea` e `isScrollControlled` foram acionadas para evitar que o modal ficasse encoberto (cortado) pela doca de navegação inferior.
+- **Identidade Visual Híbrida**: Para renderização das bandeiras de cartão (Visa, Master, Elo, Amex) no painel de perfil, integramos o uso de `Image.asset` consumindo imagens embutidas no pacote `flutter_credit_card_brazilian`. Essa decisão equaliza a identidade visual da Tabela de Taxas com o componente de *Detalhes de Transação*, provendo experiência Premium de ponta a ponta.
+
+### Funcionalidades e Conexões Globais
+- **Troca de Idioma Síncrona**: O componente "Idioma" do painel de Configurações foi injetado com o `LocaleCubit`. A troca instantânea entre PT/BR e EN/US afeta todo o aplicativo (AppBar, Menus, Filtros) em tempo real. Adicionalmente, o estado lido via `context.watch<LocaleCubit>()` assegura que a legenda do botão descreva corretamente o idioma em vigor.
+- **Motor de Autenticação (Logout)**: Implementada a ruptura de segurança (Logout) chamando a delegação do `AuthCubit` (`logout()`) e empurrando o usuário violentamente e de forma segura (`context.go('/login')`) para fora do funil autenticado.
+
+### Proteção de UX e Empty States (Fechamento Falso)
+- **Barreira Sensorial de "Em Breve"**: Construída uma heurística defensiva para testes com stakeholders. Foi detectada a existência de inúmeros *Unhappy Paths* vazios. Ao redor de todo o app (Dashboard, Vendas, Perfil, Transações), mais de 20 "Caminhos Fantasmas" receberam o acoplamento de um componente de feedback nativo (`SnackBar` flutuante e escuro) reportando "Em breve!", evitando a quebra de expectativa ao tocar em botões sem rotas.
+- **Sinergia nas Ações Rápidas (Dashboard)**: A área de Ações Rápidas (`QuickActionsRow`) foi criticada do ponto de vista do lojista e reconstruída. O foco tático mirou as quatro grandes dores de Adquirência: **Transferir, Antecipar, Pagar, Criar Link**. Os ícones e labels foram atualizados sistemicamente para refletir essas ações (sem sobreposição visual com outros recursos, como boletos). Adicionado atalhos de "Ajuda" global em todos os cabaçalhos (`AppBars`) principais.
+
+### Governança e Mapeamento de Produto (GitHub CLI)
+- **Gênese Épica**: A Issue primordial #4 sofreu mutação no repositório remoto para representar o *[Epic][Feature] Hub de Configurações e Perfil do Lojista*.
+- **Taskification**: Foram mapeadas, geradas no GitHub e conectadas estruturalmente à Epic seis sub-issues técnicas com escopo delineado:
+  - #7 Editar Dados do Negócio (Supabase CRUD)
+  - #8 Gestão de Documentos (CNPJ/CPF) com Máscara e Receita
+  - #9 Configuração de Conta Bancária de Domicílio
+  - #10 Segurança: Mutação de Senha e Setup de 2FA
+  - #11 Toggle Profundo de Biometria (`local_auth`)
+  - #12 Toggle Reativo de Modo Escuro / Claro
+
 ## [0.7.0] - Core Financeiro, SecOps e Refinamentos UI
 
 ### Detalhamento da Transação e Mapeamento de Erros
