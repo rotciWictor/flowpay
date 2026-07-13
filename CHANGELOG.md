@@ -24,14 +24,33 @@ Este documento registra as implementações do projeto em detalhes, explicando n
   - **Datas Nativas:** Ao invés de um texto falso "hardcoded", agora ao clicar em Customizado ou Alterar, o sistema invoca o `showDateRangePicker` nativo do Flutter. Envelopamos ele em um `ThemeData.dark` injetado com `FlowColors.primary` para manter a imersão visual do design system.
   - **Filtro Avançado de Horas:** O container customizado agora exibe o texto "+ horário". Ao tocar, o usuário consegue refinar a filtragem até o minuto exato usando o `showTimePicker`. Caso ele não adicione, a lógica por trás adota `00:00:00` para a data de início e `23:59:59` para a data de fim automaticamente.
 
+### Hub de Vendas (Esboço UX/UI)
+- **Grid de Conversão:** A antiga aba estática "Cobranças (Em breve)" foi completamente reimaginada.
+- **Identidade de Vendas:** O texto e contexto mudaram de "Cobrar" para "Vender", removendo a carga semântica negativa. Criado um Grid dinâmico 2x2 exibindo atalhos rápidos para *Vender via Pix, Link de Pagamento, Boleto Bancário e Tap to Pay*, com cores vibrantes do Design System.
+- **Histórico Pendente:** Adicionado um *mock* da seção "Vendas Pendentes" com ícone de status amarelo (`warning`) indicando cobranças criadas que aguardam liquidação.
+
+### Componentes Nativos de Carregamento (Loading & Refresh)
+- **`FlowProgressIndicator`:** Construído um componente nativo de Design System do zero (`CustomPainter`) para substituir o `CircularProgressIndicator` do Flutter. Ele desenha um arco contínuo que rotaciona sem o efeito de "engasgo/recuo", utilizando o *SweepGradient* Ciano e Verde oficial.
+- **`FlowSplashIndicator`:** Restaurado o componente original da Splash Screen para preservar o anel giratório 100% fechado, encapsulando-o nas regras do Design System.
+- **`FlowRefreshIndicator` (Pull-to-Refresh):** Instalado o pacote `custom_refresh_indicator` e substituída a seta genérica do Android/iOS pelo nosso anel Ciano/Verde. Aplicado globalmente nas listas do Extrato e da Dashboard para total consistência de marca.
+
+### Organização e Governança de Backlog
+- **Migração para GitHub Issues:** Todos os débitos técnicos e *features* remanescentes do roadmap foram transformados em rastreamento oficial no GitHub (via CLI local):
+  - *#1 [Tech Debt]*: i18n & Textos, com seletor de idiomas (PT/ES).
+  - *#2 [Bug/Investigação]*: Observabilidade e otimização do PDF da Edge Function.
+  - *#3 [Feature]*: Detalhes da Transação & Infinite Scroll.
+  - *#4 [Feature]*: Perfil do Lojista e Empty States.
+  - *#5 [Code Review]*: Revisão de arquitetura (`get_it`, `dartz`, e criação de `barrel files`).
+
 ### Motor de Relatórios Serverless (PDF e XML)
 - **Supabase Edge Function (`generate-report`):**
   - Implementação de um microserviço em Deno/TypeScript no ecossistema do Supabase. Para contornar as limitações de memória da V8 Engine (que não suportaria renderizar HTML via Chromium/Playwright sem esgotar o limite da Edge Function), a geração do PDF foi feita programaticamente utilizando a biblioteca Javascript pura `pdf-lib` via CDN.
   - O motor recebe os filtros ativos (ou o mês escolhido), efetua a query nas transações (respeitando o RLS validado pelo token JWT) e converte os dados em uma tabela PDF formatada ou num arquivo XML estruturado.
   - Upload automático do binário gerado para o bucket privado `reports` no Supabase Storage e devolução instantânea de uma *Signed URL* válida por 1 hora.
-- **Integração no App (Flutter):**
-  - Criado o `ReportService` que gerencia o fluxo de requisição para a Edge Function via pacote `http`, faz o download do arquivo binário e o salva no diretório local usando `path_provider`.
-  - Integrada a biblioteca `share_plus`. Ao finalizar o download invisível, o aplicativo abre a gaveta de compartilhamento nativa do OS (Android/iOS), permitindo o envio do relatório direto para o WhatsApp, Telegram ou e-mail.
+- **Integração no App e Fixes de Visualização:**
+  - Criado o `ReportService` que gerencia o fluxo de requisição para a Edge Function e o download binário seguro.
+  - **Correção "Tela Preta" (Dark Mode):** Os PDFs gerados pelo `pdf-lib` possuem fundo transparente, que ao serem abertos em visualizadores de Dark Mode (iOS/Android), deixavam o texto preto invisível. Resolvido forçando um `page.drawRectangle` branco preenchendo o fundo antes da renderização.
+  - O UX de visualização foi refinado utilizando `open_filex` em conjunto com `share_plus` em um diálogo limpo ("Abrir" ou "Compartilhar"), descartando o uso de *BottomSheets* redundantes para a ação.
 - **UX do Modal de Exportação (`TransactionsPage`):**
   - Adicionado ícone de download na AppBar. Ao clicar, o lojista aciona um BottomSheet sofisticado com 3 opções:
     1. **Relatório Mensal (PDF):** Ignora os filtros da tela e abre um segundo BottomSheet (Month Picker) listando os últimos 12 meses nomeados de forma amigável para extração direta de caixa mensal.

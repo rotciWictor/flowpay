@@ -41,9 +41,12 @@ Foco na visão principal do lojista (Dash) e fundação do Design System.
 
 ---
 
-### 🔴 DIA 4 — Cobranças, Perfil do Lojista e Polimento (PENDENTE)
+### 🟡 DIA 4 — Cobranças, Perfil do Lojista e Polimento (EM ANDAMENTO)
 Acabamento profissional, Empty States e controle de usuário.
-- ⏳ **Geração de Cobranças (Links/QR)**: Criar nova cobrança com valor/descrição e compartilhar nativamente via SharePlus.
+- ✅ **Hub de Vendas (UI Draft)**: Criação do grid central de conversão (Pix, Link, Boleto, Tap).
+- 🔄 **Feature: Detalhes da Transação & Infinite Scroll** → Movido para GitHub Issue #3
+- 🔄 **Feature: Perfil Completo & Empty States** → Movido para GitHub Issue #4
+- 🔄 **Tech Debt: i18n & Traduções** → Movido para GitHub Issue #1
 - ⏳ **Tela de Perfil Completa**: Dados da empresa, conta bancária, taxas aplicadas.
 - ⏳ **Unhappy Paths Globais**: Padronização de telas vazias (Empty States) em todo o app.
 
@@ -58,4 +61,4 @@ As bases dessa fase já foram adiantadas para garantir qualidade contínua.
 
 ---
 
-> **Próximo Alvo Recomendado:** Construir o modal de **Detalhes da Transação**, onde o usuário poderá ver a linha do tempo exata de uma venda, e na sequência, plugar a **Paginação Infinita (Infinite Scroll)** na lista do Extrato.
+> **Próximo Alvo Recomendado:** Iniciar os trabalhos através do nosso Backlog Oficial no GitHub (Issues #1 a #5), focando na finalização da Feature de Perfil ou nas Traduções Globais.
