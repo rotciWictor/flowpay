@@ -20,6 +20,7 @@ class DashboardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,7 +29,7 @@ class DashboardHeader extends StatelessWidget {
               'Olá, FlowPay Demo',
               style: FlowTypography.bodyMedium.copyWith(color: FlowColors.textSecondary),
             ),
-            SizedBox(height: FlowSpacing.xs),
+            const SizedBox(height: FlowSpacing.xs),
             Row(
               children: [
                 _NeonBorderText(text: obscureBalance ? 'R\$ •••••••' : balanceStr),
@@ -42,6 +43,15 @@ class DashboardHeader extends StatelessWidget {
               ],
             ),
           ],
+        ),
+        IconButton(
+          icon: const Icon(Icons.help_outline, color: FlowColors.textSecondary),
+          onPressed: () {
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+            );
+          },
         ),
       ],
     );

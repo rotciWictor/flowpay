@@ -8,36 +8,40 @@ class QuickActionsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         FlowIconButton(
-          icon: Icons.qr_code,
-          label: AppLocalizations.of(context)!.dashboardQuickActionPix,
-          onTap: () {
-            // TODO: Navigate to charges
-          },
-        ),
-        FlowIconButton(
           icon: Icons.pix,
-          label: 'Pix', // Usually brand names are not translated
-          onTap: () {
-            // TODO: Open Pix menu
-          },
+          label: 'Transferir',
+          onTap: () => _showComingSoon(context),
         ),
         FlowIconButton(
-          icon: Icons.receipt_long,
-          label: AppLocalizations.of(context)!.bottomNavTransactions,
-          onTap: () {
-            // TODO: Navigate to transactions
-          },
+          icon: Icons.bolt_rounded,
+          label: 'Antecipar',
+          onTap: () => _showComingSoon(context),
         ),
         FlowIconButton(
-          icon: Icons.fast_forward,
-          label: AppLocalizations.of(context)!.dashboardQuickActionTransfer,
-          onTap: () {
-            // TODO: Open anticipation simulator
-          },
+          icon: Icons.payments_rounded,
+          label: 'Pagar',
+          onTap: () => _showComingSoon(context),
+        ),
+        FlowIconButton(
+          icon: Icons.link_rounded,
+          label: 'Criar Link',
+          onTap: () => _showComingSoon(context),
         ),
       ],
+    );
+  }
+
+  void _showComingSoon(BuildContext context) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Em breve!'),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
     );
   }
 }

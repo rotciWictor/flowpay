@@ -77,7 +77,10 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
                             amountStr: data.nextSettlementAmount.toString(),
                             date: data.nextSettlementDate,
                             onTap: () {
-                              // TODO: Navigate to Receivables or Anticipation Simulator
+                              ScaffoldMessenger.of(context).clearSnackBars();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                              );
                             },
                           ),
                           const SizedBox(height: FlowSpacing.lg),
