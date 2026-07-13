@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class GradientCircularProgressPainter extends CustomPainter {
-  GradientCircularProgressPainter({
+class FlowSplashPainter extends CustomPainter {
+  FlowSplashPainter({
     required this.radius,
     required this.gradientColors,
     required this.strokeWidth,
@@ -32,12 +32,12 @@ class GradientCircularProgressPainter extends CustomPainter {
   }
 }
 
-class GradientCircularProgressIndicator extends StatefulWidget {
+class FlowSplashIndicator extends StatefulWidget {
   final double radius;
   final List<Color> gradientColors;
   final double strokeWidth;
 
-  const GradientCircularProgressIndicator({
+  const FlowSplashIndicator({
     super.key,
     required this.radius,
     required this.gradientColors,
@@ -45,10 +45,10 @@ class GradientCircularProgressIndicator extends StatefulWidget {
   });
 
   @override
-  State<GradientCircularProgressIndicator> createState() => _GradientCircularProgressIndicatorState();
+  State<FlowSplashIndicator> createState() => _FlowSplashIndicatorState();
 }
 
-class _GradientCircularProgressIndicatorState extends State<GradientCircularProgressIndicator>
+class _FlowSplashIndicatorState extends State<FlowSplashIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -80,7 +80,7 @@ class _GradientCircularProgressIndicatorState extends State<GradientCircularProg
           turns: _animation,
           child: CustomPaint(
             size: Size.fromRadius(widget.radius),
-            painter: GradientCircularProgressPainter(
+            painter: FlowSplashPainter(
               radius: widget.radius,
               gradientColors: widget.gradientColors,
               strokeWidth: widget.strokeWidth,

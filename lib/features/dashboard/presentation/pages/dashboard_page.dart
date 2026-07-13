@@ -5,6 +5,7 @@ import 'package:flowpay/injection.dart';
 import 'package:flowpay/features/transactions/presentation/cubit/dashboard_cubit.dart';
 import 'package:flowpay/features/transactions/presentation/cubit/dashboard_state.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flowpay/shared/design_system/components/indicators/flow_refresh_indicator.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
@@ -44,9 +45,7 @@ class _DashboardPageViewState extends State<_DashboardPageView> {
   Widget build(BuildContext context) {
     // Note: Scaffold is provided by the global AppBottomNav ShellRoute.
     return SafeArea(
-      child: RefreshIndicator(
-        color: FlowColors.primaryGradientEnd,
-        backgroundColor: FlowColors.surfaceHighlight, // Fundo escuro levemente destacado, spinner ciano
+      child: FlowRefreshIndicator(
         onRefresh: () => context.read<DashboardCubit>().fetchDashboard(isRefresh: true),
         child: BlocBuilder<DashboardCubit, DashboardState>(
           builder: (context, state) {

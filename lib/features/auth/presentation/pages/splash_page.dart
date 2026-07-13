@@ -5,7 +5,7 @@ import 'package:flowpay/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:flowpay/features/auth/presentation/cubit/auth_state.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
-import 'package:flowpay/features/auth/presentation/widgets/gradient_circular_progress_indicator.dart';
+import 'package:flowpay/shared/design_system/components/indicators/flow_splash_indicator.dart';
 import 'package:flowpay/shared/design_system/components/layout/flow_background.dart';
 
 class SplashPage extends StatefulWidget {
@@ -51,7 +51,7 @@ class _SplashPageState extends State<SplashPage> {
                 width: 150,
               ),
               const SizedBox(height: FlowSpacing.xxl),
-              const GradientCircularProgressIndicator(
+              const FlowSplashIndicator(
                 radius: 20,
                 strokeWidth: 4,
                 gradientColors: [

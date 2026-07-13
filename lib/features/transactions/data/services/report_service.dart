@@ -22,7 +22,9 @@ class ReportService {
           'format': format,
           'filters': filters ?? {},
         },
-      );
+      ).timeout(const Duration(seconds: 15), onTimeout: () {
+        throw Exception('Tempo limite excedido ao processar no servidor. Tente novamente.');
+      });
 
       final data = response.data;
       if (data == null || data['url'] == null) {
@@ -32,7 +34,10 @@ class ReportService {
       final String downloadUrl = data['url'];
 
       // 2. Fazer o download do arquivo gerado via HTTP
-      final fileResponse = await http.get(Uri.parse(downloadUrl));
+      final fileResponse = await http.get(Uri.parse(downloadUrl)).timeout(
+        const Duration(seconds: 15),
+        onTimeout: () => throw Exception('Tempo limite excedido ao baixar o arquivo. Tente novamente.'),
+      );
       if (fileResponse.statusCode != 200) {
         throw Exception('Falha ao baixar o relatório.');
       }

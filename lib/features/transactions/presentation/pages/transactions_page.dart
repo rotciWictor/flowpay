@@ -10,6 +10,8 @@ import 'package:flowpay/features/transactions/presentation/cubit/transactions_cu
 import 'package:flowpay/features/transactions/presentation/cubit/transactions_state.dart';
 import 'package:flowpay/injection.dart';
 import 'package:flowpay/shared/design_system/components/lists/flow_list_tile.dart';
+import 'package:flowpay/shared/design_system/components/indicators/flow_progress_indicator.dart';
+import 'package:flowpay/shared/design_system/components/indicators/flow_refresh_indicator.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_colors.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_spacing.dart';
 import 'package:flowpay/shared/design_system/tokens/flow_typography.dart';
@@ -154,9 +156,7 @@ class TransactionsView extends StatelessWidget {
                     );
                   }
 
-                  return RefreshIndicator(
-                    color: FlowColors.primary,
-                    backgroundColor: FlowColors.surfaceHighlight,
+                  return FlowRefreshIndicator(
                     onRefresh: () => context.read<TransactionsCubit>().fetchTransactions(isRefresh: true),
                     child: _TransactionsListView(transactions: state.transactions),
                   );
@@ -293,7 +293,34 @@ class TransactionsView extends StatelessWidget {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => const Center(child: CircularProgressIndicator(color: FlowColors.primary)),
+      builder: (ctx) => Dialog(
+        backgroundColor: FlowColors.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(FlowSpacing.radiusLg)),
+        child: Padding(
+          padding: const EdgeInsets.all(FlowSpacing.xl),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const FlowProgressIndicator(
+                radius: 20,
+                strokeWidth: 4,
+              ),
+              const SizedBox(height: FlowSpacing.lg),
+              Text(
+                'Preparando relatório...',
+                style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: FlowSpacing.xs),
+              Text(
+                'Buscando e formatando dados. Isso pode levar alguns segundos.',
+                style: FlowTypography.bodySmall.copyWith(color: FlowColors.textSecondary),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
 
     try {
