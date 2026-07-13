@@ -13,6 +13,34 @@ class ChargesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     
+    // Mocks melhorados com contexto real
+    final mockSales = [
+      {
+        'title': 'Link #1002 - João Silva',
+        'subtitle': 'Vence em 2 dias',
+        'value': 'R\$ 150.50',
+        'icon': Icons.link_rounded,
+        'color': FlowColors.warning,
+        'bgColor': FlowColors.statusPendingBg,
+      },
+      {
+        'title': 'Link #1012 - Maria Souza',
+        'subtitle': 'Vencido há 1 dia',
+        'value': 'R\$ 301.00',
+        'icon': Icons.warning_rounded,
+        'color': FlowColors.error,
+        'bgColor': FlowColors.statusDeclinedBg,
+      },
+      {
+        'title': 'Boleto #1022 - Loja XPTO',
+        'subtitle': 'Vence hoje',
+        'value': 'R\$ 451.50',
+        'icon': Icons.receipt_long_rounded,
+        'color': FlowColors.warning,
+        'bgColor': FlowColors.statusPendingBg,
+      },
+    ];
+
     return SafeArea(
       child: CustomScrollView(
         slivers: [
@@ -23,9 +51,23 @@ class ChargesPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: FlowSpacing.md),
-                  Text(
-                    l10n.charges, // Traduzido para "Vender" em pt_BR
-                    style: FlowTypography.headlineMedium.copyWith(color: FlowColors.textPrimary),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        l10n.charges, // "Vender"
+                        style: FlowTypography.headlineMedium.copyWith(color: FlowColors.textPrimary),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.help_outline, color: FlowColors.textSecondary),
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                   const SizedBox(height: FlowSpacing.xs),
                   Text(
@@ -35,82 +77,182 @@ class ChargesPage extends StatelessWidget {
                   ),
                   const SizedBox(height: FlowSpacing.xl),
                   
-                  // GRID 2x2
+                  // AÇÃO PRIMÁRIA: Link de Pagamento (Full Width)
+                  FlowCard(
+                    onTap: () {
+                      // TODO: Navegar para criação de Link
+                    },
+                    padding: const EdgeInsets.all(FlowSpacing.lg),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(FlowSpacing.md),
+                          decoration: BoxDecoration(
+                            color: FlowColors.primary.withValues(alpha: 0.15),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.link_rounded, color: FlowColors.primary, size: 32),
+                        ),
+                        const SizedBox(width: FlowSpacing.lg),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Link de Pagamento',
+                                style: FlowTypography.bodyLarge.copyWith(
+                                  color: FlowColors.textPrimary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: FlowSpacing.xxs),
+                              Text(
+                                'Venda a distância rápido',
+                                style: FlowTypography.bodySmall.copyWith(
+                                  color: FlowColors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(Icons.chevron_right, color: FlowColors.textSecondary),
+                      ],
+                    ),
+                  ),
+                  
+                  const SizedBox(height: FlowSpacing.lg),
+
+                  // AÇÕES SECUNDÁRIAS: Pix, Tap to Pay, Boleto, Assinatura (Grid 2x2)
                   GridView.count(
                     crossAxisCount: 2,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     mainAxisSpacing: FlowSpacing.md,
                     crossAxisSpacing: FlowSpacing.md,
-                    childAspectRatio: 1.1,
+                    childAspectRatio: 1.5, // Aspect ratio ajustado para cards mais horizontais
                     children: [
                       _SalesActionCard(
-                        // TODO: i18n
-                        title: 'Vender via Pix', 
+                        title: 'Pix', 
                         icon: Icons.pix,
                         color: FlowColors.brandPix,
                         onTap: () {
-                          // TODO: Navegar para geração de QR Code Pix
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                          );
                         },
-                      ),
-                      _SalesActionCard(
-                        title: 'Link de Pagamento',
-                        icon: Icons.link_rounded,
-                        color: FlowColors.primaryGradientEnd,
-                        onTap: () {
-                          // TODO: Navegar para criação de Link
-                        },
-                      ),
-                      _SalesActionCard(
-                        title: 'Boleto Bancário',
-                        icon: Icons.qr_code_2_rounded,
-                        color: FlowColors.textSecondary,
-                        onTap: () {},
                       ),
                       _SalesActionCard(
                         title: 'Tap to Pay',
                         icon: Icons.contactless_outlined,
-                        color: FlowColors.primary,
-                        onTap: () {},
+                        color: FlowColors.primaryGradientEnd,
+                        onTap: () {
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                          );
+                        },
+                      ),
+                      _SalesActionCard(
+                        title: 'Boleto',
+                        icon: Icons.description_rounded,
+                        color: FlowColors.textSecondary,
+                        onTap: () {
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                          );
+                        },
+                      ),
+                      _SalesActionCard(
+                        title: 'Assinatura', // Preenchendo o 4º espaço
+                        icon: Icons.autorenew_rounded,
+                        color: FlowColors.info,
+                        onTap: () {
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                          );
+                        },
                       ),
                     ],
                   ),
                   
                   const SizedBox(height: FlowSpacing.xxl),
-                  Text(
-                    // TODO: i18n
-                    "Vendas Pendentes",
-                    style: FlowTypography.titleMedium.copyWith(color: FlowColors.warning),
+                  
+                  // VENDAS PENDENTES (Com Badge)
+                  Row(
+                    children: [
+                      Text(
+                        // TODO: i18n
+                        "Vendas Pendentes",
+                        style: FlowTypography.titleMedium.copyWith(color: FlowColors.textPrimary),
+                      ),
+                      const SizedBox(width: FlowSpacing.sm),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: FlowColors.warning.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(FlowSpacing.radiusSm),
+                        ),
+                        child: Text(
+                          '3',
+                          style: FlowTypography.bodySmall.copyWith(
+                            color: FlowColors.warning,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () {
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                        );
+                      },
+                        child: Text(
+                          'Ver todas',
+                          style: FlowTypography.bodySmall.copyWith(color: FlowColors.primary),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: FlowSpacing.md),
+                  const SizedBox(height: FlowSpacing.xs),
                 ],
               ),
             ),
           ),
           
-          // MOCK LIST
+          // MOCK LIST (Com dados realistas)
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
+                final sale = mockSales[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.md, vertical: FlowSpacing.xs),
                   child: FlowListTile(
-                    title: 'Link de Pagamento #10${index}2',
-                    subtitle: 'Criado em 12/07/2026',
-                    trailingText: 'R\$ ${((index + 1) * 150.50).toStringAsFixed(2)}',
-                    icon: Icons.schedule_rounded,
-                    iconColor: FlowColors.warning,
-                    iconBackgroundColor: FlowColors.statusPendingBg,
-                    onTap: () {},
+                    title: sale['title'] as String,
+                    subtitle: sale['subtitle'] as String,
+                    trailingText: sale['value'] as String,
+                    icon: sale['icon'] as IconData,
+                    iconColor: sale['color'] as Color,
+                    iconBackgroundColor: sale['bgColor'] as Color,
+                    onTap: () {
+                      ScaffoldMessenger.of(context).clearSnackBars();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Em breve!'), behavior: SnackBarBehavior.floating),
+                      );
+                    },
                   ),
                 );
               },
-              childCount: 3,
+              childCount: mockSales.length,
             ),
           ),
           
           const SliverToBoxAdapter(
-            child: SizedBox(height: FlowSpacing.xxl * 2),
+            child: SizedBox(height: FlowSpacing.xxl * 2), // Ajustado o bottom padding
           ),
         ],
       ),
@@ -134,27 +276,30 @@ class _SalesActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlowCard(
-      padding: const EdgeInsets.all(FlowSpacing.md),
+      padding: const EdgeInsets.symmetric(horizontal: FlowSpacing.sm, vertical: FlowSpacing.sm),
       onTap: onTap,
-      child: Column(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsets.all(FlowSpacing.md),
+            padding: const EdgeInsets.all(FlowSpacing.sm),
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: color, size: 28),
+            child: Icon(icon, color: color, size: 24),
           ),
-          const SizedBox(height: FlowSpacing.md),
-          Text(
-            title,
-            style: FlowTypography.bodyMedium.copyWith(
-              color: FlowColors.textPrimary,
-              fontWeight: FontWeight.w600,
+          const SizedBox(width: FlowSpacing.xs),
+          Expanded(
+            child: Text(
+              title,
+              style: FlowTypography.bodyMedium.copyWith(
+                color: FlowColors.textPrimary,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),

@@ -51,6 +51,10 @@ class TransactionsView extends StatelessWidget {
         ),
         actions: [
           IconButton(
+            icon: const Icon(Icons.help_outline, color: FlowColors.textSecondary),
+            onPressed: () {},
+          ),
+          IconButton(
             icon: const Icon(Icons.download_rounded, color: FlowColors.textSecondary),
             onPressed: () => _showExportDialog(context),
           ),
