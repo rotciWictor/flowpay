@@ -41,6 +41,7 @@ Este documento registra as implementações do projeto em detalhes, explicando n
   - *#3 [Feature]*: Detalhes da Transação & Infinite Scroll.
   - *#4 [Feature]*: Perfil do Lojista e Empty States.
   - *#5 [Code Review]*: Revisão de arquitetura (`get_it`, `dartz`, e criação de `barrel files`).
+  - *#6 [Feature]*: Implementação Completa do Hub de Vendas (Pix, Link, Boleto, Tap e listagem real de pendências).
 
 ### Motor de Relatórios Serverless (PDF e XML)
 - **Supabase Edge Function (`generate-report`):**
