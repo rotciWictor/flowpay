@@ -11,6 +11,16 @@ O projeto simula o painel (dashboard) de um lojista (merchant), utilizando uma a
 
 ---
 
+## 📱 Screenshots
+
+| Login | Dashboard | Extrato |
+|:-----:|:---------:|:-------:|
+| ![Login](assets/images/readme/login.jpeg) | ![Dashboard](assets/images/readme/dashboard.jpeg) | ![Extrato](assets/images/readme/extrato.jpeg) |
+| **Detalhes da Transação** | **Vendas** | **Perfil** |
+| ![Detalhes](assets/images/readme/detalhes_transacao.jpeg) | ![Vendas](assets/images/readme/vendas.jpeg) | ![Perfil](assets/images/readme/perfil.jpeg) |
+
+---
+
 ## Funcionalidades e Status Atual
 
 ### ✅ Implementado

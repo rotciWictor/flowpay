@@ -4,6 +4,14 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 
 ---
 
+## [0.8.2] - Screenshots e Documentação Visual no README
+
+### Documentação
+- **Seção de Screenshots no README.md**: Adicionada uma grade visual com 6 screenshots do aplicativo (Login, Dashboard, Extrato, Detalhes da Transação, Vendas e Perfil) organizadas em uma tabela Markdown 3x2, proporcionando uma visão rápida do fluxo e da identidade visual do FlowPay.
+- **Assets Organizados**: As imagens foram nomeadas de forma semântica (`login.jpeg`, `dashboard.jpeg`, `extrato.jpeg`, `detalhes_transacao.jpeg`, `vendas.jpeg`, `perfil.jpeg`) e alocadas em `assets/images/readme/` para facilitar a manutenção futura.
+
+---
+
 ## [0.8.1] - Internacionalização Absoluta (i18n) e Idioma Espanhol
 
 ### Varredura Fina de i18n
