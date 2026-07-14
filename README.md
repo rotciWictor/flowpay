@@ -4,6 +4,8 @@ O FlowPay é um aplicativo de portfólio desenvolvido em Flutter, criado para de
 
 > **Status: Em Desenvolvimento (WIP)**
 > A fundação arquitetural, o design system e os módulos principais estão implementados. Funcionalidades secundárias, como dados cadastrais e o simulador de vendas, estão sendo adicionadas conforme o roadmap.
+> 
+> *Nota: O app foi criado e validado em um emulador Pixel 8 (Android 16). Como o projeto ainda está em andamento, alguns ajustes de layout para telas menores podem estar pendentes.*
 
 O projeto simula o painel (dashboard) de um lojista (merchant), utilizando uma arquitetura baseada em Clean Architecture e comunicação com backend real.
 
