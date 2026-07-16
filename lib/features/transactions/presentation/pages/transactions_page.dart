@@ -1,8 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:open_filex/open_filex.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flowpay/l10n/app_localizations.dart';
 import 'package:flowpay/core/utils/date_formatter.dart';
 import 'package:flowpay/features/transactions/domain/entities/transaction.dart';
@@ -199,30 +198,15 @@ class TransactionsView extends StatelessWidget {
               ),
               const SizedBox(height: FlowSpacing.lg),
               ListTile(
-                leading: const Icon(Icons.calendar_month, color: FlowColors.primary),
-                title: Text('Relatório Mensal (PDF)', style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
-                subtitle: Text('Escolha um mês específico para exportar', style: FlowTypography.bodySmall.copyWith(color: FlowColors.textTertiary)),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _showMonthSelectionDialog(context);
-                },
-              ),
-              ListTile(
                 leading: const Icon(Icons.picture_as_pdf, color: FlowColors.primary),
-                title: Text('Período Atual (PDF)', style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
-                subtitle: Text('Usa os filtros aplicados na tela', style: FlowTypography.bodySmall.copyWith(color: FlowColors.textTertiary)),
-                onTap: () {
+                title: Text('Exportar PDF (Período Atual)', style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
+                subtitle: Text('Baixar relatório baseado nos filtros da tela', style: FlowTypography.bodySmall.copyWith(color: FlowColors.textTertiary)),
+                onTap: () async {
                   Navigator.pop(ctx);
-                  _exportReport(context, format: 'pdf', isMonthly: false);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.code, color: FlowColors.primary),
-                title: Text('Período Atual (XML)', style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
-                subtitle: Text('Exportação de dados estruturados', style: FlowTypography.bodySmall.copyWith(color: FlowColors.textTertiary)),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _exportReport(context, format: 'xml', isMonthly: false);
+                  await Future.delayed(const Duration(milliseconds: 300));
+                  if (context.mounted) {
+                    _exportReport(context, format: 'pdf', isMonthly: false);
+                  }
                 },
               ),
             ],
@@ -328,52 +312,45 @@ class TransactionsView extends StatelessWidget {
     );
 
     try {
+      debugPrint('UI: Iniciando processo de exportação (Formato: $format)...');
       final service = ReportService();
-      final file = await service.generateReport(format: format, filters: apiFilters);
+      
+      debugPrint('UI: Chamando ReportService com filtros: $apiFilters');
+      final url = await service.generateReport(format: format, filters: apiFilters);
+      debugPrint('UI: Sucesso! URL recebida do servidor: $url');
       
       if (context.mounted) {
-        Navigator.pop(context); // Fechar loading IMEDIATAMENTE após o download
-        
-        showModalBottomSheet(
-          context: context,
-          backgroundColor: FlowColors.background,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-          builder: (ctx) => SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(FlowSpacing.lg),
-                  child: Text('Relatório Pronto!', style: FlowTypography.headlineSmall.copyWith(color: FlowColors.primary)),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.file_open, color: FlowColors.textSecondary),
-                  title: Text('Abrir Arquivo', style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
-                  onTap: () {
-                    Navigator.pop(ctx);
-                    OpenFilex.open(file.path);
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.share, color: FlowColors.textSecondary),
-                  title: Text('Compartilhar', style: FlowTypography.bodyLarge.copyWith(color: FlowColors.textPrimary)),
-                  onTap: () {
-                    Navigator.pop(ctx);
-                    Share.shareXFiles(
-                      [XFile(file.path)],
-                      text: 'Segue o relatório de transações exportado do FlowPay.',
-                    );
-                  },
-                ),
-                const SizedBox(height: FlowSpacing.md),
-              ],
-            ),
-          ),
-        );
+        Navigator.of(context, rootNavigator: true).pop(); // Fechar loading com segurança
+
+        // Emuladores Android não possuem leitor de PDF nativo, o que causa a tela preta.
+        // O truque universal é passar a URL para o visualizador web do Google Docs!
+        final viewerUrl = 'https://docs.google.com/gview?embedded=true&url=${Uri.encodeComponent(url)}';
+        final uri = Uri.parse(viewerUrl);
+        debugPrint('UI: Tentando abrir a URI via url_launcher (Google Docs Viewer)...');
+        final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+        if (launched) {
+          debugPrint('UI: launchUrl retornou true. Lançando navegador externo.');
+        } else {
+          debugPrint('UI: launchUrl retornou false! O aparelho não consegue abrir essa URL.');
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Não foi possível abrir o navegador.', style: FlowTypography.bodyMedium.copyWith(color: FlowColors.surface)),
+                backgroundColor: FlowColors.error,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+        }
       }
     } catch (e) {
+      debugPrint('UI: CATCH (Erro) disparado durante a exportação: $e');
       if (context.mounted) {
-        Navigator.pop(context); // Fechar loading
+        try {
+          Navigator.of(context, rootNavigator: true).pop(); // Tentar fechar o loading se ainda estiver aberto
+        } catch (_) {}
+        
+        debugPrint('UI: Exibindo SnackBar de erro para o usuário.');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Erro ao exportar: $e', style: FlowTypography.bodyMedium.copyWith(color: FlowColors.background)),

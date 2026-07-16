@@ -182,3 +182,56 @@ SELECT
   return_code
 FROM fee_calculation
 ON CONFLICT DO NOTHING;
+
+-- ==========================================
+-- BUCKETS & ASSETS (STORAGE)
+-- ==========================================
+
+-- Bucket privado para relatórios (PDF/XML)
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('reports', 'reports', false)
+ON CONFLICT (id) DO NOTHING;
+
+-- Bucket público para fontes e assets
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('reports_assets', 'reports_assets', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Política de Segurança (Permitir leitura pública apenas do bucket de assets)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE policyname = 'Public Access to Reports Assets'
+  ) THEN
+    CREATE POLICY "Public Access to Reports Assets" 
+    ON storage.objects FOR SELECT 
+    USING ( bucket_id = 'reports_assets' );
+  END IF;
+END
+$$;
+
+-- ==========================================
+-- RPCs (Remote Procedure Calls)
+-- ==========================================
+
+-- Função otimizada para buscar transações para relatório via PostgreSQL (Performance Server-Side)
+CREATE OR REPLACE FUNCTION public.get_transactions_for_report(
+  p_merchant_id UUID,
+  p_start_date TIMESTAMPTZ DEFAULT NULL,
+  p_end_date TIMESTAMPTZ DEFAULT NULL,
+  p_types TEXT[] DEFAULT NULL,
+  p_statuses TEXT[] DEFAULT NULL
+) 
+RETURNS SETOF public.transactions AS $$
+BEGIN
+  RETURN QUERY 
+  SELECT * 
+  FROM public.transactions t
+  WHERE t.merchant_id = p_merchant_id
+  AND (p_start_date IS NULL OR t.created_at >= p_start_date)
+  AND (p_end_date IS NULL OR t.created_at <= p_end_date)
+  AND (p_types IS NULL OR array_length(p_types, 1) IS NULL OR t.transaction_type = ANY(p_types))
+  AND (p_statuses IS NULL OR array_length(p_statuses, 1) IS NULL OR t.status = ANY(p_statuses))
+  ORDER BY t.created_at DESC;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;

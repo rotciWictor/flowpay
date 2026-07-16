@@ -1,6 +1,7 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import { PDFDocument, rgb, StandardFonts } from 'https://cdn.skypack.dev/pdf-lib@1.17.1?dts'
+import { serve } from "std/http/server.ts"
+import { createClient } from '@supabase/supabase-js'
+import { PDFDocument, rgb } from 'pdf-lib'
+import fontkit from 'https://esm.sh/@pdf-lib/fontkit@1.1.1'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -19,27 +20,43 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    // Pegar o usuário logado a partir do token para garantir RLS manual na Edge Function
+    // Verificação de Autenticação (Protegendo contra chamadas não autorizadas)
     const authHeader = req.headers.get('Authorization')
-    if (!authHeader) throw new Error('No authorization header')
+    if (!authHeader) {
+      console.error('[Auth Error] No authorization header provided')
+      throw new Error('No authorization header')
+    }
     
+    console.log('[Auth] Verifying user token...')
     const { data: { user }, error: userError } = await supabaseClient.auth.getUser(authHeader.replace('Bearer ', ''))
-    if (userError || !user) throw new Error('Unauthorized')
+    if (userError || !user) {
+      console.error('[Auth Error] Invalid token or user not found:', userError?.message)
+      throw new Error('Unauthorized')
+    }
+    console.log(`[Auth Success] User ID: ${user.id}`)
 
     const { filters, format } = await req.json()
+    console.log(`[Request] Format: ${format}, Filters:`, filters)
 
-    // 1. Buscar transações
-    let query = supabaseClient.from('transactions').select('*').eq('merchant_id', user.id).order('created_at', { ascending: false })
-    
-    if (filters?.startDate) query = query.gte('created_at', filters.startDate)
-    if (filters?.endDate) query = query.lte('created_at', filters.endDate)
-    if (filters?.types && filters.types.length > 0) query = query.in('transaction_type', filters.types)
-    if (filters?.statuses && filters.statuses.length > 0) query = query.in('status', filters.statuses)
+    // 1. Buscar transações otimizadas via RPC no PostgreSQL
+    console.log(`[RPC Fetch] Calling get_transactions_for_report for merchant ${user.id}...`)
+    const { data: transactions, error: fetchError } = await supabaseClient.rpc('get_transactions_for_report', {
+      p_merchant_id: user.id,
+      p_start_date: filters?.startDate ?? null,
+      p_end_date: filters?.endDate ?? null,
+      p_types: filters?.types && filters.types.length > 0 ? filters.types : null,
+      p_statuses: filters?.statuses && filters.statuses.length > 0 ? filters.statuses : null,
+    })
 
-    const { data: transactions, error: fetchError } = await query
-    if (fetchError) throw fetchError
-
-    if (!transactions) throw new Error('No transactions found')
+    if (fetchError) {
+      console.error('[RPC Error] Failed to fetch transactions:', fetchError.message, fetchError.details)
+      throw new Error(`Erro ao buscar dados: ${fetchError.message}`)
+    }
+    if (!transactions || transactions.length === 0) {
+      console.warn('[RPC Warning] No transactions returned')
+      throw new Error('Nenhuma transação encontrada neste período')
+    }
+    console.log(`[RPC Success] Retrieved ${transactions.length} transactions.`)
 
     let fileBytes: Uint8Array
     let mimeType: string
@@ -48,7 +65,7 @@ serve(async (req) => {
     if (format === 'xml') {
       // Gerar XML
       let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<report>\n'
-      transactions.forEach(t => {
+      transactions.forEach((t: any) => {
         xml += `  <transaction id="${t.id}">\n`
         xml += `    <amount>${t.amount}</amount>\n`
         xml += `    <net_amount>${t.net_amount}</net_amount>\n`
@@ -63,13 +80,41 @@ serve(async (req) => {
       mimeType = 'application/xml'
       fileName = `report_${Date.now()}.xml`
     } else {
-      // Gerar PDF via pdf-lib
+      console.log('[PDF Generation] Starting PDF generation...')
+      // 2. Adquirir Fonte TTF segura (Roboto) do bucket de assets para suportar R$ e Acentos
+      let fontBytes: Uint8Array
+      console.log('[Assets] Fetching Roboto font from storage...')
+      const { data: fontData, error: fontError } = await supabaseClient.storage.from('reports_assets').download('Roboto-Regular.ttf')
+      
+      if (fontError || !fontData) {
+        console.warn('[Assets] Font not found locally. Downloading from CDN (jsDelivr)...')
+        // Se a fonte ainda não existir no bucket local, baixa da CDN e salva
+        const res = await fetch('https://cdn.jsdelivr.net/fontsource/fonts/roboto@latest/latin-400-normal.ttf')
+        if (!res.ok) {
+          console.error('[Assets Error] Failed to download font from CDN')
+          throw new Error('Falha ao baixar fonte externa')
+        }
+        const arrayBuffer = await res.arrayBuffer()
+        fontBytes = new Uint8Array(arrayBuffer)
+        console.log('[Assets] Saving font to reports_assets bucket for future use...')
+        // Guardar no bucket para acelerar futuras execuções
+        await supabaseClient.storage.from('reports_assets').upload('Roboto-Regular.ttf', fontBytes, { contentType: 'font/ttf' })
+      } else {
+        console.log('[Assets Success] Font loaded from bucket.')
+        fontBytes = new Uint8Array(await fontData.arrayBuffer())
+      }
+
+      console.log('[PDF-LIB] Embedding font and building document structure...')
       const pdfDoc = await PDFDocument.create()
-      const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman)
+      
+      // Registrar fontkit e embutir a fonte Roboto (TrueType)
+      pdfDoc.registerFontkit(fontkit)
+      const customFont = await pdfDoc.embedFont(fontBytes)
+      
       const page = pdfDoc.addPage([595.28, 841.89]) // A4
       const { width, height } = page.getSize()
       
-      // FIX: Fundo branco explícito para evitar "tela preta" em visualizadores nativos (ex: Android/iOS Dark Mode)
+      // Fundo branco explícito para evitar "tela preta" em visualizadores nativos (ex: Android/iOS Dark Mode)
       page.drawRectangle({
         x: 0,
         y: 0,
@@ -78,19 +123,19 @@ serve(async (req) => {
         color: rgb(1, 1, 1), // Branco
       })
       
-      page.drawText('Relatorio de Transacoes - FlowPay', {
+      page.drawText('Relatório de Transações - FlowPay', {
         x: 50,
         y: height - 50,
         size: 20,
-        font: timesRomanFont,
-        color: rgb(0.0, 0.9, 0.46), // FlowColors.primary aprox (neon green)
+        font: customFont,
+        color: rgb(0.0, 0.9, 0.46), // FlowColors.primary
       })
 
-      page.drawText(`Gerado em: ${new Date().toLocaleString()}`, {
+      page.drawText(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, {
         x: 50,
         y: height - 70,
         size: 10,
-        font: timesRomanFont,
+        font: customFont,
       })
 
       let y = height - 120
@@ -98,38 +143,40 @@ serve(async (req) => {
         x: 50,
         y,
         size: 10,
-        font: timesRomanFont,
+        font: customFont,
       })
       y -= 20
 
-      // Limitando a 40 para não estourar a página no demo (na vida real usaríamos loop criando novas páginas)
-      transactions.slice(0, 40).forEach(t => { 
-        const date = new Date(t.created_at).toLocaleString()
+      transactions.slice(0, 40).forEach((t: any) => { 
+        const date = new Date(t.created_at).toLocaleString('pt-BR')
         const amount = `R$ ${(t.amount/100).toFixed(2)}`
+        // A fonte customFont suporta 'R$', 'ç', 'ã', etc.
         page.drawText(`${date.substring(0, 16)} | ${t.transaction_type} | ${t.status} | ${amount}`, {
           x: 50,
           y,
           size: 10,
-          font: timesRomanFont,
+          font: customFont,
         })
         y -= 15
       })
 
       if (transactions.length > 40) {
-        page.drawText(`... mais ${transactions.length - 40} transações não mostradas no demo.`, {
+        page.drawText(`... mais ${transactions.length - 40} transações não listadas (demo limita visualização).`, {
           x: 50,
           y: y - 10,
           size: 10,
-          font: timesRomanFont,
+          font: customFont,
         })
       }
 
       fileBytes = await pdfDoc.save()
       mimeType = 'application/pdf'
       fileName = `report_${Date.now()}.pdf`
+      console.log(`[PDF Success] Document assembled successfully: ${fileBytes.length} bytes`)
     }
 
-    // 2. Upload para Storage
+    // 3. Upload seguro para o Storage (Private Bucket)
+    console.log(`[Storage] Uploading ${fileName} to 'reports' bucket...`)
     const { error: uploadError } = await supabaseClient.storage
       .from('reports')
       .upload(fileName, fileBytes, {
@@ -137,23 +184,33 @@ serve(async (req) => {
         upsert: false
       })
 
-    if (uploadError) throw uploadError
+    if (uploadError) {
+      console.error('[Storage Error] Failed to upload document:', uploadError.message)
+      throw new Error(`Falha no arquivamento: ${uploadError.message}`)
+    }
 
-    // 3. Gerar URL Assinada
+    // 4. Gerar Signed URL para download temporário (60 minutos) com flag 'download'
+    console.log(`[Storage] Requesting 60-min Signed URL for ${fileName}...`)
     const { data: signedUrlData, error: signedUrlError } = await supabaseClient.storage
       .from('reports')
-      .createSignedUrl(fileName, 60 * 60) // 1 hora
+      .createSignedUrl(fileName, 60 * 60, { download: fileName })
 
-    if (signedUrlError) throw signedUrlError
+    if (signedUrlError) {
+      console.error('[Storage Error] Failed to create signed URL:', signedUrlError.message)
+      throw new Error(`Falha ao gerar link seguro: ${signedUrlError.message}`)
+    }
 
+    console.log('[Function Success] Returning signed URL to client.')
     return new Response(
       JSON.stringify({ status: 'success', url: signedUrlData.signedUrl }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
     )
+
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 400,
-    })
+    console.error('[Function Fatal Error]', error)
+    return new Response(
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Erro interno desconhecido no gerador de relatórios.' }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+    )
   }
 })

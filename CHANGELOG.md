@@ -4,6 +4,16 @@ Este documento registra as implementações do projeto em detalhes, explicando n
 
 ---
 
+## [0.8.3] - Supabase Reports & Edge Function Pivot
+
+### Motor de Relatórios Serverless
+- **Pivot para Signed URLs**: Após iterar na arquitetura de Edge Functions no Deno, a necessidade de salvar o PDF fisicamente no aparelho do usuário via `path_provider` provou-se problemática e pesada (causando crashes de permissão em versões recentes do Android). O fluxo foi simplificado: a função `generate-report` do Supabase agora assina e devolve apenas a **URL Pública** do PDF gerado.
+- **Integração com `url_launcher`**: O pacote `url_launcher` substituiu pacotes de filesystem local, permitindo que o Flutter lance a visualização do arquivo diretamente de forma nativa e leve, mantendo o download sob a batuta do sistema operacional.
+- **Android Fallback (O Pulo do Gato)**: Como emuladores nativos e algumas engines não possuem leitor de PDF acoplado, um fallback arquitetural foi construído. O app agora passa a URL criptografada pelo componente `Google Docs Web Viewer` (`docs.google.com/gview`), assegurando que todo aparelho Android e iOS abra relatórios como *HTML Canvas* instantâneo.
+- **Correção de UI de Navegação**: Refatorado o comportamento dos `BottomSheets` de filtros que, por uma race-condition assíncrona com os dialogs de loading, causavam anomalias do tipo *popped the last page* na pilha do `go_router`.
+
+---
+
 ## [0.8.2] - Screenshots e Documentação Visual no README
 
 ### Documentação
